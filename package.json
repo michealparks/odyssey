@@ -28,6 +28,6 @@
     "@threlte/theatre": "^0.0.3-next.0",
     "@types/three": "^0.149.0",
     "three": "^0.150.1",
-    "three-inspect": "^0.2.4"
+    "three-inspect": "^0.3.1"
   }
 }

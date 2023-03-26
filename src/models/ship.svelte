@@ -21,13 +21,17 @@ type GLTFResult = {
     person: THREE.Mesh
     exterior_top: THREE.Mesh
     exterior_bottom: THREE.Mesh
-    floor_center: THREE.Mesh
     exterior_middle_bottom: THREE.Mesh
     exterior_middle_top: THREE.Mesh
     floor_top: THREE.Mesh
+    floor_center: THREE.Mesh
+    stasis_chamber: THREE.Mesh
     floor_bottom: THREE.Mesh
   }
-  materials: {}
+  materials: {
+    Exterior: THREE.MeshStandardMaterial
+    Material: THREE.MeshStandardMaterial
+  }
 }
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
@@ -91,14 +95,30 @@ $: {
 </script>
 
 {#if $gltf}
-  <T is={ref} {...$$restProps}>
+  <T is={ref} {...$$restProps} rotation={[0, -Math.PI / 2, 0]}>
     <T.Mesh
       name="person"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.person.geometry}
-      material={$gltf.nodes.person.material}
-      position={[0, 0.9, 0]}
+      material={$gltf.materials.Material}
+      position={[0.49, 4.79, 0]}
+    />
+
+    <!-- top section -->
+    <Collider
+      shape='cylinder'
+      position={[-2, 5.23, 0]}
+      args={[1.3, 0.9]}
+    />
+    <T.Mesh
+      name="stasis_chamber"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.stasis_chamber.geometry}
+      material={$gltf.nodes.stasis_chamber.material}
+      position={[-2, 5.23, 0]}
+      userData={{ name: 'stasis_chamber' }}
     />
 
     <T.Mesh
@@ -108,7 +128,7 @@ $: {
       geometry={$gltf.nodes.exterior_top.geometry}
     >
       <T
-        is={$gltf.nodes.exterior_middle_top.material}
+        is={$gltf.materials.Exterior}
         {metalness}
         {roughness}
         envMap={cubeRenderTarget.texture}
@@ -122,7 +142,7 @@ $: {
       geometry={$gltf.nodes.exterior_middle_top.geometry}
     >
       <T
-        is={$gltf.nodes.exterior_middle_top.material}
+        is={$gltf.materials.Exterior}
         {metalness}
         {roughness}
         envMap={cubeRenderTarget.texture}
@@ -136,7 +156,7 @@ $: {
       geometry={$gltf.nodes.exterior_middle_bottom.geometry}
     >
       <T
-        is={$gltf.nodes.exterior_middle_top.material}
+        is={$gltf.materials.Exterior}
         {metalness}
         {roughness}
         envMap={cubeRenderTarget.texture}
@@ -149,7 +169,7 @@ $: {
       geometry={$gltf.nodes.exterior_bottom.geometry}
     >
       <T
-        is={$gltf.nodes.exterior_middle_top.material}
+        is={$gltf.materials.Exterior}
         {metalness}
         {roughness}
         envMap={cubeRenderTarget.texture}
@@ -175,16 +195,15 @@ $: {
     <Collider 
       shape='cylinder'
       args={[0.1, 8.25]}
-    >
-      <T.Mesh
-        bind:ref={floors2}
-        name="floor_center"
-        receiveShadow
-        geometry={$gltf.nodes.floor_center.geometry}
-        material={$gltf.nodes.floor_center.material}
-        on:click={handleFloorClick}
-      />
-    </Collider>
+    />
+    <T.Mesh
+      bind:ref={floors2}
+      name="floor_center"
+      receiveShadow
+      geometry={$gltf.nodes.floor_center.geometry}
+      material={$gltf.nodes.floor_center.material}
+      on:click={handleFloorClick}
+    />
 
     <Collider
       shape='cylinder'

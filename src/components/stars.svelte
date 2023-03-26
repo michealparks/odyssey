@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { T, useFrame } from '@threlte/core'
   import * as THREE from 'three';
-  import { randomPointOnCircle } from './lib/math'
+  import { randomPointOnCircle } from '../lib/math'
 
   export let position: [x: number, y: number, z: number]
 
@@ -34,19 +34,19 @@
   init()
 
   useFrame((_, delta) => {
-    for (let i = 0, j = 0; i < attribute.array.length; i += 3, j += 1) {
-      const val = attribute.array[i + 2]
+    const { array } = attribute
+  
+    for (let i = 0, j = 0; i < array.length; i += 3, j += 1) {
+      const val = array[i + 2]
       if (val > length / 2) {
-        attribute.array[i + 2] = -length / 2
+        array[i + 2] = -length / 2
       } else {
-        attribute.array[i + 2] += v[j]
+        array[i + 2] += v[j]
       }
     }
 
     geometry.attributes.position.needsUpdate = true
   })
-
-  console.log(position)
 </script>
 
 <T.Points

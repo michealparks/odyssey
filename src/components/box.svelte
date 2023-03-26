@@ -20,7 +20,7 @@
   {position}
   {rotation}
 >
-  <T.Mesh castShadow>
+  <T.Mesh name='Box' castShadow>
     <T.BoxGeometry args={[1, 1, 1]} />
     <T.MeshStandardMaterial color='blue' />
   </T.Mesh>
