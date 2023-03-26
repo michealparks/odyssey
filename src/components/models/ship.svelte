@@ -57,8 +57,6 @@ const mirrorSphereCamera = new THREE.CubeCamera(10, 2000, cubeRenderTarget)
 scene.add(mirrorSphereCamera)
 
 mirrorSphereCamera.renderTarget.depthBuffer = false
-// material.depthTest = false;  // for all the 6 materials
-// material.depthWrite = false;
 
 const handleFloorClick = (e) => {
   console.log(e)
@@ -69,14 +67,14 @@ useFrame(() => {
 })
 
 document.addEventListener('keyup', (e) => {
-  switch (e.key.toLowerCase()) {
-    case 'w': case 'arrowup':
-      level = Math.min(4, level + 1)
-      return
-    case 's': case 'arrowdown':
-      level = Math.max(1, level - 1)
-      return
+  const key = Number.parseInt(e.key.toLowerCase(), 10)
+
+  if ([1, 2, 3, 4].includes(key) === false) {
+    return
   }
+
+  level = key
+
 }, { passive: true })
 
 $: {
@@ -96,19 +94,10 @@ $: {
 
 {#if $gltf}
   <T is={ref} {...$$restProps} rotation={[0, -Math.PI / 2, 0]}>
-    <T.Mesh
-      name="person"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.person.geometry}
-      material={$gltf.materials.Material}
-      position={[0.49, 4.79, 0]}
-    />
-
     <!-- top section -->
     <Collider
       shape='cylinder'
-      position={[-2, 5.23, 0]}
+      position={[-2, 5.35, 0]}
       args={[1.3, 0.9]}
     />
     <T.Mesh
@@ -117,7 +106,7 @@ $: {
       receiveShadow
       geometry={$gltf.nodes.stasis_chamber.geometry}
       material={$gltf.nodes.stasis_chamber.material}
-      position={[-2, 5.23, 0]}
+      position={[-2, 5.35, 0]}
       userData={{ name: 'stasis_chamber' }}
     />
 
@@ -179,7 +168,7 @@ $: {
 
     <Collider
       shape='cylinder'
-      position={[0, 4.13, 0]}
+      position={[0, 3.87, 0]}
       args={[0.1, 7.15]}
     >
       <T.Mesh
@@ -202,6 +191,7 @@ $: {
       receiveShadow
       geometry={$gltf.nodes.floor_center.geometry}
       material={$gltf.nodes.floor_center.material}
+      position={[0, -0.29, 0]}
       on:click={handleFloorClick}
     />
 

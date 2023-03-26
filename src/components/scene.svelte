@@ -4,10 +4,11 @@
   import { spring } from 'svelte/motion'
   import { interactivity } from '@threlte/extras'
   import { Debug } from '@threlte/rapier'
-  import Ground from './components/ground.svelte'
-  import Box from './components/box.svelte'
-  import Stars from './components/stars.svelte'
+  import Ground from './ground.svelte'
+  import Box from './box.svelte'
+  import Stars from './stars.svelte'
   import Ship from './models/ship.svelte'
+  import Player from './models/player.svelte'
   import Inspector from 'three-inspect'
 
   export let state = 'title'
@@ -17,7 +18,7 @@
   const { scene, camera, renderer } = useThrelte()
 
   const debug = false
-  const physicsDebug = false
+  const physicsDebug = true
 
   if (debug) {
     new Inspector({
@@ -33,6 +34,7 @@
 
   const posCamstart = [0, 0, 57]
   const rotCamstart = [0, 0, 0]
+
   const posCamgame = [0, 18, 24]
   const rotCamgame = [-0.6, 0, 0]
 
@@ -78,6 +80,7 @@
 <!-- <Ground /> -->
 <Stars position={[0, 0, -140]} />
 
+<Player />
 <Ship />
 
 {#if physicsDebug}

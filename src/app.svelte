@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { Canvas } from '@threlte/core'
   import { World } from '@threlte/rapier'
-  import Scene from './scene.svelte'
+  import Scene from './components/scene.svelte'
 
   let state = 'title'
 </script>

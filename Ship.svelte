@@ -17,6 +17,7 @@ Command: npx @threlte/gltf@0.0.5 public/glb/ship.glb --output src/models/ship.sv
   type GLTFResult = {
     nodes: {
       person: THREE.Mesh
+      exterior_top: THREE.Mesh
       exterior_bottom: THREE.Mesh
       exterior_middle_bottom: THREE.Mesh
       floor_top: THREE.Mesh
@@ -44,6 +45,14 @@ Command: npx @threlte/gltf@0.0.5 public/glb/ship.glb --output src/models/ship.sv
       material={$gltf.materials.Material}
       position={[0.49, 4.79, 0]}
       userData={{ name: 'person' }}
+    />
+    <T.Mesh
+      name="exterior_top"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.exterior_top.geometry}
+      material={$gltf.materials.Exterior}
+      userData={{ name: 'exterior_top' }}
     />
     <T.Mesh
       name="exterior_bottom"

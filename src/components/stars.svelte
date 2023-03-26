@@ -5,8 +5,6 @@
 
   export let position: [x: number, y: number, z: number]
 
-  let cursor = 0
-
   const radius = 200
   const length = 2500
   const count = 3_000
@@ -16,11 +14,9 @@
   geometry.setAttribute('position', attribute);
 
   const init = () => {
-    const p = attribute.array
+    const p = attribute.array as number[]
 
     for (let i = 0, j = 0; i < p.length; i += 3, j += 1) {
-      const start = Math.PI / 1.5
-      const end = Math.PI * 3 / 2
       const [x, y] = randomPointOnCircle(radius)
 
       v[j] = (Math.random() * 3) + 1
@@ -34,14 +30,14 @@
   init()
 
   useFrame((_, delta) => {
-    const { array } = attribute
+    const p = attribute.array as number[]
   
-    for (let i = 0, j = 0; i < array.length; i += 3, j += 1) {
-      const val = array[i + 2]
+    for (let i = 0, j = 0; i < p.length; i += 3, j += 1) {
+      const val = p[i + 2]
       if (val > length / 2) {
-        array[i + 2] = -length / 2
+        p[i + 2] = -length / 2
       } else {
-        array[i + 2] += v[j]
+        p[i + 2] += v[j]
       }
     }
 
