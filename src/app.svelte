@@ -1,31 +1,39 @@
 <script lang='ts'>
-  import { Canvas } from '@threlte/core'
-  import { World } from '@threlte/rapier'
-  import Scene from './components/scene.svelte'
 
-  let state = 'title'
+import { Canvas } from '@threlte/core'
+import { World } from '@threlte/rapier'
+import { frame, setFrame } from './stores/state'
+import Scene from './components/scene.svelte'
+import Stats from './components/stats.svelte';
+
+window.addEventListener('keyup', () =>
+  setFrame('level_3')
+, { once: true })
+
 </script>
 
 <Canvas>
+  <Stats />
+
   <World>
-    <Scene {state} />
+    <Scene />
     <div slot='fallback'>
       Your browser does not support WASM. Please use a modern browser.
     </div>
   </World>
 </Canvas>
 
-{#if state === 'title'}
+
+{#if $frame === 'title'}
   <header>
     <h1>odyssey</h1>
   </header>
 
   <section>
-    <button on:click={() => (state = 'game')}>
+    <button on:click={() => setFrame('level_3')}>
       begin
     </button>
   </section>
-  
 {/if}
 
 <style>
@@ -40,6 +48,7 @@
   }
 
   h1 {
+    display: none;
     cursor: default;
     margin-top: -26px;
     color: white;
@@ -59,6 +68,7 @@
   }
 
   button {
+    background: transparent;
     color: white;
     font-weight: 200;
     font-size: 1rem;

@@ -1,63 +1,46 @@
 <script lang='ts'>
-  import * as THREE from 'three'
-  import { T, useThrelte } from '@threlte/core'
-  import { spring } from 'svelte/motion'
-  import { interactivity } from '@threlte/extras'
-  import { Debug } from '@threlte/rapier'
-  import Ground from './ground.svelte'
-  import Box from './box.svelte'
-  import Stars from './stars.svelte'
-  import Ship from './models/ship.svelte'
-  import Player from './models/player.svelte'
-  import Inspector from 'three-inspect'
 
-  export let state = 'title'
+import * as THREE from 'three'
+import { softShadows } from 'trzy'
+import { T, useThrelte } from '@threlte/core'
+import { interactivity } from '@threlte/extras'
+import { Debug } from '@threlte/rapier'
+import Box from './box.svelte'
+import Stars from './stars.svelte'
+import Ship from './models/ship.svelte'
+import Player from './models/player.svelte'
+import { cameraPosition, cameraRotation } from '../stores/state'
+import Inspector from 'three-inspect'
+import { onMount } from 'svelte';
 
-  interactivity()
+softShadows()
 
-  const { scene, camera, renderer } = useThrelte()
+interactivity()
 
-  const debug = false
-  const physicsDebug = true
+const { scene, camera, renderer } = useThrelte()
 
-  if (debug) {
+renderer.useLegacyLights = false
+
+const physicsDebug = localStorage['debug_physics'] === 'true'
+
+onMount(() => {
+  if (localStorage.getItem('debug') === 'true') {
     new Inspector({
       THREE,
       scene,
       camera: camera.current as THREE.PerspectiveCamera,
       renderer,
-      options: {
-        location: 'overlay',
-      },
+      options: { location: 'overlay' }
     })
   }
+})
 
-  const posCamstart = [0, 0, 57]
-  const rotCamstart = [0, 0, 0]
-
-  const posCamgame = [0, 18, 24]
-  const rotCamgame = [-0.6, 0, 0]
-
-  const stiffness = 0.02
-  const damping = 0.9
-  const pos = spring(state === 'title' ? [...posCamstart] : [...posCamgame], { stiffness, damping })
-  const rot = spring(state === 'title' ? [...rotCamstart] : [...rotCamgame], { stiffness, damping })
-
-  $: {
-    if (state === 'title') {
-      pos.set([...posCamstart])
-      rot.set([...rotCamstart])
-    } else if (state === 'game') {
-      pos.set([...posCamgame])
-      rot.set([...rotCamgame])
-    }
-  }
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={$pos}
-  rotation={$rot}
+  position={$cameraPosition}
+  rotation={$cameraRotation}
   near={0.1}
   far={2500}
   on:create={({ ref }) => ref.lookAt(0, 1, 0)}
@@ -65,15 +48,26 @@
 
 <T.DirectionalLight
   castShadow
-  intensity={0.25}
-  position={[3, 10, 7]}
+  intensity={1.1}
+  position={[-3.4, 8, 4.3]}
+  on:create={({ ref }) => {
+    const { shadow } = ref
+    shadow.mapSize.set(2048, 2048)
+    shadow.camera.left = -10
+    shadow.camera.right = 10
+    shadow.camera.top = 10
+    shadow.camera.bottom = -10
+    shadow.camera.far = 20
+    shadow.camera.near = 0.1
+    shadow.camera.updateProjectionMatrix()
+  }}
 />
 
 <T.AmbientLight
-  intensity={0.15}
+  intensity={0.5}
 />
 
-{#each Array.from({ length: 1 }) as item, i}
+{#each Array.from({ length: 10 }) as _, i}
   <Box />
 {/each}
 

@@ -25,6 +25,9 @@ Command: npx @threlte/gltf@0.0.5 public/glb/ship.glb --output src/models/ship.sv
       stasis_chamber: THREE.Mesh
       floor_bottom: THREE.Mesh
       exterior_middle_top: THREE.Mesh
+      floor_top_railing: THREE.Mesh
+      console: THREE.Mesh
+      console_screen: THREE.Mesh
     }
     materials: {
       Material: THREE.MeshStandardMaterial
@@ -43,7 +46,7 @@ Command: npx @threlte/gltf@0.0.5 public/glb/ship.glb --output src/models/ship.sv
       receiveShadow
       geometry={$gltf.nodes.person.geometry}
       material={$gltf.materials.Material}
-      position={[0.49, 4.79, 0]}
+      position={[2.24, 4.92, 0]}
       userData={{ name: 'person' }}
     />
     <T.Mesh
@@ -94,7 +97,7 @@ Command: npx @threlte/gltf@0.0.5 public/glb/ship.glb --output src/models/ship.sv
       receiveShadow
       geometry={$gltf.nodes.stasis_chamber.geometry}
       material={$gltf.materials.Material}
-      position={[-2, 5.35, 0]}
+      position={[0, 5.43, -4.32]}
       userData={{ name: 'stasis_chamber' }}
     />
     <T.Mesh
@@ -113,6 +116,33 @@ Command: npx @threlte/gltf@0.0.5 public/glb/ship.glb --output src/models/ship.sv
       geometry={$gltf.nodes.exterior_middle_top.geometry}
       material={$gltf.materials.Exterior}
       userData={{ name: 'exterior_middle_top' }}
+    />
+    <T.Mesh
+      name="floor_top_railing"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_top_railing.geometry}
+      material={$gltf.materials.Material}
+      position={[0, 3.87, 0]}
+      userData={{ name: 'floor_top_railing' }}
+    />
+    <T.Mesh
+      name="console"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.console.geometry}
+      material={$gltf.nodes.console.material}
+      position={[4.77, 4.63, -0.09]}
+      userData={{ name: 'console' }}
+    />
+    <T.Mesh
+      name="console_screen"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.console_screen.geometry}
+      material={$gltf.nodes.console_screen.material}
+      position={[4.94, 5.15, -0.09]}
+      userData={{ name: 'console_screen' }}
     />
 
     <slot {ref} />
