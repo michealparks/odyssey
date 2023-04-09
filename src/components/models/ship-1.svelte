@@ -22,11 +22,9 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     shape='cuboid'
     position={[0, -4, 1.5]}
     args={[1, 1, 1]}
-    options={[{
-      input: 'R',
-      effect: 'up',
-      handler: () => setFrame('level_2'),
-    }]}
+    options={['e']}
+    labels={['up']}
+    on:interact={() => setFrame('level_2')}
   />
 
   <!-- floor_bottom -->

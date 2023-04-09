@@ -1,39 +1,21 @@
 <script lang='ts'>
 
-import * as THREE from 'three'
 import { softShadows } from 'trzy'
 import { T, useThrelte } from '@threlte/core'
 import { interactivity } from '@threlte/extras'
-import { Debug } from '@threlte/rapier'
 import Box from './box.svelte'
 import Stars from './stars.svelte'
 import Ship from './models/ship.svelte'
 import Player from './models/player.svelte'
 import { cameraPosition, cameraRotation } from '../stores/state'
-import Inspector from 'three-inspect'
-import { onMount } from 'svelte';
 
 softShadows()
 
 interactivity()
 
-const { scene, camera, renderer } = useThrelte()
+const { renderer } = useThrelte()
 
 renderer.useLegacyLights = false
-
-const physicsDebug = localStorage['debug_physics'] === 'true'
-
-onMount(() => {
-  if (localStorage.getItem('debug') === 'true') {
-    new Inspector({
-      THREE,
-      scene,
-      camera: camera.current as THREE.PerspectiveCamera,
-      renderer,
-      options: { location: 'overlay' }
-    })
-  }
-})
 
 </script>
 
@@ -52,13 +34,15 @@ onMount(() => {
   position={[-3.4, 8, 4.3]}
   on:create={({ ref }) => {
     const { shadow } = ref
-    shadow.mapSize.set(2048, 2048)
+    const size = 2 ** 12
+
+    shadow.mapSize.set(size, size)
     shadow.camera.left = -10
     shadow.camera.right = 10
     shadow.camera.top = 10
     shadow.camera.bottom = -10
     shadow.camera.far = 20
-    shadow.camera.near = 0.1
+    shadow.camera.near = 0.2
     shadow.camera.updateProjectionMatrix()
   }}
 />
@@ -71,12 +55,7 @@ onMount(() => {
   <Box />
 {/each}
 
-<!-- <Ground /> -->
 <Stars position={[0, 0, -140]} />
 
 <Player />
 <Ship />
-
-{#if physicsDebug}
-  <Debug />
-{/if}

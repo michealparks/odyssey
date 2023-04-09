@@ -15,6 +15,13 @@ interface GLTFResult {
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
+const handleInteract = ({ detail }: CustomEvent<string>) => {
+  switch (detail) {
+    case 'e': return setFrame('level_3')
+    case 'f': return setFrame('level_1')
+  }
+}
+
 </script>
 
 {#if $level === 2}
@@ -22,23 +29,9 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     shape='cuboid'
     position={[0, 0, 1.5]}
     args={[1, 1, 1]}
-    options={[
-      {
-        input: 'R',
-        effect: 'up',
-        handler: () => setFrame('level_3'),
-      }, {
-        input: 'F',
-        effect: 'down',
-        handler: () => setFrame('level_1'),
-      }
-    ]}
-  />
-
-  <Collider 
-    shape='roundCylinder'
-    args={[0.1, 15, 0]}
-    position={[0, -0.37, 0]}
+    options={['e', 'f']}
+    labels={['up', 'down']}
+    on:interact={handleInteract}
   />
 {/if}
 
@@ -50,3 +43,9 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     position={[0, -0.29, 0]}
   />
 {/if}
+
+<Collider
+  shape='roundCylinder'
+  args={[0.1, 15, 0]}
+  position={[0, -0.37, 0]}
+/>

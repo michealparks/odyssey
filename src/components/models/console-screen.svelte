@@ -67,7 +67,7 @@ useFrame(() => {
   />
 {/if}
 
-<T.Mesh position={[0, 5, 0]} {material}>
+<!-- <T.Mesh name="screen" position={[4.8, 5, 0]} rotation={[-Math.PI / 4, -Math.PI / 2, 0]} {material}>
   <T.PlaneGeometry args={[2, 1]} />
 </T.Mesh>
-  
+   -->

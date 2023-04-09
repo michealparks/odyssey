@@ -1,8 +1,8 @@
 <script lang='ts'>
 
 import { useGltf } from '@threlte/extras'
-import { useReflectionTexture } from './hull-reflection'
-import { T } from '@threlte/core'
+import { reflection } from './hull-reflection'
+import { T, useFrame, useThrelte } from '@threlte/core'
 import { level } from '../../stores/state'
 
 interface GLTFResult {
@@ -18,10 +18,20 @@ interface GLTFResult {
 }
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
-const reflectionTexture = useReflectionTexture()
-
+const envMap = reflection.texture
 const metalness = 0.9
 const roughness = 0.05
+const envMapIntensity = 0.8
+
+const { renderer, scene } = useThrelte()
+
+reflection.texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+
+reflection.target.setSize(1024, 1024)
+
+useFrame(() => {
+  reflection.update(renderer, scene)
+})
 
 </script>
 
@@ -35,8 +45,8 @@ const roughness = 0.05
       is={$gltf.materials.Exterior}
       {metalness}
       {roughness}
-      envMap={reflectionTexture}
-      envMapIntensity={0.8}
+      {envMap}
+      {envMapIntensity}
     />
   </T.Mesh>
 
@@ -49,8 +59,8 @@ const roughness = 0.05
       is={$gltf.materials.Exterior}
       {metalness}
       {roughness}
-      envMap={reflectionTexture}
-      envMapIntensity={0.8}
+      {envMap}
+      {envMapIntensity}
     />
   </T.Mesh>
 
@@ -63,8 +73,8 @@ const roughness = 0.05
       is={$gltf.materials.Exterior}
       {metalness}
       {roughness}
-      envMap={reflectionTexture}
-      envMapIntensity={0.8}
+      {envMap}
+      {envMapIntensity}
     />
   </T.Mesh>
 
@@ -76,8 +86,8 @@ const roughness = 0.05
       is={$gltf.materials.Exterior}
       {metalness}
       {roughness}
-      envMap={reflectionTexture}
-      envMapIntensity={0.8}
+      {envMap}
+      {envMapIntensity}
     />
   </T.Mesh>
 {/if}

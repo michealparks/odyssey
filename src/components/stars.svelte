@@ -1,7 +1,7 @@
 <script lang='ts'>
 
 import { T, useFrame } from '@threlte/core'
-import * as THREE from 'three';
+import * as THREE from 'three'
 import { randomPointOnCircle } from '../lib/math'
 
 export let position: [x: number, y: number, z: number]
@@ -30,7 +30,7 @@ const init = () => {
 
 init()
 
-useFrame((_, delta) => {
+useFrame(() => {
   const p = attribute.array as number[]
 
   for (let i = 0, j = 0; i < p.length; i += 3, j += 1) {
