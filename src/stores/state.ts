@@ -13,7 +13,9 @@ type Frames =
 let frameValue: Frames = (localStorage.getItem('frame') ?? 'title') as Frames
 let levelValue: Levels = Number.parseInt(localStorage.getItem('level') ?? '4') as Levels
 
-export let allowUserControl = true
+export let allowPlayerControl = true
+
+export let animationPlayerControl = writable(false)
 
 export const frame = writable<Frames>(frameValue)
 export const level = writable<Levels>(levelValue)
@@ -65,10 +67,12 @@ frame.subscribe((update) => {
 export const elevatorPosition = tweened(3.83, { easing, duration })
 
 level.subscribe(async (update) => {
-  allowUserControl = false
+  allowPlayerControl = false
+  animationPlayerControl.set(true)
 
   if      (update === 3) await elevatorPosition.set(3.83)
   else if (update === 2) await elevatorPosition.set(-0.48)
 
-  allowUserControl = true
+  allowPlayerControl = true
+  animationPlayerControl.set(false)
 })

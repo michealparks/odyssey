@@ -4,6 +4,7 @@ import { useGltf } from '@threlte/extras'
 import { reflection } from './hull-reflection'
 import { T, useFrame, useThrelte } from '@threlte/core'
 import { level } from '../../stores/state'
+import { graphics } from '../../stores/settings'
 
 interface GLTFResult {
   nodes: {
@@ -25,12 +26,15 @@ const envMapIntensity = 0.8
 
 const { renderer, scene } = useThrelte()
 
-reflection.texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+reflection.texture.anisotropy = renderer?.capabilities.getMaxAnisotropy() ?? 1
 
-reflection.target.setSize(1024, 1024)
+$: {
+  const size = $graphics === 'performance' ? 512 : 1024
+  reflection.target.setSize(size, size)
+}
 
 useFrame(() => {
-  reflection.update(renderer, scene)
+  if (renderer) reflection.update(renderer, scene)
 })
 
 </script>

@@ -2,7 +2,6 @@
 
 import { T } from '@threlte/core'
 import { useGltf } from '@threlte/extras'
-import { Collider } from '@threlte/rapier'
 import InteractionSensor from '../interaction-sensor.svelte'
 import ShipExterior from './ship-exterior.svelte'
 import ShipLevel3 from './ship-3.svelte'

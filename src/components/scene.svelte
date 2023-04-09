@@ -8,6 +8,7 @@ import Stars from './stars.svelte'
 import Ship from './models/ship.svelte'
 import Player from './models/player.svelte'
 import { cameraPosition, cameraRotation } from '../stores/state'
+import { graphics } from '../stores/settings'
 
 softShadows()
 
@@ -15,7 +16,7 @@ interactivity()
 
 const { renderer } = useThrelte()
 
-renderer.useLegacyLights = false
+renderer!.useLegacyLights = false
 
 </script>
 
@@ -32,10 +33,11 @@ renderer.useLegacyLights = false
   castShadow
   intensity={1.1}
   position={[-3.4, 8, 4.3]}
+  shadow.camera.width={2048}
+  shadow.camera.height={2048}
   on:create={({ ref }) => {
     const { shadow } = ref
-    const size = 2 ** 12
-
+    const size = $graphics === 'performance' ? 2 ** 10 : 2 ** 12
     shadow.mapSize.set(size, size)
     shadow.camera.left = -10
     shadow.camera.right = 10
