@@ -32,23 +32,10 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     shape='cuboid'
     position={[4.77, 4.63, -0.09]}
     args={[1, 1, 1]}
-    options={[{
-      input: 'Space',
-      key: ' ',
-      handler: () => setFrame('level_3_console')
-    }]}
+    options={['e']}
+    labels={['interact']}
+    on:interact={() => setFrame('level_3_console')}
     on:exit={() => setFrame('level_3')}
-  />
-
-  <InteractionSensor
-    shape='cuboid'
-    position={[0, 3.87, 1.5]}
-    args={[1, 1, 1]}
-    options={[{
-      input: 'F',
-      effect: 'down',
-      handler: () => setFrame('level_2'),
-    }]}
   />
 
   <!-- floor_top -->
@@ -67,7 +54,6 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     receiveShadow
     visible={$level > 2}
   />
-  
 
   <T
     is={$gltf.nodes.stasis_chamber}
@@ -88,11 +74,7 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     visible={$level > 2}
   />
 
-  <Collider
-    shape='roundCylinder'
-    position={[0, 3.87, 0]}
-    args={[1, 1.5, 0]}
-  />
+  
 
   <AutoColliders shape='cuboid'>
     <T

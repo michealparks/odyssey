@@ -4,18 +4,18 @@ import { Canvas } from '@threlte/core'
 import { World } from '@threlte/rapier'
 import { frame, setFrame } from './stores/state'
 import Scene from './components/scene.svelte'
-import Stats from './components/stats.svelte';
+import Stats from './components/stats.svelte'
+import Debug from './components/debug.svelte'
 
-window.addEventListener('keyup', () =>
-  setFrame('level_3')
-, { once: true })
+window.addEventListener('keyup', () => setFrame('level_3'), { once: true })
+window.addEventListener('click', () => setFrame('level_3'), { once: true })
 
 </script>
 
 <Canvas>
-  <Stats />
-
   <World>
+    <Stats />
+    <Debug />
     <Scene />
     <div slot='fallback'>
       Your browser does not support WASM. Please use a modern browser.
@@ -30,7 +30,7 @@ window.addEventListener('keyup', () =>
   </header>
 
   <section>
-    <button on:click={() => setFrame('level_3')}>
+    <button>
       begin
     </button>
   </section>

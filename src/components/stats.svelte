@@ -1,8 +1,8 @@
 <script lang='ts'>
 
-import { onDestroy, onMount } from 'svelte';
+import { onDestroy, onMount } from 'svelte'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import { useFrame } from '@threlte/core';
+import { useFrame } from '@threlte/core'
 
 const stats = new Stats()
 const v = useFrame(() => stats.update())

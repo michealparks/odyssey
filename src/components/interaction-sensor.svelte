@@ -2,17 +2,11 @@
 
 import { Collider, type ColliderShapes } from '@threlte/rapier'
 import Interaction from './interaction.svelte'
-import { createEventDispatcher } from 'svelte'
-
-interface Option {
-  input: string
-  key?: string
-  effect?: string
-  handler: () => void
-}
+import { createEventDispatcher, onDestroy } from 'svelte'
 
 export let shape: ColliderShapes
-export let options: Option[]
+export let options: string[]
+export let labels: string[]
 export let args:
   [radius: number] |
   [halfHeight: number, radius: number] |
@@ -25,12 +19,8 @@ const dispatch = createEventDispatcher()
 
 const handleKeydown = (event: KeyboardEvent) => {
   const key = event.key.toLowerCase()
-  for (let option of options) {
-    if (option.key === key || option.input.toLowerCase() === key) {
-      option.handler()
-      break
-    }
-  }
+
+  if (options.includes(key)) dispatch('interact', key)
 }
 
 const handleEnter = () => {
@@ -45,6 +35,10 @@ const handleExit = () => {
   dispatch('exit')
 }
 
+onDestroy(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
+
 </script>
 
 <Collider
@@ -56,7 +50,7 @@ const handleExit = () => {
   on:sensorexit={handleExit}
 >
   {#if entered}
-    <Interaction options={options} />
+    <Interaction {options} {labels} />
   {/if}
 </Collider>
  

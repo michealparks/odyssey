@@ -13,6 +13,8 @@ type Frames =
 let frameValue: Frames = (localStorage.getItem('frame') ?? 'title') as Frames
 let levelValue: Levels = Number.parseInt(localStorage.getItem('level') ?? '4') as Levels
 
+export let allowUserControl = true
+
 export const frame = writable<Frames>(frameValue)
 export const level = writable<Levels>(levelValue)
 
@@ -42,8 +44,8 @@ const translations = {
   ],
 } as const
 
-const easing = Easing.quartOut
-const duration = 2000
+const easing = Easing.cubicInOut
+const duration = 1500
 
 const [position, rotation] = translations[frameValue]
 
@@ -58,4 +60,15 @@ frame.subscribe((update) => {
   if (update.includes('level_3')) return level.set(3)
   if (update.includes('level_2')) return level.set(2)
   if (update.includes('level_1')) return level.set(1)
+})
+
+export const elevatorPosition = tweened(3.83, { easing, duration })
+
+level.subscribe(async (update) => {
+  allowUserControl = false
+
+  if      (update === 3) await elevatorPosition.set(3.83)
+  else if (update === 2) await elevatorPosition.set(-0.48)
+
+  allowUserControl = true
 })

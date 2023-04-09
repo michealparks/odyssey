@@ -2,13 +2,8 @@
 
 import { HTML } from '@threlte/extras'
 
-interface Option {
-  input: string
-  effect?: string
-  handler: () => void
-}
-
-export let options: Option[] = []
+export let options: string[] = []
+export let labels: string[] = []
 
 </script>
 
@@ -17,12 +12,14 @@ export let options: Option[] = []
   {...$$restProps}
 >
   <ul>
-    {#each options as { input, effect } (input)}
-      {#if effect === undefined}
-        <li class='one'>{input}</li>
+    {#each options as option, i (option)}
+      {#if labels[i] === undefined}
+        <li class='one'>{option}</li>
       {:else}
         <li class='two'>
-          <span>{input}</span> <span>{effect}</span>
+          <span>{option}</span>
+          <span class="border-l border-l-white" />
+          <span>{labels[i]}</span>
         </li>
       {/if}
     {/each}
@@ -43,18 +40,9 @@ export let options: Option[] = []
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    background-color: white;
-  }
-
-  li.one,
-  li.two span:first-child {
     background-color: #666;
-    color: #eee;
-    padding: 0.125rem;
+    color: #fff;
     border-radius: 3px;
-  }
-
-  li.two span:last-child {
-    margin: 0 0.5rem;
+    padding: 0.125rem;
   }
 </style>
