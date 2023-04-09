@@ -5,7 +5,7 @@ import { useKeyboard, useGamepad } from 'trzy'
 import { Collider, RigidBody, useRapier } from '@threlte/rapier'
 import { useFrame } from '@threlte/core'
 import type RAPIER from '@dimforge/rapier3d-compat'
-import { level, animationPlayerControl, elevatorPosition } from '../../stores/state'
+import { animationPlayerControl, elevatorPosition } from '../../stores/state'
 import Male from './male.svelte'
 
 const { world } = useRapier()
@@ -85,18 +85,6 @@ useFrame((_ctx, _delta) => {
   rigidBody.setTranslation(desiredTranslation, true)
   // rigidBody.setNextKinematicTranslation(correctedMovement)
 })
-
-$: {
-  if (rigidBody) {
-    const t = rigidBody.translation()
-    switch ($level) {
-      case 3: t.y = 4.5; break;
-      case 2: t.y = 0.5; break; 
-      case 1: t.y = -4.1; break;
-    }
-    requestAnimationFrame(() => rigidBody.setTranslation(t, true))
-  }
-}
 
 </script>
 
