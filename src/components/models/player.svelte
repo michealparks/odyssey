@@ -39,7 +39,7 @@ useFrame(() => {
   
   characterController.computeColliderMovement(collider, desiredTranslation)
 
-  const correctedMovement = characterController.computedMovement()
+  // const correctedMovement = characterController.computedMovement()
   // characterController.computeColliderMovement(collider, desiredTranslation);
 
   // for (let i = 0; i < characterController.numComputedCollisions(); i++) {

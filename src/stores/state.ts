@@ -11,7 +11,7 @@ type Frames =
   | 'level_1'
 
 let frameValue: Frames = (localStorage.getItem('frame') ?? 'title') as Frames
-let levelValue: Levels = localStorage.getItem('level') ? Number.parseInt(localStorage.getItem('level')) as Levels : 4
+let levelValue: Levels = Number.parseInt(localStorage.getItem('level') ?? '4') as Levels
 
 export const frame = writable<Frames>(frameValue)
 export const level = writable<Levels>(levelValue)

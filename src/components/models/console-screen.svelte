@@ -19,7 +19,7 @@ const width = 200
 const height = 200
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 const canvas = document.createElement('canvas')
-const ctx = canvas.getContext('2d')
+const ctx = canvas.getContext('2d')!
 canvas.width = width
 canvas.height = height
 ctx.fillStyle = '#ffffff'
@@ -29,7 +29,7 @@ const material = new THREE.MeshStandardMaterial({ map })
 material.side = THREE.FrontSide
 map.wrapS = THREE.RepeatWrapping;
 map.wrapT = THREE.RepeatWrapping;
-map.anisotropy = renderer.capabilities.getMaxAnisotropy()
+map.anisotropy = renderer?.capabilities.getMaxAnisotropy() ?? 1
 
 material.needsUpdate = true
 
