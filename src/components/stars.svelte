@@ -3,53 +3,82 @@
 import { T, useFrame } from '@threlte/core'
 import * as THREE from 'three'
 import { randomPointOnCircle } from '../lib/math'
+import { shaderMaterial } from 'trzy'
 
 const radius = 200
 const length = 2500
-const count = 3_000
-const v = new Float32Array(count);
+const count = 5_000
+const animatedCount = 3_000
+const speeds = new Float32Array(count);
 const geometry = new THREE.BufferGeometry()
-const attribute = new THREE.BufferAttribute(new Float32Array(count * 3), 3)
-geometry.setAttribute('position', attribute)
 
-const p = attribute.array as number[]
+const positionsAttribute = new THREE.BufferAttribute(new Float32Array(count * 3), 3)
+const positionsArray = positionsAttribute.array as number[]
+geometry.setAttribute('position', positionsAttribute)
 
-for (let i = 0, j = 0; i < p.length; i += 3, j += 1) {
+const colorArray = new Float32Array(count)
+
+for (let i = 0, j = 0; i < positionsArray.length; i += 3, j += 1) {
   const [x, y] = randomPointOnCircle(radius)
 
-  v[j] = (Math.random() * 3) + 1
+  positionsArray[i + 0] = x
+  positionsArray[i + 1] = y
+  positionsArray[i + 2] = (Math.random() * length) - (length / 2)
 
-  p[i + 0] = x
-  p[i + 1] = y
-  p[i + 2] = (Math.random() * length) - (length / 2)
+  speeds[j] = (Math.random() * 4)
+
+  const grayscaleValue = Math.random() * 256 | 0
+  colorArray[j] = grayscaleValue / 255
+
+  if (j > animatedCount) {
+    colorArray[j] /= 2
+  }
 }
 
-useFrame(() => {
-  const p = attribute.array as number[]
+const colorAttribute = new THREE.BufferAttribute(colorArray, 1)
+geometry.setAttribute('color', colorAttribute)
 
-  for (let i = 0, j = 0; i < p.length; i += 3, j += 1) {
-    const val = p[i + 2]!
+const StarMaterial = shaderMaterial(
+  {},
+  `
+    attribute float color;
+    varying float vColor;
+
+    void main() {
+      vColor = color;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      gl_PointSize = 2.0;
+    }
+  `,
+  `
+    varying float vColor;
+    void main() {
+      gl_FragColor = vec4(vColor, vColor, vColor, 1);
+    }
+  `)
+
+const material = new StarMaterial()
+
+useFrame(() => {
+  for (let i = 0, j = 0, l = animatedCount * 3; i < l; i += 3, j += 1) {
+    const val = positionsArray[i + 2]!
     if (val > length / 2) {
-      p[i + 2] = -length / 2
+      positionsArray[i + 2] = -length / 2
     } else {
-      p[i + 2] += v[j]!
+      positionsArray[i + 2] += speeds[j]!
     }
   }
 
-  geometry.attributes['position']!.needsUpdate = true
+  positionsAttribute.needsUpdate = true
 })
 
 </script>
 
 <T.Points
   name='stars'
-  frustumCulled={false}
   {geometry}
+  {material}
   position.z={-140}
 >
-  <T.PointsMaterial
-    size={1}
-    color={0xffffff}
-    sizeAttenuation={false}
-  />
+
 </T.Points>

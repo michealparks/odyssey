@@ -37,17 +37,23 @@ export let labels: string[] = []
 
   .divider {
     height: 100%;
-    border-left: 1px solid #eee;
+    border-left: 1px solid rgba(255,255,255,0.6);
   }
 
   li {
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    border: 1px solid #eee;
-    background-color: #666;
+    border: 1px solid rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
     color: #fff;
     border-radius: 3px;
     padding: 0 5px;
+    font-size: 13px;
+  }
+
+  span:first-child {
+    min-width: 0.5rem;
+    text-align: center;
   }
 </style>

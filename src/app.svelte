@@ -1,5 +1,6 @@
 <script lang='ts'>
 
+import { onMount } from 'svelte';
 import { Canvas } from '@threlte/core'
 import { World } from '@threlte/rapier'
 import { frame, setFrame } from './stores/state'
@@ -7,20 +8,28 @@ import Scene from './components/scene.svelte'
 import Stats from './components/stats.svelte'
 import Debug from './components/debug.svelte'
 
-if (window.localStorage.getItem('frame') === null) {
-  const init = () => {
-    setFrame('level_3')
-    window.removeEventListener('keyup', init)
-    window.removeEventListener('click', init)
-  }
+let ready = false
 
-  window.addEventListener('keyup', init)
-  window.addEventListener('click', init)
-}
+onMount(() => {
+  setTimeout(() => {
+    if (window.localStorage.getItem('frame') === null) {
+      const init = () => {
+        setFrame('level_3')
+        window.removeEventListener('keyup', init)
+        window.removeEventListener('click', init)
+      }
+
+      window.addEventListener('keyup', init)
+      window.addEventListener('click', init)
+    }
+
+    ready = true
+  }, 500)
+})
 
 </script>
 
-<Canvas>
+<Canvas useLegacyLights={false}>
   <World>
     <Stats />
     <Debug />
@@ -38,9 +47,11 @@ if (window.localStorage.getItem('frame') === null) {
   </header>
 
   <section>
-    <button>
-      begin
-    </button>
+    {#if ready}
+      <button>
+        begin
+      </button>
+    {/if}
   </section>
 {/if}
 
@@ -56,13 +67,14 @@ if (window.localStorage.getItem('frame') === null) {
   }
 
   h1 {
-    display: none;
+    opacity: 0.3;
     cursor: default;
     margin-top: -26px;
     color: white;
-    font-size: 8rem;
+    font-size: 10rem;
     font-weight: 100;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, sans-serif;
+    letter-spacing: 30px;
   }
 
   section {
@@ -73,12 +85,14 @@ if (window.localStorage.getItem('frame') === null) {
     display: grid;
     place-content: center;
     height: 20vh;
+    
   }
 
   button {
+    opacity: 0.3;
     background: transparent;
     color: white;
     font-weight: 200;
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 </style>

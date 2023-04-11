@@ -1,8 +1,7 @@
 <script lang='ts'>
 
 import { softShadows } from 'trzy'
-import { T, useThrelte } from '@threlte/core'
-import { interactivity } from '@threlte/extras'
+import { T } from '@threlte/core'
 import Stars from './stars.svelte'
 import Ship from './models/ship.svelte'
 import Player from './models/player.svelte'
@@ -10,16 +9,6 @@ import { cameraPosition, cameraRotation, frame } from '../stores/state'
 import { graphics } from '../stores/settings'
 
 softShadows()
-
-interactivity()
-
-const { renderer } = useThrelte()
-
-if (renderer) renderer.useLegacyLights = false
-
-window.addEventListener('resize', () => {
-  if (renderer) renderer.useLegacyLights = false
-}, { passive: true })
 
 </script>
 
