@@ -2,12 +2,11 @@
 
 import { T } from '@threlte/core'
 import { useGltf } from '@threlte/extras'
-import InteractionSensor from '../interaction-sensor.svelte'
 import ShipExterior from './ship-exterior.svelte'
 import ShipLevel3 from './ship-3.svelte'
 import ShipLevel2 from './ship-2.svelte'
 import ShipLevel1 from './ship-1.svelte'
-import { setFrame, elevatorPosition } from '../../stores/state';
+import { elevatorPosition } from '../../stores/state';
 
 interface GLTFResult {
   nodes: {
@@ -27,15 +26,6 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 <ShipLevel3 />
 <ShipLevel2 />
 <ShipLevel1 />
-
-<InteractionSensor
-  shape='roundCylinder'
-  position={[0, 3.87, 0]}
-  args={[1, 1.2, 0]}
-  options={['f']}
-  labels={['down']}
-  on:interact={() => setFrame('level_2')}
-/>
 
 {#if $gltf}
   <T

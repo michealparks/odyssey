@@ -14,7 +14,7 @@ if (localStorage.getItem('debug') === 'true') {
     THREE,
     scene,
     camera: camera.current as THREE.PerspectiveCamera,
-    renderer,
+    renderer: renderer!,
     options: { location: 'overlay' }
   })
 }
@@ -22,5 +22,5 @@ if (localStorage.getItem('debug') === 'true') {
 </script>
 
 {#if physicsDebug}
-  <Debug />
+  <Debug depthTest={false} depthWrite={false} />
 {/if}

@@ -4,11 +4,13 @@ import { tweened } from 'svelte/motion'
 import { useKeyboard, useGamepad } from 'trzy'
 import { Collider, RigidBody, useRapier } from '@threlte/rapier'
 import { useFrame } from '@threlte/core'
+import { AudioListener } from '@threlte/extras'
 import type RAPIER from '@dimforge/rapier3d-compat'
 import { animationPlayerControl, elevatorPosition } from '../../stores/state'
 import Male from './male.svelte'
 
-const { world } = useRapier()
+// const { world } = useRapier()
+
 const { gamepad, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
 
@@ -17,7 +19,7 @@ let rigidBody: RAPIER.RigidBody
 
 let action = 'Man_Idle'
 
-const characterController = world.createCharacterController(0.01);
+// const characterController = world.createCharacterController(0.01);
 
 let rotation = tweened(0, { duration: 100 })
 
@@ -63,13 +65,20 @@ useFrame((_ctx, _delta) => {
   }
 
   if (x !== 0 || z !== 0) {
-    $rotation = Math.atan2(x, z)
-  }
+    const nextRotation = Math.atan2(x, z)
   
+    if ($rotation < 0 && nextRotation > 0) {
+
+    }
+  
+    $rotation = Math.atan2(x, z)
+    console.log($rotation)
+  }
+
   desiredTranslation.x += x
   desiredTranslation.z += z
 
-  characterController.computeColliderMovement(collider, desiredTranslation)
+  // characterController.computeColliderMovement(collider, desiredTranslation)
 
   // const correctedMovement = characterController.computedMovement()
   // characterController.computeColliderMovement(collider, desiredTranslation);
@@ -83,18 +92,21 @@ useFrame((_ctx, _delta) => {
   // console.log(correctedMovement.x, correctedMovement.z)
 
   rigidBody.setTranslation(desiredTranslation, true)
+
   // rigidBody.setNextKinematicTranslation(correctedMovement)
 })
 
 </script>
 
 <RigidBody
-  dominance={0}
+  dominance={1}
   enabledRotations={[false, false, false]}
   bind:rigidBody
   position={[0, 5.5, -2.5]}
   type='dynamic'
 >
+  <AudioListener />
+
   <Collider
     bind:collider
     shape='capsule'

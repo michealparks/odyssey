@@ -3,11 +3,10 @@
 import { softShadows } from 'trzy'
 import { T, useThrelte } from '@threlte/core'
 import { interactivity } from '@threlte/extras'
-import Box from './box.svelte'
 import Stars from './stars.svelte'
 import Ship from './models/ship.svelte'
 import Player from './models/player.svelte'
-import { cameraPosition, cameraRotation } from '../stores/state'
+import { cameraPosition, cameraRotation, frame } from '../stores/state'
 import { graphics } from '../stores/settings'
 
 softShadows()
@@ -16,7 +15,11 @@ interactivity()
 
 const { renderer } = useThrelte()
 
-renderer!.useLegacyLights = false
+if (renderer) renderer.useLegacyLights = false
+
+window.addEventListener('resize', () => {
+  if (renderer) renderer.useLegacyLights = false
+}, { passive: true })
 
 </script>
 
@@ -33,19 +36,19 @@ renderer!.useLegacyLights = false
   castShadow
   intensity={1.1}
   position={[-3.4, 8, 4.3]}
-  shadow.camera.width={2048}
-  shadow.camera.height={2048}
   on:create={({ ref }) => {
     const { shadow } = ref
     const size = $graphics === 'performance' ? 2 ** 10 : 2 ** 12
     shadow.mapSize.set(size, size)
-    shadow.camera.left = -10
-    shadow.camera.right = 10
-    shadow.camera.top = 10
-    shadow.camera.bottom = -10
-    shadow.camera.far = 20
-    shadow.camera.near = 0.2
-    shadow.camera.updateProjectionMatrix()
+
+    const cam = shadow.camera
+    cam.left = -10
+    cam.right = 10
+    cam.top = 10
+    cam.bottom = -10
+    cam.far = 20
+    cam.near = 0.2
+    cam.updateProjectionMatrix()
   }}
 />
 
@@ -53,11 +56,10 @@ renderer!.useLegacyLights = false
   intensity={0.5}
 />
 
-{#each Array.from({ length: 10 }) as _, i}
-  <Box />
-{/each}
+<Stars />
 
-<Stars position={[0, 0, -140]} />
+{#if $frame !== 'title'}
+  <Player />
+{/if}
 
-<Player />
 <Ship />

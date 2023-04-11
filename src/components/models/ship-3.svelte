@@ -38,6 +38,15 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     on:exit={() => setFrame('level_3')}
   />
 
+  <InteractionSensor
+    shape='roundCylinder'
+    position={[0, 3.87, 0]}
+    args={[1, 1.2, 0]}
+    options={['f']}
+    labels={['down']}
+    on:interact={() => setFrame('level_2')}
+  />
+
   <!-- floor_top -->
   <Collider
     shape='roundCylinder'
@@ -61,10 +70,12 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     receiveShadow
     visible={$level > 2}
   >
-    <Collider
-      shape='roundCylinder'
-      args={[1.3, 0.9, 0]}
-    />
+    {#if $level === 3}
+      <Collider
+        shape='roundCylinder'
+        args={[1.3, 0.9, 0]}
+      />
+    {/if}
   </T>
 
   <T
@@ -73,8 +84,6 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     receiveShadow
     visible={$level > 2}
   />
-
-  
 
   <AutoColliders shape='cuboid'>
     <T

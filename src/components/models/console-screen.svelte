@@ -2,7 +2,8 @@
 
 import * as THREE from 'three'
 import { T, useFrame, useThrelte } from '@threlte/core'
-import { useGltf } from '@threlte/extras'
+import { useGltf, PositionalAudio } from '@threlte/extras'
+import { frame } from '../../stores/state'
 
 export let visible = true
 
@@ -22,8 +23,6 @@ const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')!
 canvas.width = width
 canvas.height = height
-ctx.fillStyle = '#ffffff'
-ctx.fillRect(0, 0, width, height)
 const map = new THREE.CanvasTexture(canvas)
 const material = new THREE.MeshStandardMaterial({ map })
 material.side = THREE.FrontSide
@@ -48,7 +47,7 @@ const drawRandomDot = () => {
 }
 
 useFrame(() => {
-  ctx.fillStyle = '#ffffff'
+  ctx.fillStyle = '#111'
   ctx.fillRect(0, 0, width, height)
   drawRandomDot()
   map.needsUpdate = true
@@ -64,10 +63,20 @@ useFrame(() => {
     position={[4.94, 5.15, -0.09]}
     {material}
     {visible}
-  />
+  >
+    {#if $frame !== 'title'}
+      <PositionalAudio
+        src={'/mp3/computer_broken.mp3'}
+        autoplay
+        refDistance={0.3}
+        maxDistance={0.5}
+        loop
+        directionalCone={{
+          coneInnerAngle: 90,
+          coneOuterAngle: 220,
+          coneOuterGain: 0.3
+        }}
+      />
+    {/if}
+  </T.Mesh>
 {/if}
-
-<!-- <T.Mesh name="screen" position={[4.8, 5, 0]} rotation={[-Math.PI / 4, -Math.PI / 2, 0]} {material}>
-  <T.PlaneGeometry args={[2, 1]} />
-</T.Mesh>
-   -->

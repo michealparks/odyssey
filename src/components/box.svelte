@@ -3,11 +3,8 @@
 import { T } from '@threlte/core'
 import { RigidBody, Collider } from '@threlte/rapier'
 
-const position: [x: number, y: number, z: number] = [
-  (Math.random() * 6) - 3,
-  0.5,
-  (Math.random() * 6) - 3,
-]
+export let position: [x: number, y: number, z: number] = [0, 0, 0]
+export let rigidBody
 
 const rotation: [x: number, y: number, z: number] = [
   Math.random() * 2 * Math.PI,
@@ -19,8 +16,10 @@ const rotation: [x: number, y: number, z: number] = [
 
 <RigidBody
   type='dynamic'
+  enabledRotations={[false, false, false]}
   {position}
   {rotation}
+  bind:this={$rigidBody}
 >
   <T.Mesh name='Box' castShadow>
     <T.BoxGeometry args={[1, 1, 1]} />
@@ -31,6 +30,7 @@ const rotation: [x: number, y: number, z: number] = [
 		contactForceEventThreshold={30}
 		restitution={0.4}
 		shape='cuboid'
+    mass={0.1}
 		args={[0.5, 0.5, 0.5]}
 	/>
 </RigidBody>

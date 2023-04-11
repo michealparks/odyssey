@@ -29,8 +29,16 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       floor_top_railing: THREE.Mesh
       console: THREE.Mesh
       console_screen: THREE.Mesh
-      floor_top001: THREE.Mesh
       elevator_platform: THREE.Mesh
+      sentry: THREE.Mesh
+      floor_center_rail_1: THREE.Mesh
+      floor_center_rail_3: THREE.Mesh
+      floor_center_rail_4: THREE.Mesh
+      floor_center_rail_2: THREE.Mesh
+      floor_center_rail_5: THREE.Mesh
+      floor_center_rail_6: THREE.Mesh
+      floor_center_rail_7: THREE.Mesh
+      floor_center_rail_8: THREE.Mesh
     }
     materials: {
       Material: THREE.MeshStandardMaterial
@@ -148,15 +156,6 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       userData={{ name: 'console_screen' }}
     />
     <T.Mesh
-      name="floor_top001"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_top001.geometry}
-      material={$gltf.materials.Material}
-      position={[0, 4.04, -4.45]}
-      userData={{ name: 'floor_top.001' }}
-    />
-    <T.Mesh
       name="elevator_platform"
       castShadow
       receiveShadow
@@ -164,6 +163,87 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       material={$gltf.materials.Material}
       position={[0, 3.83, 0]}
       userData={{ name: 'elevator_platform' }}
+    />
+    <T.Mesh
+      name="sentry"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.sentry.geometry}
+      material={$gltf.materials.Material}
+      position={[0, -0.29, 0]}
+      userData={{ name: 'sentry' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_1"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_1.geometry}
+      material={$gltf.materials.Material}
+      position={[2.59, -0.26, 0]}
+      userData={{ name: 'floor_center_rail_1' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_3"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_3.geometry}
+      material={$gltf.materials.Material}
+      position={[0, -0.26, -2.59]}
+      userData={{ name: 'floor_center_rail_3' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_4"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_4.geometry}
+      material={$gltf.materials.Material}
+      position={[-1.83, -0.26, -1.83]}
+      userData={{ name: 'floor_center_rail_4' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_2"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_2.geometry}
+      material={$gltf.materials.Material}
+      position={[1.68, -0.26, -1.68]}
+      userData={{ name: 'floor_center_rail_2' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_5"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_5.geometry}
+      material={$gltf.materials.Material}
+      position={[-2.38, -0.26, 0]}
+      userData={{ name: 'floor_center_rail_5' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_6"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_6.geometry}
+      material={$gltf.materials.Material}
+      position={[-1.83, -0.26, 1.83]}
+      userData={{ name: 'floor_center_rail_6' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_7"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_7.geometry}
+      material={$gltf.materials.Material}
+      position={[0, -0.26, 2.38]}
+      userData={{ name: 'floor_center_rail_7' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_8"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_8.geometry}
+      material={$gltf.materials.Material}
+      position={[1.68, -0.26, 1.68]}
+      userData={{ name: 'floor_center_rail_8' }}
     />
 
     <slot {ref} />

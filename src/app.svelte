@@ -7,8 +7,16 @@ import Scene from './components/scene.svelte'
 import Stats from './components/stats.svelte'
 import Debug from './components/debug.svelte'
 
-window.addEventListener('keyup', () => setFrame('level_3'), { once: true })
-window.addEventListener('click', () => setFrame('level_3'), { once: true })
+if (window.localStorage.getItem('frame') === null) {
+  const init = () => {
+    setFrame('level_3')
+    window.removeEventListener('keyup', init)
+    window.removeEventListener('click', init)
+  }
+
+  window.addEventListener('keyup', init)
+  window.addEventListener('click', init)
+}
 
 </script>
 
