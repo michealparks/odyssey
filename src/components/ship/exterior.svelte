@@ -4,7 +4,6 @@ import { useGltf } from '@threlte/extras'
 import { reflection } from './hull-reflection'
 import { T, useFrame, useThrelte } from '@threlte/core'
 import { level } from '../../stores/state'
-import { graphics } from '../../stores/settings'
 
 interface GLTFResult {
   nodes: {

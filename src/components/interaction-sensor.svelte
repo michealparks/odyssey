@@ -3,7 +3,7 @@
 import { T } from '@threlte/core'
 import { Collider, type ColliderShapes } from '@threlte/rapier'
 import Interaction from './interaction.svelte'
-import { createEventDispatcher, onDestroy } from 'svelte'
+import { createEventDispatcher } from 'svelte'
 
 export let enabled = true
 export let shape: ColliderShapes
@@ -26,21 +26,17 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 const handleEnter = () => {
   entered = true
-  window.addEventListener('keydown', handleKeydown, { passive: true })
   dispatch('enter')
 }
 
 const handleExit = () => {
   entered = false
-  window.removeEventListener('keydown', handleKeydown)
   dispatch('exit')
 }
 
-onDestroy(() => {
-  window.removeEventListener('keydown', handleKeydown)
-})
-
 </script>
+
+<svelte:window on:keydown={entered ? handleKeydown : null} />
 
 <T.Group {...$$restProps}>
   <Collider

@@ -2,26 +2,12 @@
 
 import * as THREE from 'three'
 import { Group } from 'three'
-import { T, type Props, type Events, type Slots } from '@threlte/core'
+import type { ActionName } from './types'
+import { T, type Events, type Slots } from '@threlte/core'
 import { useGltf, useGltfAnimations } from '@threlte/extras'
 
-type $$Props = Props<THREE.Group>
 type $$Events = Events<THREE.Group>
 type $$Slots = Slots<THREE.Group>
-
-type ActionName =
-  | 'Man_Clapping'
-  | 'Man_Death'
-  | 'Man_Idle'
-  | 'Man_Jump'
-  | 'Man_Punch'
-  | 'Man_Roll'
-  | 'Man_Run'
-  | 'Man_RunningJump'
-  | 'Man_Sitting'
-  | 'Man_Standing'
-  | 'Man_SwordSlash'
-  | 'Man_Walk'
 
 type GLTFResult = {
   nodes: {
@@ -90,7 +76,7 @@ $: {
   >
     <T is={$gltf.nodes.Bone} />
     <T.SkinnedMesh
-      name='Cylinder002'
+      name='Skin'
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002.geometry}
@@ -98,7 +84,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002.skeleton}
     />
     <T.SkinnedMesh
-      name='Cylinder002_1'
+      name='Feet'
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_1.geometry}
@@ -106,7 +92,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_1.skeleton}
     />
     <T.SkinnedMesh
-      name='Cylinder002_2'
+      name='Hair'
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_2.geometry}
@@ -114,7 +100,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_2.skeleton}
     />
     <T.SkinnedMesh
-      name='Cylinder002_3'
+      name='Shirt'
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_3.geometry}
@@ -122,7 +108,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_3.skeleton}
     />
     <T.SkinnedMesh
-      name='Cylinder002_4'
+      name='Pants'
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_4.geometry}
@@ -130,7 +116,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_4.skeleton}
     />
     <T.SkinnedMesh
-      name='Cylinder002_5'
+      name='Socks'
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_5.geometry}

@@ -2,8 +2,8 @@
 
 import { T, useThrelte } from '@threlte/core'
 import Stars from './stars.svelte'
-import Ship from './models/ship.svelte'
-import Player from './models/player.svelte'
+import Ship from './ship/index.svelte'
+import Player from './player/index.svelte'
 import Lights from './lights.svelte'
 import { cameraPosition, cameraRotation, frame } from '../stores/state'
 import { softShadows, resetSoftShadows } from 'trzy'

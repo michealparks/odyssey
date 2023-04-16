@@ -1,12 +1,11 @@
 <script lang='ts'>
 
-import { useGltf } from '@threlte/extras'
+import { useGltf, HTML } from '@threlte/extras'
 import { AutoColliders } from '@threlte/rapier'
 import { T } from '@threlte/core'
-import ConsoleScreen from './console-screen.svelte'
 import { frame, setFrame, cameraAnimating, gameState } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte'
-import { HTML } from '@threlte/extras'
+import ConsoleScreen from './console-screen.svelte'
 import Dialogue from './dialogue.svelte'
 
 interface GLTFResult {
@@ -42,7 +41,7 @@ const handleSelectConsole = () => {
   <ConsoleScreen {visible}>
     {#if $frame === 'level_3_console' && !$cameraAnimating}
       <HTML center sprite>
-        <section class={$gameState}>
+        <section class={$gameState === 'fixedComputer' ? 'w-[30vw]' : 'w-[fit-content]'}>
           {#if $gameState === 'initial'}
             <p>asgr;oijznsvlsdlfnkfehlks...?</p>
           {:else if $gameState === 'fixedComputer'}
@@ -69,26 +68,27 @@ const handleSelectConsole = () => {
 
 <style>
   section {
-    position: relative;
+    position: absolute;
     top: 0;
     right: 0;
     border: 1px solid white;
-    transform: translate(0, -120%);
+    transform: translate(50%, -100%);
+    margin-top: -5rem;
     padding: 1rem 2rem;
-    width: 30vw;
     backdrop-filter: blur(1px);
-  }
-
-  div {
-    position: absolute;
-    height: 7rem;
-    width: 1px;
-    bottom: -7rem;
-    left: 50%;
-    background-color: white;
   }
 
   p {
     font-family: monospace;
+    color: white;
+  }
+
+  div {
+    position: absolute;
+    height: 5rem;
+    width: 1px;
+    bottom: -5rem;
+    left: 50%;
+    background-color: white;
   }
 </style>

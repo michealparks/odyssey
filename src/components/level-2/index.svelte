@@ -6,7 +6,7 @@ import { Collider } from '@threlte/rapier'
 import { level, frame, setFrame } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte'
 import { tweened } from 'svelte/motion'
-import Joint from '../joint.svelte'
+import Joint from './joint.svelte'
 import Sentry from './sentry.svelte'
 
 interface GLTFResult {
@@ -46,9 +46,11 @@ $: {
   }
 }
 
+$: visible = $frame === 'level_2'
+
 </script>
 
-<Sentry />
+<Sentry {visible} />
 
 <InteractionSensor
   shape='roundCylinder'
@@ -77,9 +79,9 @@ $: {
 {#if $gltf}
   <T
     is={$gltf.nodes.floor_center}
-    visible={$frame === 'level_2'}
     receiveShadow
     position.y={-0.29}
+    {visible}
   />
 
   <T
@@ -89,7 +91,7 @@ $: {
     receiveShadow
     position.x={2.59}
     position.y={-0.26}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint />
   </T>
@@ -99,7 +101,7 @@ $: {
     castShadow
     receiveShadow
     position={[1.68, -0.26, -1.68]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={Math.PI / 4} />
   </T>
@@ -109,63 +111,58 @@ $: {
     castShadow
     receiveShadow
     position={[0, -0.26, -2.59]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={Math.PI / 2} />
   </T>
-  <T.Mesh
+  <T
     name="floor_center_rail_4"
+    is={$gltf.nodes.floor_center_rail_4}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_4.geometry}
-    material={$gltf.materials.Material}
     position={[-1.83, -0.26, -1.83]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={3 * Math.PI / 4} />
-  </T.Mesh>
-  <T.Mesh
+  </T>
+  <T
     name="floor_center_rail_5"
+    is={$gltf.nodes.floor_center_rail_5}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_5.geometry}
-    material={$gltf.materials.Material}
     position={[-2.38, -0.26, 0]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={Math.PI} />
-  </T.Mesh>
-  <T.Mesh
+  </T>
+  <T
     name="floor_center_rail_6"
+    is={$gltf.nodes.floor_center_rail_6}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_6.geometry}
-    material={$gltf.materials.Material}
     position={[-1.83, -0.26, 1.83]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={5 * Math.PI / 4} />
-  </T.Mesh>
-  <T.Mesh
+  </T>
+  <T
     name="floor_center_rail_7"
+    is={$gltf.nodes.floor_center_rail_7}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_7.geometry}
-    material={$gltf.materials.Material}
     position={[0, -0.26, 2.38]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={3 * Math.PI / 2} />
-  </T.Mesh>
-  <T.Mesh
+  </T>
+  <T
     name="floor_center_rail_8"
+    is={$gltf.nodes.floor_center_rail_8}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_8.geometry}
-    material={$gltf.materials.Material}
     position={[1.68, -0.26, 1.68]}
-    visible={$frame === 'level_2'}
+    {visible}
   >
     <Joint rotation={7 * Math.PI / 4} />
-  </T.Mesh>
+  </T>
 {/if}

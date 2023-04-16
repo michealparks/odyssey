@@ -3,7 +3,8 @@
 import { T, useFrame } from '@threlte/core'
 import { Collider } from '@threlte/rapier'
 import { useGltf } from '@threlte/extras'
-import { frame } from '../../stores/state'
+
+export let visible = false
 
 interface GLTFResult {
   nodes: {
@@ -33,9 +34,9 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
     material={$gltf.materials.Material}
     position.y={-0.29}
     rotation.y={rotationY}
-    visible={$frame === 'level_2'}
+    {visible}
   >
-    <T.Group position={[-6.78, 0.2, 0]}>
+    <T.Group position.x={-6.78} position.y={0.2}>
       <Collider shape='ball' args={[0.5]} />
 
       <T.SpotLight

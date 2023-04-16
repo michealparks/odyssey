@@ -7,20 +7,18 @@ import { useFrame } from '@threlte/core'
 import { AudioListener } from '@threlte/extras'
 import type RAPIER from '@dimforge/rapier3d-compat'
 import { animationPlayerControl, elevatorPosition } from '../../stores/state'
-import Male from './male.svelte'
+import Male from './model.svelte'
+import type { ActionName } from './types'
 
 // const { world } = useRapier()
 
 const { gamepad1, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
 
-const frame = localStorage.getItem('frame') ?? 'title'
-const position: [x: number, y: number, z: number] = frame === 'level_2' ? [0, 0, 0] : [0, 5.5, -2.5]
-
 let collider: RAPIER.Collider
 let rigidBody: RAPIER.RigidBody
 
-let action = 'Man_Idle'
+let action: ActionName = 'Man_Idle'
 
 // const characterController = world.createCharacterController(0.01);
 

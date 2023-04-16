@@ -11,49 +11,17 @@ export let labels: string[] = []
   sprite
   {...$$restProps}
 >
-  <ul>
+  <ul class='grid gap-1 font-mono m-0'>
     {#each options as option, i (option)}
-      {#if labels[i] === undefined}
-        <li class='one'>{option}</li>
-      {:else}
-        <li class='two'>
-          <span>{option}</span>
-          <span class="divider" />
-          <span>{labels[i]}</span>
-        </li>
-      {/if}
+      <li class='flex items-center gap-1 px-1.5 text-white backdrop-blur border border-[rgba(255,255,255,0.6)] rounded-[3px]'>
+        {#if labels[i] === undefined}
+          {option}
+        {:else}
+        <span class='min-w-[0.5rem] text-center'>{option}</span>
+        <span class='h-full border-l border-[rgba(255,255,255,0.6)]' />
+        <span>{labels[i]}</span>
+        {/if}
+      </li>
     {/each}
   </ul>
 </HTML>
-
-<style>
-  ul {
-    display: grid;
-    gap: 0.25rem;
-    font-family: ui-monospace;
-    border-radius: 3px;
-    margin: 0;
-  }
-
-  .divider {
-    height: 100%;
-    border-left: 1px solid rgba(255,255,255,0.6);
-  }
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    border: 1px solid rgba(255,255,255,0.6);
-    backdrop-filter: blur(10px);
-    color: #fff;
-    border-radius: 3px;
-    padding: 0 5px;
-    font-size: 13px;
-  }
-
-  span:first-child {
-    min-width: 0.5rem;
-    text-align: center;
-  }
-</style>

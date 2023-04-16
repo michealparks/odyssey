@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store'
 import * as Easing from 'svelte/easing'
 import { tweened } from 'svelte/motion'
+import { storage } from '../lib/storage'
 
 type Levels = 1 | 2 | 3 | 4
 
@@ -10,8 +11,8 @@ type Frames =
   | 'level_2'
   | 'level_1'
 
-let frameValue: Frames = (localStorage.getItem('frame') ?? 'title') as Frames
-let levelValue: Levels = Number.parseInt(localStorage.getItem('level') ?? '4') as Levels
+let frameValue: Frames = storage('frame') as Frames
+let levelValue: Levels = Number.parseInt(storage('level')!) as Levels
 
 export let allowPlayerControl = true
 
@@ -85,4 +86,4 @@ level.subscribe(async (update) => {
 
 type GameStates = 'initial' | 'fixedComputer' | 'ended'
 
-export const gameState = writable<GameStates>('fixedComputer')
+export const gameState = writable<GameStates>(storage('gameState') as GameStates)

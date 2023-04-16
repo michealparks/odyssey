@@ -3,10 +3,10 @@
 import { tweened } from 'svelte/motion'
 import { T } from '@threlte/core'
 import { useGltf, Audio } from '@threlte/extras'
-import ShipExterior from './ship-exterior.svelte'
-import ShipLevel3 from './ship-3.svelte'
-import ShipLevel2 from './ship-2.svelte'
-import ShipLevel1 from './ship-1.svelte'
+import Exterior from './exterior.svelte'
+import Level3 from '../level-3/index.svelte'
+import Level2 from '../level-2/index.svelte'
+import Level1 from './level-1.svelte'
 import { elevatorPosition, frame } from '../../stores/state';
 
 interface GLTFResult {
@@ -33,10 +33,10 @@ $: {
 
 </script>
 
-<ShipExterior />
-<ShipLevel3 />
-<ShipLevel2 />
-<ShipLevel1 />
+<Exterior />
+<Level3 />
+<Level2 />
+<!-- <Level1 /> -->
 
 {#if $gltf}
   <T
