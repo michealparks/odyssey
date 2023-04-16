@@ -3,9 +3,10 @@
 import * as THREE from 'three'
 import { T, useFrame, useThrelte } from '@threlte/core'
 import { useGltf, PositionalAudio } from '@threlte/extras'
-import { frame } from '../../stores/state'
+import { frame, gameState } from '../../stores/state'
+    import { tweened } from 'svelte/motion';
 
-export let visible = true
+export let visible = false
 
 const { renderer } = useThrelte()
 
@@ -32,11 +33,11 @@ map.anisotropy = renderer?.capabilities.getMaxAnisotropy() ?? 1
 
 material.needsUpdate = true
 
-const randInt = (min: number, max: number) => {
+const randInt = (min: number, max: number): number => {
   return Math.random() * (max - min) + min | 0
 }
 
-const drawRandomDot = () => {
+const drawRandomDot = (): void => {
   for (let i = 0; i < 20; i += 1) {
     ctx.fillStyle = `rgb(${randInt(0, 255)}, ${randInt(0, 255)}, ${randInt(0, 255)})`
     const x = randInt(0, width)
@@ -46,12 +47,18 @@ const drawRandomDot = () => {
   }
 }
 
-useFrame(() => {
+const { start, stop } = useFrame(() => {
   ctx.fillStyle = '#111'
   ctx.fillRect(0, 0, width, height)
   drawRandomDot()
   map.needsUpdate = true
-})
+}, { autostart: false })
+
+$: visible ? start() : stop()
+
+const volume = tweened(0, { duration: 500 })
+
+$: $volume = $frame === 'level_3_console' ? 0.7 : 0
 
 </script>
 
@@ -64,19 +71,21 @@ useFrame(() => {
     {material}
     {visible}
   >
-    {#if $frame !== 'title'}
-      <PositionalAudio
-        src={'/mp3/computer_broken.mp3'}
-        autoplay
-        refDistance={0.3}
-        maxDistance={0.5}
-        loop
-        directionalCone={{
-          coneInnerAngle: 90,
-          coneOuterAngle: 220,
-          coneOuterGain: 0.3
-        }}
-      />
+    {#if $volume > 0}
+    <PositionalAudio
+      src={`/mp3/computer_${$gameState === 'initial' ? 'broken' : 'working'}.mp3`}
+      refDistance={0.5}
+      maxDistance={0.5}
+      autoplay
+      volume={$volume}
+      loop
+      directionalCone={{
+        coneInnerAngle: 90,
+        coneOuterAngle: 220,
+        coneOuterGain: 0.3
+      }}
+    />
     {/if}
+    <slot />
   </T.Mesh>
 {/if}

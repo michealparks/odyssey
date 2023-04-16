@@ -17,28 +17,9 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
 
   type GLTFResult = {
     nodes: {
-      person: THREE.Mesh
-      exterior_top: THREE.Mesh
-      exterior_bottom: THREE.Mesh
-      exterior_middle_bottom: THREE.Mesh
-      floor_top: THREE.Mesh
-      floor_center: THREE.Mesh
-      stasis_chamber: THREE.Mesh
-      floor_bottom: THREE.Mesh
-      exterior_middle_top: THREE.Mesh
-      floor_top_railing: THREE.Mesh
-      console: THREE.Mesh
-      console_screen: THREE.Mesh
-      elevator_platform: THREE.Mesh
-      sentry: THREE.Mesh
-      floor_center_rail_1: THREE.Mesh
-      floor_center_rail_3: THREE.Mesh
-      floor_center_rail_4: THREE.Mesh
-      floor_center_rail_2: THREE.Mesh
-      floor_center_rail_5: THREE.Mesh
-      floor_center_rail_6: THREE.Mesh
-      floor_center_rail_7: THREE.Mesh
-      floor_center_rail_8: THREE.Mesh
+      mesh_0: THREE.Mesh
+      mesh_0_1: THREE.Mesh
+      mesh_0_2: THREE.Mesh
     }
     materials: {
       Material: THREE.MeshStandardMaterial
@@ -51,200 +32,29 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
 
 {#if $gltf}
   <T is={ref} dispose={false} {...$$restProps}>
-    <T.Mesh
-      name="person"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.person.geometry}
-      material={$gltf.materials.Material}
-      position={[2.24, 4.92, 0]}
-      userData={{ name: 'person' }}
-    />
-    <T.Mesh
-      name="exterior_top"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.exterior_top.geometry}
-      material={$gltf.materials.Exterior}
-      userData={{ name: 'exterior_top' }}
-    />
-    <T.Mesh
-      name="exterior_bottom"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.exterior_bottom.geometry}
-      material={$gltf.materials.Exterior}
-      userData={{ name: 'exterior_bottom' }}
-    />
-    <T.Mesh
-      name="exterior_middle_bottom"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.exterior_middle_bottom.geometry}
-      material={$gltf.materials.Exterior}
-      userData={{ name: 'exterior_middle_bottom' }}
-    />
-    <T.Mesh
-      name="floor_top"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_top.geometry}
-      material={$gltf.materials.Material}
-      position={[0, 3.87, 0]}
-      userData={{ name: 'floor_top' }}
-    />
-    <T.Mesh
-      name="floor_center"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center.geometry}
-      material={$gltf.materials.Material}
-      position={[0, -0.29, 0]}
-      userData={{ name: 'floor_center' }}
-    />
-    <T.Mesh
-      name="stasis_chamber"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.stasis_chamber.geometry}
-      material={$gltf.materials.Material}
-      position={[0, 5.43, -4.32]}
-      userData={{ name: 'stasis_chamber' }}
-    />
-    <T.Mesh
-      name="floor_bottom"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_bottom.geometry}
-      material={$gltf.materials.Material}
-      position={[0, -4.13, 0]}
-      userData={{ name: 'floor_bottom' }}
-    />
-    <T.Mesh
-      name="exterior_middle_top"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.exterior_middle_top.geometry}
-      material={$gltf.materials.Exterior}
-      userData={{ name: 'exterior_middle_top' }}
-    />
-    <T.Mesh
-      name="floor_top_railing"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_top_railing.geometry}
-      material={$gltf.materials.Material}
-      position={[0, 3.87, 0]}
-      userData={{ name: 'floor_top_railing' }}
-    />
-    <T.Mesh
-      name="console"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.console.geometry}
-      material={$gltf.nodes.console.material}
-      position={[4.77, 4.63, -0.09]}
-      userData={{ name: 'console' }}
-    />
-    <T.Mesh
-      name="console_screen"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.console_screen.geometry}
-      material={$gltf.nodes.console_screen.material}
-      position={[4.94, 5.15, -0.09]}
-      userData={{ name: 'console_screen' }}
-    />
-    <T.Mesh
-      name="elevator_platform"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.elevator_platform.geometry}
-      material={$gltf.materials.Material}
-      position={[0, 3.83, 0]}
-      userData={{ name: 'elevator_platform' }}
-    />
-    <T.Mesh
-      name="sentry"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.sentry.geometry}
-      material={$gltf.materials.Material}
-      position={[0, -0.29, 0]}
-      userData={{ name: 'sentry' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_1"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_1.geometry}
-      material={$gltf.materials.Material}
-      position={[2.59, -0.26, 0]}
-      userData={{ name: 'floor_center_rail_1' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_3"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_3.geometry}
-      material={$gltf.materials.Material}
-      position={[0, -0.26, -2.59]}
-      userData={{ name: 'floor_center_rail_3' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_4"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_4.geometry}
-      material={$gltf.materials.Material}
-      position={[-1.83, -0.26, -1.83]}
-      userData={{ name: 'floor_center_rail_4' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_2"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_2.geometry}
-      material={$gltf.materials.Material}
-      position={[1.68, -0.26, -1.68]}
-      userData={{ name: 'floor_center_rail_2' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_5"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_5.geometry}
-      material={$gltf.materials.Material}
-      position={[-2.38, -0.26, 0]}
-      userData={{ name: 'floor_center_rail_5' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_6"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_6.geometry}
-      material={$gltf.materials.Material}
-      position={[-1.83, -0.26, 1.83]}
-      userData={{ name: 'floor_center_rail_6' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_7"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_7.geometry}
-      material={$gltf.materials.Material}
-      position={[0, -0.26, 2.38]}
-      userData={{ name: 'floor_center_rail_7' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_8"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_8.geometry}
-      material={$gltf.materials.Material}
-      position={[1.68, -0.26, 1.68]}
-      userData={{ name: 'floor_center_rail_8' }}
-    />
+    <T.Group position={[-8.25, -8.25, -8.25]} scale={0}>
+      <T.Mesh
+        name="mesh_0"
+        castShadow
+        receiveShadow
+        geometry={$gltf.nodes.mesh_0.geometry}
+        material={$gltf.materials.Material}
+      />
+      <T.Mesh
+        name="mesh_0_1"
+        castShadow
+        receiveShadow
+        geometry={$gltf.nodes.mesh_0_1.geometry}
+        material={$gltf.materials.Exterior}
+      />
+      <T.Mesh
+        name="mesh_0_2"
+        castShadow
+        receiveShadow
+        geometry={$gltf.nodes.mesh_0_2.geometry}
+        material={$gltf.nodes.mesh_0_2.material}
+      />
+    </T.Group>
 
     <slot {ref} />
   </T>

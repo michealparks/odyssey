@@ -19,8 +19,10 @@ if (localStorage.getItem('debug') === 'true') {
   })
 }
 
+let depth = true
+
 </script>
 
 {#if physicsDebug}
-  <Debug depthTest={false} depthWrite={false} />
+  <Debug depthTest={depth} depthWrite={depth} />
 {/if}

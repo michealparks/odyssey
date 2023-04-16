@@ -2,11 +2,12 @@
 
 import { T } from '@threlte/core'
 import { useGltf, Audio } from '@threlte/extras'
-import { AutoColliders, Collider } from '@threlte/rapier'
+import { Collider } from '@threlte/rapier'
 import { level, frame, setFrame } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte'
 import { tweened } from 'svelte/motion'
-import Joint from '../joint.svelte';
+import Joint from '../joint.svelte'
+import Sentry from './sentry.svelte'
 
 interface GLTFResult {
   nodes: {
@@ -31,7 +32,7 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 const handleInteract = ({ detail }: CustomEvent<string>) => {
   switch (detail) {
     case 'e': return setFrame('level_3')
-    case 'f': return setFrame('level_1')
+    // case 'f': return setFrame('level_1')
   }
 }
 
@@ -39,7 +40,7 @@ let volume = tweened(0, { duration: 2000 })
 
 $: {
   if ($level === 2) {
-    volume.set(0.1)
+    volume.set(0.01)
   } else {
     volume.set(0)
   }
@@ -47,22 +48,22 @@ $: {
 
 </script>
 
-{#if $level === 2}
-  <InteractionSensor
-    shape='roundCylinder'
-    position={[0, 0, 0]}
-    args={[1, 1, 0]}
-    options={['e', 'f']}
-    labels={['up', 'down']}
-    on:interact={handleInteract}
-  />
-{/if}
+<Sentry />
 
-<Collider
+<InteractionSensor
   shape='roundCylinder'
-  args={[0.1, 15, 0]}
-  position={[0, -0.37, 0]}
+  args={[1, 1, 0]}
+  options={['e', /* 'f' */]}
+  labels={['up', /* 'down' */]}
+  on:interact={handleInteract}
 />
+
+<T.Group position.y={-0.37}>
+  <Collider
+    shape='roundCylinder'
+    args={[0.1, 15, 0]}
+  />
+</T.Group>
 
 {#if $frame !== 'title'}
   <Audio
@@ -76,54 +77,42 @@ $: {
 {#if $gltf}
   <T
     is={$gltf.nodes.floor_center}
-    visible={$level > 1}
+    visible={$frame === 'level_2'}
     receiveShadow
-    position={[0, -0.29, 0]}
+    position.y={-0.29}
   />
-
-  <AutoColliders
-    shape='cuboid'
-  >
-    <T.Mesh
-      name="sentry"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.sentry.geometry}
-      material={$gltf.materials.Material}
-      position={[0, -0.29, 0]}
-      rotation={[0, -0.13, 0]}
-    />
-  </AutoColliders>
 
   <T
     name="floor_center_rail_1"
     is={$gltf.nodes.floor_center_rail_1}
     castShadow
     receiveShadow
-    position={[2.59, -0.26, 0]}
+    position.x={2.59}
+    position.y={-0.26}
+    visible={$frame === 'level_2'}
   >
     <Joint />
   </T>
-  <T.Mesh
+  <T
     name="floor_center_rail_2"
+    is={$gltf.nodes.floor_center_rail_2}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_2.geometry}
-    material={$gltf.materials.Material}
     position={[1.68, -0.26, -1.68]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={Math.PI / 4} />
-  </T.Mesh>
-  <T.Mesh
+  </T>
+  <T
     name="floor_center_rail_3"
+    is={$gltf.nodes.floor_center_rail_3}
     castShadow
     receiveShadow
-    geometry={$gltf.nodes.floor_center_rail_3.geometry}
-    material={$gltf.materials.Material}
     position={[0, -0.26, -2.59]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={Math.PI / 2} />
-  </T.Mesh>
+  </T>
   <T.Mesh
     name="floor_center_rail_4"
     castShadow
@@ -131,6 +120,7 @@ $: {
     geometry={$gltf.nodes.floor_center_rail_4.geometry}
     material={$gltf.materials.Material}
     position={[-1.83, -0.26, -1.83]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={3 * Math.PI / 4} />
   </T.Mesh>
@@ -141,6 +131,7 @@ $: {
     geometry={$gltf.nodes.floor_center_rail_5.geometry}
     material={$gltf.materials.Material}
     position={[-2.38, -0.26, 0]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={Math.PI} />
   </T.Mesh>
@@ -151,6 +142,7 @@ $: {
     geometry={$gltf.nodes.floor_center_rail_6.geometry}
     material={$gltf.materials.Material}
     position={[-1.83, -0.26, 1.83]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={5 * Math.PI / 4} />
   </T.Mesh>
@@ -161,6 +153,7 @@ $: {
     geometry={$gltf.nodes.floor_center_rail_7.geometry}
     material={$gltf.materials.Material}
     position={[0, -0.26, 2.38]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={3 * Math.PI / 2} />
   </T.Mesh>
@@ -171,6 +164,7 @@ $: {
     geometry={$gltf.nodes.floor_center_rail_8.geometry}
     material={$gltf.materials.Material}
     position={[1.68, -0.26, 1.68]}
+    visible={$frame === 'level_2'}
   >
     <Joint rotation={7 * Math.PI / 4} />
   </T.Mesh>

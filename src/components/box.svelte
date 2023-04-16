@@ -14,23 +14,27 @@ const rotation: [x: number, y: number, z: number] = [
 
 </script>
 
-<RigidBody
-  type='dynamic'
-  enabledRotations={[false, false, false]}
+<T.Mesh
+  name='Box'
+  castShadow
+  receiveShadow
   {position}
   {rotation}
-  bind:this={$rigidBody}
 >
-  <T.Mesh name='Box' castShadow>
-    <T.BoxGeometry args={[1, 1, 1]} />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
+  <T.BoxGeometry args={[1, 1, 1]} />
+  <T.MeshStandardMaterial />
 
-  <Collider
-		contactForceEventThreshold={30}
-		restitution={0.4}
-		shape='cuboid'
-    mass={0.1}
-		args={[0.5, 0.5, 0.5]}
-	/>
-</RigidBody>
+  <RigidBody
+    type='dynamic'
+    enabledRotations={[false, false, false]}
+    bind:this={$rigidBody}
+  >
+    <Collider
+      contactForceEventThreshold={30}
+      restitution={0.4}
+      shape='cuboid'
+      mass={0.1}
+      args={[0.5, 0.5, 0.5]}
+    />
+  </RigidBody>
+</T.Mesh>

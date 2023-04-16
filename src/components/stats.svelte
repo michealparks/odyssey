@@ -5,16 +5,15 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { useFrame } from '@threlte/core'
 
 const stats = new Stats()
-const v = useFrame(() => stats.update())
-v.stop()
+const { start, stop } = useFrame(() => stats.update(), { autostart: false })
 
 onMount(() => {
-  v.start()
   document.body.append(stats.dom)
+  start()
 })
 
 onDestroy(() => {
-  v.stop()
+  stop()
   stats.dom.remove()
 })
 

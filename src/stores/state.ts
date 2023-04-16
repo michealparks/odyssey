@@ -15,7 +15,7 @@ let levelValue: Levels = Number.parseInt(localStorage.getItem('level') ?? '4') a
 
 export let allowPlayerControl = true
 
-export let animationPlayerControl = writable(false)
+export const animationPlayerControl = writable(false)
 
 export const frame = writable<Frames>(frameValue)
 export const level = writable<Levels>(levelValue)
@@ -53,15 +53,21 @@ const [position, rotation] = translations[frameValue]
 
 export const cameraPosition = tweened(position, { easing, duration })
 export const cameraRotation = tweened(rotation, { easing, duration })
+export const cameraAnimating = writable<boolean>(false)
 
-frame.subscribe((update) => {
+frame.subscribe(async (update) => {
   const [position, rotation] = translations[update]
-  cameraPosition.set(position)
-  cameraRotation.set(rotation)
 
-  if (update.includes('level_3')) return level.set(3)
-  if (update.includes('level_2')) return level.set(2)
-  if (update.includes('level_1')) return level.set(1)
+  if (update.includes('level_3')) level.set(3)
+  if (update.includes('level_2')) level.set(2)
+  if (update.includes('level_1')) level.set(1)
+
+  cameraAnimating.set(true)
+
+  cameraRotation.set(rotation)
+  await cameraPosition.set(position)
+
+  cameraAnimating.set(false)
 })
 
 export const elevatorPosition = tweened(3.83, { easing, duration })
@@ -76,3 +82,7 @@ level.subscribe(async (update) => {
   allowPlayerControl = true
   animationPlayerControl.set(false)
 })
+
+type GameStates = 'initial' | 'fixedComputer' | 'ended'
+
+export const gameState = writable<GameStates>('fixedComputer')

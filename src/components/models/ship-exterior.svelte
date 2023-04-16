@@ -28,10 +28,8 @@ const { renderer, scene } = useThrelte()
 
 reflection.texture.anisotropy = renderer?.capabilities.getMaxAnisotropy() ?? 1
 
-$: {
-  const size = $graphics === 'performance' ? 512 : 1024
-  reflection.target.setSize(size, size)
-}
+const size = 512
+reflection.target.setSize(size, size)
 
 useFrame(() => {
   if (renderer) reflection.update(renderer, scene)

@@ -53,6 +53,9 @@ const gltf = useGltf<GLTFResult>('./glb/male.glb')
 
 export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
 
+let timeoutid = 0
+let crossFading = false
+
 $: {
   if ($actions[action]) {
     if (!previous) {
@@ -63,7 +66,12 @@ $: {
 
       currentAction.play()
       previousAction.crossFadeTo(currentAction, 0.1, false)
-      setTimeout(() => previousAction.stop(), 100)
+
+      if (timeoutid) clearTimeout(timeoutid)
+      timeoutid = setTimeout(() => {
+        previousAction.stop()
+        crossFading = false
+      }, 100)
     }
 
     previous = action
@@ -78,60 +86,57 @@ $: {
     dispose={false}
     {...$$restProps}
     name='Male'
-    position={[0, -0.77, 0]}
     scale={0.4}
   >
     <T is={$gltf.nodes.Bone} />
-    <T.Group name='BaseHuman'>
-      <T.SkinnedMesh
-        name='Cylinder002'
-        castShadow
-        receiveShadow
-        geometry={$gltf.nodes.Cylinder002.geometry}
-        material={$gltf.materials.Skin}
-        skeleton={$gltf.nodes.Cylinder002.skeleton}
-      />
-      <T.SkinnedMesh
-        name='Cylinder002_1'
-        castShadow
-        receiveShadow
-        geometry={$gltf.nodes.Cylinder002_1.geometry}
-        material={$gltf.materials.Eyes}
-        skeleton={$gltf.nodes.Cylinder002_1.skeleton}
-      />
-      <T.SkinnedMesh
-        name='Cylinder002_2'
-        castShadow
-        receiveShadow
-        geometry={$gltf.nodes.Cylinder002_2.geometry}
-        material={$gltf.materials.Hair}
-        skeleton={$gltf.nodes.Cylinder002_2.skeleton}
-      />
-      <T.SkinnedMesh
-        name='Cylinder002_3'
-        castShadow
-        receiveShadow
-        geometry={$gltf.nodes.Cylinder002_3.geometry}
-        material={$gltf.materials.Shirt}
-        skeleton={$gltf.nodes.Cylinder002_3.skeleton}
-      />
-      <T.SkinnedMesh
-        name='Cylinder002_4'
-        castShadow
-        receiveShadow
-        geometry={$gltf.nodes.Cylinder002_4.geometry}
-        material={$gltf.materials.Pants}
-        skeleton={$gltf.nodes.Cylinder002_4.skeleton}
-      />
-      <T.SkinnedMesh
-        name='Cylinder002_5'
-        castShadow
-        receiveShadow
-        geometry={$gltf.nodes.Cylinder002_5.geometry}
-        material={$gltf.materials.Socks}
-        skeleton={$gltf.nodes.Cylinder002_5.skeleton}
-      />
-    </T.Group>
+    <T.SkinnedMesh
+      name='Cylinder002'
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.Cylinder002.geometry}
+      material={$gltf.materials.Skin}
+      skeleton={$gltf.nodes.Cylinder002.skeleton}
+    />
+    <T.SkinnedMesh
+      name='Cylinder002_1'
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.Cylinder002_1.geometry}
+      material={$gltf.materials.Eyes}
+      skeleton={$gltf.nodes.Cylinder002_1.skeleton}
+    />
+    <T.SkinnedMesh
+      name='Cylinder002_2'
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.Cylinder002_2.geometry}
+      material={$gltf.materials.Hair}
+      skeleton={$gltf.nodes.Cylinder002_2.skeleton}
+    />
+    <T.SkinnedMesh
+      name='Cylinder002_3'
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.Cylinder002_3.geometry}
+      material={$gltf.materials.Shirt}
+      skeleton={$gltf.nodes.Cylinder002_3.skeleton}
+    />
+    <T.SkinnedMesh
+      name='Cylinder002_4'
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.Cylinder002_4.geometry}
+      material={$gltf.materials.Pants}
+      skeleton={$gltf.nodes.Cylinder002_4.skeleton}
+    />
+    <T.SkinnedMesh
+      name='Cylinder002_5'
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.Cylinder002_5.geometry}
+      material={$gltf.materials.Socks}
+      skeleton={$gltf.nodes.Cylinder002_5.skeleton}
+    />
     <slot {ref} />
   </T>
 {/if}

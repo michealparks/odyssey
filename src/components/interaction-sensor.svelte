@@ -1,9 +1,11 @@
 <script lang='ts'>
 
+import { T } from '@threlte/core'
 import { Collider, type ColliderShapes } from '@threlte/rapier'
 import Interaction from './interaction.svelte'
 import { createEventDispatcher, onDestroy } from 'svelte'
 
+export let enabled = true
 export let shape: ColliderShapes
 export let options: string[]
 export let labels: string[]
@@ -11,7 +13,6 @@ export let args:
   [radius: number] |
   [halfHeight: number, radius: number] |
   [halfHeight: number, halfWidth: number, halfLength: number]
-export let position: [x: number, y: number, z: number] = [0, 0, 0]
 
 let entered = false
 
@@ -41,16 +42,16 @@ onDestroy(() => {
 
 </script>
 
-<Collider
-  {shape}
-  {args}
-  {position}
-  sensor
-  on:sensorenter={handleEnter}
-  on:sensorexit={handleExit}
->
+<T.Group {...$$restProps}>
+  <Collider
+    sensor
+    {shape}
+    {args}
+    on:sensorenter={enabled ? handleEnter : null}
+    on:sensorexit={enabled ? handleExit : null}
+  />
+
   {#if entered}
     <Interaction {options} {labels} />
   {/if}
-</Collider>
- 
+</T.Group>

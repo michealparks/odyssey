@@ -2,7 +2,7 @@
 
 import { tweened } from 'svelte/motion'
 import { useKeyboard, useGamepad } from 'trzy'
-import { Collider, RigidBody, useRapier } from '@threlte/rapier'
+import { Collider, RigidBody } from '@threlte/rapier'
 import { useFrame } from '@threlte/core'
 import { AudioListener } from '@threlte/extras'
 import type RAPIER from '@dimforge/rapier3d-compat'
@@ -11,8 +11,11 @@ import Male from './male.svelte'
 
 // const { world } = useRapier()
 
-const { gamepad, updateGamepad } = useGamepad()
+const { gamepad1, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
+
+const frame = localStorage.getItem('frame') ?? 'title'
+const position: [x: number, y: number, z: number] = frame === 'level_2' ? [0, 0, 0] : [0, 5.5, -2.5]
 
 let collider: RAPIER.Collider
 let rigidBody: RAPIER.RigidBody
@@ -41,7 +44,7 @@ useFrame((_ctx, _delta) => {
   let z = 0
 
   if (keyboard.controlling) {
-    const scale = 1 / (keyboard.keys['shift'] ? 15 : 30)
+    const scale = 1 / (keyboard.keys['shift'] ? 13 : 30)
 
     x = keyboard.x * scale
     z = -keyboard.y * scale
@@ -50,12 +53,12 @@ useFrame((_ctx, _delta) => {
       x /= 1.5
       z /= 1.5
     }
-  } else if (gamepad.connected) {
+  } else if (gamepad1.connected) {
     const scale = 1 / 10
 
     updateGamepad()
-    x = gamepad.leftStickX * scale
-    z = gamepad.leftStickY * scale
+    x = gamepad1.leftStickX * scale
+    z = gamepad1.leftStickY * scale
   }
 
   if (x === 0 && z === 0) {
@@ -72,7 +75,6 @@ useFrame((_ctx, _delta) => {
     }
   
     $rotation = Math.atan2(x, z)
-    console.log($rotation)
   }
 
   desiredTranslation.x += x
@@ -102,7 +104,6 @@ useFrame((_ctx, _delta) => {
   dominance={1}
   enabledRotations={[false, false, false]}
   bind:rigidBody
-  position={[0, 5.5, -2.5]}
   type='dynamic'
 >
   <AudioListener />
@@ -115,6 +116,7 @@ useFrame((_ctx, _delta) => {
 
   <Male
     {action}
+    position.y={-0.77}
     rotation.y={$rotation}
   />
 </RigidBody>

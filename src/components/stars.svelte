@@ -45,6 +45,7 @@ const StarMaterial = shaderMaterial(
     varying float vColor;
 
     void main() {
+      float z = (position.z + 1250.0) / 2500.0;
       vColor = color;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       gl_PointSize = 2.0;
@@ -53,7 +54,7 @@ const StarMaterial = shaderMaterial(
   `
     varying float vColor;
     void main() {
-      gl_FragColor = vec4(vColor, vColor, vColor, 1);
+      gl_FragColor = vec4(vColor, vColor, vColor, 1.0);
     }
   `)
 
