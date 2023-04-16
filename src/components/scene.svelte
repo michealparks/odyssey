@@ -10,6 +10,8 @@ import { softShadows, resetSoftShadows } from 'trzy'
 
 const { renderer, scene, camera } = useThrelte()
 
+renderer!.debug.checkShaderErrors = import.meta.env.DEV
+
 softShadows()
 resetSoftShadows(renderer!, scene, $camera)
 

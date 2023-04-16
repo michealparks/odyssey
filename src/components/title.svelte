@@ -1,21 +1,20 @@
 <script lang='ts'>
 
-import { onMount } from 'svelte'
 import { setFrame } from '../stores/state'
 
 let ready = false
 
-const init = () => {
-  if (ready) setFrame('level_3')
-}
+const init = (event: Event) => {
+  if ((event as KeyboardEvent).key === 'Escape') return
 
-onMount(() => setTimeout(() => { ready = true }, 500))
+  setFrame('level_3')
+}
 
 </script>
 
 <svelte:window
-  on:keyup={init}
-  on:click={init}
+  on:keyup|passive|once={init}
+  on:click|passive|once={init}
 />
 
 <header class='absolute top-0 left-0 w-full h-full grid place-content-center'>

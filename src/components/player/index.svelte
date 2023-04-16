@@ -24,6 +24,9 @@ let action: ActionName = 'Man_Idle'
 
 let rotation = tweened(0, { duration: 100 })
 
+let desiredRotation = 0
+let referenceAngle = 0
+
 $: rigidBody?.setEnabled(!$animationPlayerControl)
 
 useFrame((_ctx, _delta) => {
@@ -66,13 +69,29 @@ useFrame((_ctx, _delta) => {
   }
 
   if (x !== 0 || z !== 0) {
-    const nextRotation = Math.atan2(x, z)
+    let nextRotation = referenceAngle + Math.atan2(x, z)
   
-    if ($rotation < 0 && nextRotation > 0) {
+    const startRotation = desiredRotation
+    const dif = nextRotation - startRotation
 
-    }
+    if (dif > Math.PI) console.log('dif > +PI', startRotation, nextRotation)
+    if (dif < -Math.PI) console.log('dif <-PI', startRotation, nextRotation)
+
+    // // Going left
+    // if (dif < -Math.PI) {
+    //   referenceAngle += Math.PI * 2
+    //   nextRotation += referenceAngle
+    // }
   
-    $rotation = Math.atan2(x, z)
+    // // Going right
+    // if (dif > Math.PI) {
+    //   referenceAngle -= Math.PI * 2
+    //   nextRotation += referenceAngle
+    // }
+  
+    desiredRotation = nextRotation
+    $rotation = nextRotation
+    // $rotation = Math.atan2(x, z)
   }
 
   desiredTranslation.x += x

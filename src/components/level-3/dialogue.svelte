@@ -46,7 +46,7 @@ const tree = [
           line('Access to crew records is restricted to authorized personnel only.'),
           line('Please provide authorization credentials for access.'),
           question('How am I supposed to give you credentials if I can’t remember my name?', [
-            line('Requesting suggestions for exploits of the terminal is not a supported function of this terminal.')
+            line('Requesting suggestions for exploits of this terminal is not a supported function of this terminal.')
           ])
         ]),
       ])
@@ -90,7 +90,7 @@ const process = (branch: Node[]) => {
 }
 
 const handleInput = (question: Question) => {
-  lastQuestion = question.text
+  lastQuestion = question.text === 'Back' ? '' : question.text
   question.asked = true
   process(question.next)
 }

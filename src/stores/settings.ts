@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store'
-import { storage } from '../lib/storage'
+import { save, storage } from '../lib/storage'
 
-export type GraphicsMode = 'performance' | 'quality'
+export type GraphicsMode = 'performance' | 'balanced' | 'quality'
 
 export const graphics = writable<GraphicsMode>(storage('graphics') as GraphicsMode)
+
+graphics.subscribe(value => save('graphics', value))

@@ -6,6 +6,7 @@ import { frame } from './stores/state'
 import Scene from './components/scene.svelte'
 import Debug from './components/debug.svelte'
 import Title from './components/title.svelte'
+import Menu from './components/menu.svelte'
 
 </script>
 
@@ -23,3 +24,5 @@ import Title from './components/title.svelte'
 {#if $frame === 'title'}
   <Title />
 {/if}
+
+<Menu />
