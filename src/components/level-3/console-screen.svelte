@@ -108,19 +108,19 @@ for (let i = 0; i < n; i += 1) {
     {visible}
   >
     {#if $volume > 0}
-    <PositionalAudio
-      src={`/mp3/computer_${$gameState === 'seeking' ? 'broken' : 'working'}.mp3`}
-      refDistance={0.5}
-      maxDistance={0.5}
-      autoplay
-      volume={$volume}
-      loop
-      directionalCone={{
-        coneInnerAngle: 90,
-        coneOuterAngle: 220,
-        coneOuterGain: 0.3
-      }}
-    />
+      <PositionalAudio
+        src={`/mp3/computer_${$gameState === 'seeking' ? 'broken' : 'working'}.mp3`}
+        refDistance={0.5}
+        maxDistance={0.5}
+        autoplay
+        volume={$volume}
+        loop
+        directionalCone={{
+          coneInnerAngle: 90,
+          coneOuterAngle: 220,
+          coneOuterGain: 0.3
+        }}
+      />
     {/if}
     <slot />
   </T.Mesh>

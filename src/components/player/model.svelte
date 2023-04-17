@@ -6,6 +6,7 @@ import type { ActionName } from './types'
 import { T, type Events, type Slots } from '@threlte/core'
 import { useGltf, useGltfAnimations } from '@threlte/extras'
 import { playSound } from '../../lib/sound'
+import { fadeToAction } from '../../lib/animation'
 
 type $$Events = Events<THREE.Group>
 type $$Slots = Slots<THREE.Group>
@@ -34,12 +35,7 @@ export const ref = new Group()
 
 export let action: ActionName = 'Man_Idle'
 
-let previous: ActionName
-
 const gltf = useGltf<GLTFResult>('./glb/male.glb')
-
-let timeoutid = 0
-let crossFading = false
 
 let soundId1 = 0
 let soundId2 = 0
@@ -64,27 +60,8 @@ mixer.addEventListener('loop', playAnimationSound)
 
 $: {
   if ($actions[action]) {
-    if (!previous) {
-      $actions[action]!.play()
-      playAnimationSound()
-    } else if (previous !== action) {
-      const previousAction = $actions[previous]!
-      const currentAction = $actions[action]!
-
-      clearTimeout(soundId1)
-      clearTimeout(soundId2)
-      currentAction.play()
-      previousAction.crossFadeTo(currentAction, 0.1, false)
-      playAnimationSound()
-
-      if (timeoutid) clearTimeout(timeoutid)
-      timeoutid = setTimeout(() => {
-        previousAction.stop()
-        crossFading = false
-      }, 100)
-    }
-
-    previous = action
+    fadeToAction($actions[action]!, 0.1)
+    playAnimationSound()
   }
 }
 

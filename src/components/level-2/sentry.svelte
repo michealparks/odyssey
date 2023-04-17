@@ -17,12 +17,9 @@ let light: THREE.SpotLight
 
 const raycaster = new THREE.Raycaster()
 const raycastPosition = new THREE.Vector3()
-const raycastDirection = new THREE.Vector3(0, 0.2, 0)
 
 raycaster.near = 0
 raycaster.far = 15
-
-const { scene } = useThrelte()
 
 let state: States = 'sleeping'
 let moveDirection = 1
@@ -42,9 +39,11 @@ let charge = tweened(0, { duration: 1000 })
 let lightIntensity = tweened(0, { duration: 2000 })
 let moveSpeed = tweened(0, { duration: 2000 })
 let rotationY = 0
+let explosionPosition = [0, 0]
 
-let bulletTarget = tweened<[x: number, z: number]>([0, 0], { duration: 1000 })
+let bulletPosition = tweened<[x: number, z: number]>([0, 0], { duration: 1000 })
 let bulletOpacity = tweened(0, { duration: 600 })
+let explosionScale = tweened(0, { duration: 500 })
 
 const sleeping = () => {
   if (switchState === 1 && visible) {
@@ -87,11 +86,17 @@ const firing = async () => {
   stop()
   await moveSpeed.set(0, { duration: 500 })
   light.getWorldPosition(raycastPosition)
-  await bulletTarget.set([raycastPosition.x, raycastPosition.z], { duration: 0 })
+  await bulletPosition.set([raycastPosition.x, raycastPosition.z], { duration: 0 })
   await bulletOpacity.set(1, { duration: 0 })
   playSound('laser.mp3')
+  
   bulletOpacity.set(0)
-  await bulletTarget.set([0, 0])
+  setTimeout(async () => {
+    explosionPosition = [...$bulletPosition]
+    await explosionScale.set(1)
+    explosionScale.set(0, { duration: 0 })
+  }, 500)
+  await bulletPosition.set([0, 0])
   await moveSpeed.set(moveDirection * (0.01 + (Math.random() > 0.5 ? 0.5 : -0.5) * 0.03), { duration: 500 })
   start()
 
@@ -160,9 +165,9 @@ $: {
 
   <T.Group
     name='bullet'
-    position.x={$bulletTarget[0]}
+    position.x={$bulletPosition[0]}
     position.y={0.2}
-    position.z={$bulletTarget[1]}
+    position.z={$bulletPosition[1]}
   >
     <T.Mesh>
       <T.IcosahedronGeometry args={[0.15]} />
@@ -170,6 +175,21 @@ $: {
       <T.PointLight intensity={$bulletOpacity * 15} />
     </T.Mesh>
   </T.Group>
+
+  <T.Mesh
+    name='explosion'
+    position.x={explosionPosition[0]}
+    position.y={0.2}
+    position.z={explosionPosition[1]}
+    scale={$explosionScale}
+  >
+    <T.SphereGeometry args={[2]} />
+    <T.MeshBasicMaterial
+      transparent={true}
+      opacity={1 / ($explosionScale + 0.01)}
+      color='#FFE0B2'
+    />
+  </T.Mesh>
 
   <T.Group rotation.y={rotationY}>
     <T.Group
