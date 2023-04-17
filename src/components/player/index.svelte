@@ -37,7 +37,9 @@ gameState.subscribe((value) => {
 
 $: cinematic = $gameState === 'intro' || $gameState === 'end'
 
-const { start, stop } = useFrame((_ctx, _delta) => {
+const t = 0.01667
+
+const { start, stop } = useFrame((_ctx, delta) => {
   const desiredTranslation = rigidBody.translation()
 
   if ($animationPlayerControl) {
@@ -50,8 +52,10 @@ const { start, stop } = useFrame((_ctx, _delta) => {
   let x = 0
   let z = 0
 
+  const f = delta / t
+
   if (keyboard.controlling) {
-    const scale = 1 / (keyboard.keys['shift'] ? 13 : 30)
+    const scale = 1 / (keyboard.keys['shift'] ? 13 : 30) * f
 
     x = keyboard.x * scale
     z = -keyboard.y * scale
@@ -126,7 +130,7 @@ const { start, stop } = useFrame((_ctx, _delta) => {
 
   <Male
     visible={$gameState !== 'intro'}
-    {action}
+    action={$animationPlayerControl ? 'Man_Idle' : action}
     position.y={-0.77}
     rotation.y={$rotation}
   />

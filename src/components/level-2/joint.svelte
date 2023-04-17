@@ -58,7 +58,7 @@ const handleExit = (event: any) => {
     </RigidBody>
   </T.Group>
 
-  <T.Group position.y={0.8} rotation.y={rotation}>
+  <T.Group position.y={1.5} rotation.y={rotation}>
     <RigidBody
       type='dynamic'
       enabledRotations={[false, false, false]}
@@ -77,15 +77,15 @@ const handleExit = (event: any) => {
         receiveShadow
         geometry={$gltf.nodes.sphere.geometry}
         material={$gltf.nodes.sphere.material}
-        position={[0, 0.1, 0]}
+        position.y={-0.5}
       />
       <T.Mesh
         name="sphere_band"
         castShadow
         receiveShadow
         geometry={$gltf.nodes.sphere_band.geometry}
+        position.y={-0.5}
         {material}
-        position.y={0.1}
       />
     </RigidBody>
 

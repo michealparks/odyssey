@@ -71,18 +71,8 @@ const seeking = () => {
     $moveSpeed = moveDirection * (0.01 + (Math.random() > 0.5 ? 0.5 : -0.5) * 0.03)
   }
 
-  const player = scene.getObjectByName('Player')
-
   if (Math.random() < 0.02) {
     state = 'firing'
-  }
-
-  if (player) {
-    light.getWorldPosition(raycastPosition)
-
-    raycastPosition.y = 0.2
-    raycaster.set(raycastPosition, raycastDirection.normalize())
-    const intersections = raycaster.intersectObjects([player], true)
   }
 }
 
