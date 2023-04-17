@@ -5,6 +5,7 @@ import { Collider, type ColliderShapes } from '@threlte/rapier'
 import Interaction from './interaction.svelte'
 import { createEventDispatcher } from 'svelte'
 
+export let visible = true
 export let enabled = true
 export let shape: ColliderShapes
 export let options: string[]
@@ -38,7 +39,7 @@ const handleExit = () => {
 
 <svelte:window on:keydown={entered ? handleKeydown : null} />
 
-<T.Group {...$$restProps}>
+<T.Group {visible} {...$$restProps}>
   <Collider
     sensor
     {shape}
@@ -47,7 +48,7 @@ const handleExit = () => {
     on:sensorexit={enabled ? handleExit : null}
   />
 
-  {#if entered}
+  {#if entered && visible}
     <Interaction {options} {labels} />
   {/if}
 </T.Group>

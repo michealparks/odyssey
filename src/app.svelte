@@ -21,11 +21,9 @@ import Menu from './components/menu.svelte'
   </World>
 </Canvas>
 
-{#if $frame === 'title'}
+{#if $frame === 'title' || $frame === 'end'}
   <Title />
-{/if}
-
-{#if $gameState === 'lose'}
+{:else if $gameState === 'lose'}
   <div class='absolute top-0 left-0 w-full h-full grid place-content-center gap-4 bg-black bg-opacity-50 text-white font-sans'>
     <h1 class='text-7xl font-extralight'>You died</h1>
     <button class='text-base' on:click={() => location.reload()}>Again?</button>

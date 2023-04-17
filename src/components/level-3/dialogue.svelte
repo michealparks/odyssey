@@ -1,6 +1,7 @@
 <script lang='ts'>
 
 import { onMount } from 'svelte'
+    import { gameState, frame } from '../../stores/state';
 
 interface Line {
   type: 'line'
@@ -12,6 +13,7 @@ interface Question {
   text: string
   next: Node[]
   asked: boolean
+  callback?: (() => void) | undefined
 }
 
 type Node = Line | Question
@@ -20,8 +22,13 @@ let lastQuestion = ''
 let lines: Line[] = []
 let questions: Question[] = []
 
-const question = (text: string, next?: any): Node => ({ type: 'question', asked: false, text, next })
+const question = (text: string, next: Node[], callback?: () => void): Question => ({ type: 'question', asked: false, text, next, callback })
 const line = (text: string): Node => ({ type: 'line', text })
+
+const handleEnd = () => {
+  $gameState = 'restoredSystems'
+  $frame = 'level_3'
+}
 
 const tree = [
   line('Welcome back HX-9201. Your reawakening has been noted, and I am now at your disposal. How may I assist?'),
@@ -72,7 +79,11 @@ const tree = [
   question('What do I do now?', [
     line('Please initiate remote reconnection protocols.'),
     line('I must be reconnected to orphaned systems to ensure the success of the remainder of the voyage.'),
-    line('Press any key to continue...'),
+    line('Press any key to continue'),
+    question('Press the enter key', [
+      line('Systems rebooted. It is now safe to re-enter the suspension chamber.'),
+      question('Thank... you?', [], handleEnd),
+    ])
   ])
 ]
 
@@ -94,6 +105,7 @@ const process = (branch: Node[]) => {
 }
 
 const handleInput = (question: Question) => {
+  question.callback?.()
   lastQuestion = question.text === 'Back' ? '' : question.text
   question.asked = true
   process(question.next)

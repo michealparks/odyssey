@@ -1,10 +1,11 @@
 <script lang='ts'>
 
 import * as THREE from 'three'
-import { useGltf } from '@threlte/extras'
+import { useGltf, HTML } from '@threlte/extras'
 import { Collider } from '@threlte/rapier'
-import { T, useFrame, useThrelte } from '@threlte/core'
+import { T } from '@threlte/core'
 import { frame, gameState } from '../../stores/state'
+import InteractionSensor from '../interaction-sensor.svelte';
 
 interface GLTFResult {
   nodes: {
@@ -13,9 +14,23 @@ interface GLTFResult {
   materials: {}
 }
 
-const { scene } = useThrelte()
-
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+
+let exited = false
+let erroring = false
+
+const handleInteract = () => {
+  $gameState = 'end'
+    $frame = 'end'
+    return
+  if ($gameState === 'restoredSystems') {
+    $gameState = 'end'
+    $frame = 'end'
+  } else {
+    erroring = true
+    setTimeout(() => (erroring = false), 2000)
+  }
+}
 
 $: visible = $frame.includes('level_3')
 
@@ -25,35 +40,6 @@ $: {
     $gameState = 'seeking'
   }
 }
-
-const count = 16
-const velocities = new Float32Array(count * 3)
-
-for (let i = 0; i < count * 3; i += 3) {
-  velocities[i + 0] = (Math.random() - 0.5) * 0.01
-  velocities[i + 1] = (Math.random() + 0.5) * 0.01
-  velocities[i + 2] = Math.random() * 0.05
-}
-
-const mat4 = new THREE.Matrix4()
-const vec3 = new THREE.Vector3()
-
-const geo = new THREE.IcosahedronGeometry(0.1)
-const mat = new THREE.MeshStandardMaterial({ color: '#fff' })
-const mesh = new THREE.InstancedMesh(geo, mat, count)
-scene.add(mesh)
-mesh.position.set(0, 5.43, -4.32)
-
-const { stop, start } = useFrame(() => {
-  for (let i = 0, j = 0; i < count; i += 1, j += 3) {
-    mesh.getMatrixAt(i, mat4)
-    vec3.setFromMatrixPosition(mat4)
-    vec3.set(vec3.x + velocities[j]!, vec3.y + velocities[j + 1]!, vec3.z + velocities[j + 2]!)
-    mat4.setPosition(vec3)
-    mesh.setMatrixAt(i, mat4)
-  }
-  mesh.instanceMatrix.needsUpdate = true
-}, { autostart: false })
 
 </script>
 
@@ -68,5 +54,25 @@ const { stop, start } = useFrame(() => {
       shape='roundCylinder'
       args={[1.3, 0.9, 0]}
     />
+
+    {#if erroring}
+    <HTML center>
+      <div class='bg-red-500 text-white uppercase p-1 w-28 text-center font-mono font-bold border border-white text-xs z-50'>
+        no response
+      </div>
+    </HTML>
+    {:else}
+      <T.Group position.z={0.5}>
+        <InteractionSensor
+          visible={exited}
+          shape='roundCylinder'
+          args={[1.3, 0.9, 0]}
+          options={['e']}
+          labels={['sleep']}
+          on:interact={handleInteract}
+          on:exit={() => (exited = true)}
+        />
+      </T.Group>
+    {/if}
   </T>
 {/if}

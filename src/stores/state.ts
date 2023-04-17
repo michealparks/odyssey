@@ -10,6 +10,7 @@ type Frames =
   | 'level_3' | 'level_3_console'
   | 'level_2'
   | 'level_1'
+  | 'end'
 
 let frameValue: Frames = storage('frame') as Frames
 let levelValue: Levels = Number.parseInt(storage('level')!) as Levels
@@ -43,7 +44,11 @@ const translations = {
   ],
   title: [
     [0, 0, 57],
-    [0, 0, 0]
+    [0, 0, 0],
+  ],
+  end: [
+    [0, 0, 57],
+    [0, 0, 0],
   ],
 } as const
 
@@ -59,6 +64,7 @@ export const cameraAnimating = writable<boolean>(false)
 frame.subscribe(async (update) => {
   const [position, rotation] = translations[update]
 
+  if (update === 'end') level.set(4)
   if (update.includes('level_3')) level.set(3)
   if (update.includes('level_2')) level.set(2)
   if (update.includes('level_1')) level.set(1)
