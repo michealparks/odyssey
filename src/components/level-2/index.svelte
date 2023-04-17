@@ -3,7 +3,7 @@
 import { T } from '@threlte/core'
 import { useGltf, Audio } from '@threlte/extras'
 import { Collider } from '@threlte/rapier'
-import { level, frame, setFrame } from '../../stores/state'
+import { level, frame, setFrame, gameState } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte'
 import { summation } from '../../lib/math'
 import { tweened } from 'svelte/motion'
@@ -22,6 +22,8 @@ interface GLTFResult {
     floor_center_rail_6: THREE.Mesh
     floor_center_rail_7: THREE.Mesh
     floor_center_rail_8: THREE.Mesh
+    sphere: THREE.Mesh
+    sphere_band: THREE.Mesh
   }
   materials: {
     Material: THREE.MeshStandardMaterial
@@ -45,19 +47,23 @@ let switchState: 0 | 1 | 2 = 0
 let volume = tweened(0, { duration: 2000 })
 
 const handleEnter = (index: number) => {
-  entered += index
-  exited = Math.max(0, exited - index)
+  if (switchState === 1) {
+    entered += index
 
-  if (entered === totalMoved && switchState === 1) {
-    switchState = 2
+    if (entered === totalMoved) {
+      switchState = 2
+      $gameState = 'fixedComputer'
+    }
   }
 }
 
 const handleExit = (index: number) => {
-  exited += index
-  entered = Math.max(0, entered - index)
-  if (exited === totalMoved) {
-    switchState = 1
+  if (switchState === 0) {
+    exited += index
+
+    if (exited === totalMoved) {
+      switchState = 1
+    }
   }
 }
 
@@ -109,7 +115,7 @@ $: visible = $frame === 'level_2'
     position.y={-0.26}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(1)} on:exit={() => handleExit(1)} />
+    <Joint {switchState} on:enter={() => handleEnter(1)} on:exit={() => handleExit(1)} />
   </T>
   <T
     name="floor_center_rail_2"
@@ -119,7 +125,7 @@ $: visible = $frame === 'level_2'
     position={[1.68, -0.26, -1.68]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(2)} on:exit={() => handleExit(2)} rotation={Math.PI / 4} />
+    <Joint {switchState} on:enter={() => handleEnter(2)} on:exit={() => handleExit(2)} rotation={Math.PI / 4} />
   </T>
   <T
     name="floor_center_rail_3"
@@ -129,7 +135,7 @@ $: visible = $frame === 'level_2'
     position={[0, -0.26, -2.59]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(3)} on:exit={() => handleExit(3)} rotation={Math.PI / 2} />
+    <Joint {switchState} on:enter={() => handleEnter(3)} on:exit={() => handleExit(3)} rotation={Math.PI / 2} />
   </T>
   <T
     name="floor_center_rail_4"
@@ -139,7 +145,7 @@ $: visible = $frame === 'level_2'
     position={[-1.83, -0.26, -1.83]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(4)} on:exit={() => handleExit(4)} rotation={3 * Math.PI / 4} />
+    <Joint {switchState} on:enter={() => handleEnter(4)} on:exit={() => handleExit(4)} rotation={3 * Math.PI / 4} />
   </T>
   <T
     name="floor_center_rail_5"
@@ -149,7 +155,7 @@ $: visible = $frame === 'level_2'
     position={[-2.38, -0.26, 0]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(5)} on:exit={() => handleExit(5)} rotation={Math.PI} />
+    <Joint {switchState} on:enter={() => handleEnter(5)} on:exit={() => handleExit(5)} rotation={Math.PI} />
   </T>
   <T
     name="floor_center_rail_6"
@@ -159,7 +165,7 @@ $: visible = $frame === 'level_2'
     position={[-1.83, -0.26, 1.83]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(6)} on:exit={() => handleExit(6)} rotation={5 * Math.PI / 4} />
+    <Joint {switchState} on:enter={() => handleEnter(6)} on:exit={() => handleExit(6)} rotation={5 * Math.PI / 4} />
   </T>
   <T
     name="floor_center_rail_7"
@@ -169,7 +175,7 @@ $: visible = $frame === 'level_2'
     position={[0, -0.26, 2.38]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(7)} on:exit={() => handleExit(7)} rotation={3 * Math.PI / 2} />
+    <Joint {switchState} on:enter={() => handleEnter(7)} on:exit={() => handleExit(7)} rotation={3 * Math.PI / 2} />
   </T>
   <T
     name="floor_center_rail_8"
@@ -179,6 +185,6 @@ $: visible = $frame === 'level_2'
     position={[1.68, -0.26, 1.68]}
     {visible}
   >
-    <Joint on:enter={() => handleEnter(8)} on:exit={() => handleExit(8)} rotation={7 * Math.PI / 4} />
+    <Joint {switchState} on:enter={() => handleEnter(8)} on:exit={() => handleExit(8)} rotation={7 * Math.PI / 4} />
   </T>
 {/if}

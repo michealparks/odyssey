@@ -17,6 +17,8 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
 
   type GLTFResult = {
     nodes: {
+      sphere: THREE.Mesh
+      sphere_band: THREE.Mesh
       person: THREE.Mesh
       exterior_top: THREE.Mesh
       exterior_bottom: THREE.Mesh
@@ -29,16 +31,9 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       floor_top_railing: THREE.Mesh
       console: THREE.Mesh
       console_screen: THREE.Mesh
+      ladder: THREE.Mesh
       elevator_platform: THREE.Mesh
       sentry: THREE.Mesh
-      floor_center_rail_1: THREE.Mesh
-      floor_center_rail_3: THREE.Mesh
-      floor_center_rail_4: THREE.Mesh
-      floor_center_rail_2: THREE.Mesh
-      floor_center_rail_5: THREE.Mesh
-      floor_center_rail_6: THREE.Mesh
-      floor_center_rail_7: THREE.Mesh
-      floor_center_rail_8: THREE.Mesh
       outer_collider_3_1: THREE.Mesh
       outer_collider_3_2: THREE.Mesh
       outer_collider_3_3: THREE.Mesh
@@ -55,6 +50,44 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       outer_collider_3_14: THREE.Mesh
       outer_collider_3_15: THREE.Mesh
       outer_collider_3_16: THREE.Mesh
+      collider_rail_1: THREE.Mesh
+      collider_rail_2: THREE.Mesh
+      collider_rail_3: THREE.Mesh
+      collider_rail_4: THREE.Mesh
+      collider_rail_5: THREE.Mesh
+      collider_rail_6: THREE.Mesh
+      collider_rail_7: THREE.Mesh
+      collider_rail_8: THREE.Mesh
+      collider_rail_9: THREE.Mesh
+      collider_rail_10: THREE.Mesh
+      collider_rail_11: THREE.Mesh
+      collider_rail_12: THREE.Mesh
+      collider_rail_13: THREE.Mesh
+      collider_rail_14: THREE.Mesh
+      outer_collider_2_1: THREE.Mesh
+      outer_collider_2_2: THREE.Mesh
+      outer_collider_2_3: THREE.Mesh
+      outer_collider_2_4: THREE.Mesh
+      outer_collider_2_5: THREE.Mesh
+      outer_collider_2_6: THREE.Mesh
+      outer_collider_2_7: THREE.Mesh
+      outer_collider_2_8: THREE.Mesh
+      outer_collider_2_9: THREE.Mesh
+      outer_collider_2_10: THREE.Mesh
+      outer_collider_2_11: THREE.Mesh
+      outer_collider_2_12: THREE.Mesh
+      outer_collider_2_13: THREE.Mesh
+      outer_collider_2_14: THREE.Mesh
+      outer_collider_2_15: THREE.Mesh
+      outer_collider_2_16: THREE.Mesh
+      floor_center_rail_1: THREE.Mesh
+      floor_center_rail_2: THREE.Mesh
+      floor_center_rail_3: THREE.Mesh
+      floor_center_rail_4: THREE.Mesh
+      floor_center_rail_5: THREE.Mesh
+      floor_center_rail_6: THREE.Mesh
+      floor_center_rail_7: THREE.Mesh
+      floor_center_rail_8: THREE.Mesh
     }
     materials: {
       Material: THREE.MeshStandardMaterial
@@ -67,6 +100,24 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
 
 {#if $gltf}
   <T is={ref} dispose={false} {...$$restProps}>
+    <T.Mesh
+      name="sphere"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.sphere.geometry}
+      material={$gltf.nodes.sphere.material}
+      position={[-2.38, 0.37, 0]}
+      userData={{ name: 'sphere' }}
+    />
+    <T.Mesh
+      name="sphere_band"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.sphere_band.geometry}
+      material={$gltf.nodes.sphere_band.material}
+      position={[-2.38, 0.37, 0]}
+      userData={{ name: 'sphere_band' }}
+    />
     <T.Mesh
       name="person"
       castShadow
@@ -172,6 +223,16 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       userData={{ name: 'console_screen' }}
     />
     <T.Mesh
+      name="ladder"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.ladder.geometry}
+      material={$gltf.nodes.ladder.material}
+      position={[0, 4.08, 0.86]}
+      scale={0.02}
+      userData={{ name: 'ladder' }}
+    />
+    <T.Mesh
       name="elevator_platform"
       castShadow
       receiveShadow
@@ -190,6 +251,374 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       userData={{ name: 'sentry' }}
     />
     <T.Mesh
+      name="outer_collider_3_1"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_1.geometry}
+      material={$gltf.nodes.outer_collider_3_1.material}
+      userData={{ name: 'outer_collider_3_1' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_2"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_2.geometry}
+      material={$gltf.nodes.outer_collider_3_2.material}
+      userData={{ name: 'outer_collider_3_2' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_3"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_3.geometry}
+      material={$gltf.nodes.outer_collider_3_3.material}
+      userData={{ name: 'outer_collider_3_3' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_4"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_4.geometry}
+      material={$gltf.nodes.outer_collider_3_4.material}
+      userData={{ name: 'outer_collider_3_4' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_5"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_5.geometry}
+      material={$gltf.nodes.outer_collider_3_5.material}
+      userData={{ name: 'outer_collider_3_5' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_6"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_6.geometry}
+      material={$gltf.nodes.outer_collider_3_6.material}
+      userData={{ name: 'outer_collider_3_6' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_7"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_7.geometry}
+      material={$gltf.nodes.outer_collider_3_7.material}
+      userData={{ name: 'outer_collider_3_7' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_8"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_8.geometry}
+      material={$gltf.nodes.outer_collider_3_8.material}
+      userData={{ name: 'outer_collider_3_8' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_9"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_9.geometry}
+      material={$gltf.nodes.outer_collider_3_9.material}
+      userData={{ name: 'outer_collider_3_9' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_10"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_10.geometry}
+      material={$gltf.nodes.outer_collider_3_10.material}
+      userData={{ name: 'outer_collider_3_10' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_11"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_11.geometry}
+      material={$gltf.nodes.outer_collider_3_11.material}
+      userData={{ name: 'outer_collider_3_11' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_12"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_12.geometry}
+      material={$gltf.nodes.outer_collider_3_12.material}
+      userData={{ name: 'outer_collider_3_12' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_13"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_13.geometry}
+      material={$gltf.nodes.outer_collider_3_13.material}
+      userData={{ name: 'outer_collider_3_13' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_14"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_14.geometry}
+      material={$gltf.nodes.outer_collider_3_14.material}
+      userData={{ name: 'outer_collider_3_14' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_15"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_15.geometry}
+      material={$gltf.nodes.outer_collider_3_15.material}
+      userData={{ name: 'outer_collider_3_15' }}
+    />
+    <T.Mesh
+      name="outer_collider_3_16"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_3_16.geometry}
+      material={$gltf.nodes.outer_collider_3_16.material}
+      userData={{ name: 'outer_collider_3_16' }}
+    />
+    <T.Mesh
+      name="collider_rail_1"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_1.geometry}
+      material={$gltf.nodes.collider_rail_1.material}
+      userData={{ name: 'collider_rail_1' }}
+    />
+    <T.Mesh
+      name="collider_rail_2"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_2.geometry}
+      material={$gltf.nodes.collider_rail_2.material}
+      userData={{ name: 'collider_rail_2' }}
+    />
+    <T.Mesh
+      name="collider_rail_3"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_3.geometry}
+      material={$gltf.nodes.collider_rail_3.material}
+      userData={{ name: 'collider_rail_3' }}
+    />
+    <T.Mesh
+      name="collider_rail_4"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_4.geometry}
+      material={$gltf.nodes.collider_rail_4.material}
+      userData={{ name: 'collider_rail_4' }}
+    />
+    <T.Mesh
+      name="collider_rail_5"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_5.geometry}
+      material={$gltf.nodes.collider_rail_5.material}
+      userData={{ name: 'collider_rail_5' }}
+    />
+    <T.Mesh
+      name="collider_rail_6"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_6.geometry}
+      material={$gltf.nodes.collider_rail_6.material}
+      userData={{ name: 'collider_rail_6' }}
+    />
+    <T.Mesh
+      name="collider_rail_7"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_7.geometry}
+      material={$gltf.nodes.collider_rail_7.material}
+      userData={{ name: 'collider_rail_7' }}
+    />
+    <T.Mesh
+      name="collider_rail_8"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_8.geometry}
+      material={$gltf.nodes.collider_rail_8.material}
+      userData={{ name: 'collider_rail_8' }}
+    />
+    <T.Mesh
+      name="collider_rail_9"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_9.geometry}
+      material={$gltf.nodes.collider_rail_9.material}
+      userData={{ name: 'collider_rail_9' }}
+    />
+    <T.Mesh
+      name="collider_rail_10"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_10.geometry}
+      material={$gltf.nodes.collider_rail_10.material}
+      userData={{ name: 'collider_rail_10' }}
+    />
+    <T.Mesh
+      name="collider_rail_11"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_11.geometry}
+      material={$gltf.nodes.collider_rail_11.material}
+      userData={{ name: 'collider_rail_11' }}
+    />
+    <T.Mesh
+      name="collider_rail_12"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_12.geometry}
+      material={$gltf.nodes.collider_rail_12.material}
+      userData={{ name: 'collider_rail_12' }}
+    />
+    <T.Mesh
+      name="collider_rail_13"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_13.geometry}
+      material={$gltf.nodes.collider_rail_13.material}
+      userData={{ name: 'collider_rail_13' }}
+    />
+    <T.Mesh
+      name="collider_rail_14"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.collider_rail_14.geometry}
+      material={$gltf.nodes.collider_rail_14.material}
+      userData={{ name: 'collider_rail_14' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_1"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_1.geometry}
+      material={$gltf.nodes.outer_collider_2_1.material}
+      userData={{ name: 'outer_collider_2_1' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_2"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_2.geometry}
+      material={$gltf.nodes.outer_collider_2_2.material}
+      userData={{ name: 'outer_collider_2_2' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_3"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_3.geometry}
+      material={$gltf.nodes.outer_collider_2_3.material}
+      userData={{ name: 'outer_collider_2_3' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_4"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_4.geometry}
+      material={$gltf.nodes.outer_collider_2_4.material}
+      userData={{ name: 'outer_collider_2_4' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_5"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_5.geometry}
+      material={$gltf.nodes.outer_collider_2_5.material}
+      userData={{ name: 'outer_collider_2_5' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_6"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_6.geometry}
+      material={$gltf.nodes.outer_collider_2_6.material}
+      userData={{ name: 'outer_collider_2_6' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_7"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_7.geometry}
+      material={$gltf.nodes.outer_collider_2_7.material}
+      userData={{ name: 'outer_collider_2_7' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_8"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_8.geometry}
+      material={$gltf.nodes.outer_collider_2_8.material}
+      userData={{ name: 'outer_collider_2_8' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_9"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_9.geometry}
+      material={$gltf.nodes.outer_collider_2_9.material}
+      userData={{ name: 'outer_collider_2_9' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_10"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_10.geometry}
+      material={$gltf.nodes.outer_collider_2_10.material}
+      userData={{ name: 'outer_collider_2_10' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_11"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_11.geometry}
+      material={$gltf.nodes.outer_collider_2_11.material}
+      userData={{ name: 'outer_collider_2_11' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_12"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_12.geometry}
+      material={$gltf.nodes.outer_collider_2_12.material}
+      userData={{ name: 'outer_collider_2_12' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_13"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_13.geometry}
+      material={$gltf.nodes.outer_collider_2_13.material}
+      userData={{ name: 'outer_collider_2_13' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_14"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_14.geometry}
+      material={$gltf.nodes.outer_collider_2_14.material}
+      userData={{ name: 'outer_collider_2_14' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_15"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_15.geometry}
+      material={$gltf.nodes.outer_collider_2_15.material}
+      userData={{ name: 'outer_collider_2_15' }}
+    />
+    <T.Mesh
+      name="outer_collider_2_16"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.outer_collider_2_16.geometry}
+      material={$gltf.nodes.outer_collider_2_16.material}
+      userData={{ name: 'outer_collider_2_16' }}
+    />
+    <T.Mesh
       name="floor_center_rail_1"
       castShadow
       receiveShadow
@@ -197,6 +626,15 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       material={$gltf.materials.Material}
       position={[2.59, -0.26, 0]}
       userData={{ name: 'floor_center_rail_1' }}
+    />
+    <T.Mesh
+      name="floor_center_rail_2"
+      castShadow
+      receiveShadow
+      geometry={$gltf.nodes.floor_center_rail_2.geometry}
+      material={$gltf.materials.Material}
+      position={[1.68, -0.26, -1.68]}
+      userData={{ name: 'floor_center_rail_2' }}
     />
     <T.Mesh
       name="floor_center_rail_3"
@@ -215,15 +653,6 @@ Command: npx @threlte/gltf@1.0.0-next.2 public/glb/ship.glb --output src/models/
       material={$gltf.materials.Material}
       position={[-1.83, -0.26, -1.83]}
       userData={{ name: 'floor_center_rail_4' }}
-    />
-    <T.Mesh
-      name="floor_center_rail_2"
-      castShadow
-      receiveShadow
-      geometry={$gltf.nodes.floor_center_rail_2.geometry}
-      material={$gltf.materials.Material}
-      position={[1.68, -0.26, -1.68]}
-      userData={{ name: 'floor_center_rail_2' }}
     />
     <T.Mesh
       name="floor_center_rail_5"

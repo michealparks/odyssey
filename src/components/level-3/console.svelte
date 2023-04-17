@@ -42,10 +42,10 @@ const handleSelectConsole = () => {
     {#if $frame === 'level_3_console' && !$cameraAnimating}
       <HTML center sprite>
         <section class={$gameState === 'fixedComputer' ? 'w-[30vw]' : 'w-[fit-content]'}>
-          {#if $gameState === 'initial'}
-            <p>asgr;oijznsvlsdlfnkfehlks...?</p>
-          {:else if $gameState === 'fixedComputer'}
+          {#if $gameState === 'fixedComputer'}
             <Dialogue />
+          {:else}
+            <p>asgr;oijznsvlsdlfnkfehlks...?</p>
           {/if}
           <div />
         </section>
