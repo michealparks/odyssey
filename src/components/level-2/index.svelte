@@ -39,29 +39,29 @@ const handleInteract = ({ detail }: CustomEvent<string>) => {
   }
 }
 
-const totalMoved = summation(1, 8)
+const totalMoved = 8
 let entered = 0
 let exited = 0
 
 let switchState: 0 | 1 | 2 = 0
 let volume = tweened(0, { duration: 2000 })
 
-const handleEnter = (index: number) => {
+const handleEnter = (_index: number) => {
   if (switchState === 1) {
-    entered += index
+    entered += 1
 
-    if (entered === totalMoved) {
+    if (entered >= totalMoved) {
       switchState = 2
       $gameState = 'fixedComputer'
     }
   }
 }
 
-const handleExit = (index: number) => {
+const handleExit = (_index: number) => {
   if (switchState === 0) {
-    exited += index
+    exited += 1
 
-    if (exited === totalMoved) {
+    if (exited >= totalMoved) {
       switchState = 1
     }
   }

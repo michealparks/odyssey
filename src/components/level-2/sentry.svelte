@@ -132,8 +132,6 @@ useFrame(() => {
 })
 
 const { stop, start } = useFrame(() => {
-  console.log(switchState, state)
-
   if (switchState === 2) {
     state = 'dead' 
   }

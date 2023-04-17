@@ -1,14 +1,22 @@
 <script lang='ts'>
 
-import { setFrame } from '../stores/state'
+import { onMount } from 'svelte'
+import { frame, gameState } from '../stores/state'
+import { useProgress } from '@threlte/extras'
+
+const { progress } = useProgress()
 
 let ready = false
 
 const init = (event: Event) => {
+  if (!ready && $progress < 1) return
   if ((event as KeyboardEvent).key === 'Escape') return
 
-  setFrame('level_3')
+  $frame = 'level_3'
+  $gameState = 'awoken'
 }
+
+onMount(() => setTimeout(() => (ready = true), 1500))
 
 </script>
 
@@ -22,9 +30,7 @@ const init = (event: Event) => {
 </header>
 
 <article class='z-10 absolute bottom-0 w-full grid place-content-center h-[20vh]'>
-  {#if ready}
     <button class='text-white font-extralight text-xl opacity-30'>
-      begin
+      {$progress === 1 && ready ? 'begin' : `${$progress * 100}%`}
     </button>
-  {/if}
 </article>

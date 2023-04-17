@@ -6,11 +6,9 @@ import { Collider, RigidBody } from '@threlte/rapier'
 import { useFrame } from '@threlte/core'
 import { AudioListener } from '@threlte/extras'
 import type RAPIER from '@dimforge/rapier3d-compat'
-import { animationPlayerControl, elevatorPosition } from '../../stores/state'
+import { animationPlayerControl, elevatorPosition, gameState } from '../../stores/state'
 import Male from './model.svelte'
 import type { ActionName } from './types'
-
-// const { world } = useRapier()
 
 const { gamepad1, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
@@ -20,20 +18,28 @@ let rigidBody: RAPIER.RigidBody
 
 let action: ActionName = 'Man_Idle'
 
-// const characterController = world.createCharacterController(0.01);
-
 let rotation = tweened(0, { duration: 100 })
 
 let desiredRotation = 0
 let referenceAngle = 0
 
-$: rigidBody?.setEnabled(!$animationPlayerControl)
+gameState.subscribe((value) => {
+  if (value === 'awoken') {
+    rigidBody.setEnabled(true)
+    rigidBody.setTranslation({ x: 0, y: 5, z: -2.75 }, true)
+    start()
+  }
 
-useFrame((_ctx, _delta) => {
-  if (!rigidBody) return
+  if ($gameState === 'end') {
+    stop()
+  }
+})
 
+$: cinematic = $gameState === 'intro' || $gameState === 'end'
+
+const { start, stop } = useFrame((_ctx, _delta) => {
   const desiredTranslation = rigidBody.translation()
-  
+
   if ($animationPlayerControl) {
     desiredTranslation.y = $elevatorPosition + 0.97
     
@@ -97,29 +103,16 @@ useFrame((_ctx, _delta) => {
   desiredTranslation.x += x
   desiredTranslation.z += z
 
-  // characterController.computeColliderMovement(collider, desiredTranslation)
-
-  // const correctedMovement = characterController.computedMovement()
-  // characterController.computeColliderMovement(collider, desiredTranslation);
-
-  // for (let i = 0; i < characterController.numComputedCollisions(); i++) {
-  //   let collision = characterController.computedCollision(i);
-  //   // Do something with that collision information.
-  //   console.log(collision)
-  // }
-
-  // console.log(correctedMovement.x, correctedMovement.z)
-
   rigidBody.setTranslation(desiredTranslation, true)
-
-  // rigidBody.setNextKinematicTranslation(correctedMovement)
-})
+}, { autostart: false })
 
 </script>
 
 <RigidBody
   dominance={1}
+  enabled={!cinematic && !$animationPlayerControl}
   enabledRotations={[false, false, false]}
+  enabledTranslations={[true, false, true]}
   bind:rigidBody
   type='dynamic'
 >
@@ -132,6 +125,7 @@ useFrame((_ctx, _delta) => {
   />
 
   <Male
+    visible={$gameState !== 'intro'}
     {action}
     position.y={-0.77}
     rotation.y={$rotation}

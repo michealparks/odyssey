@@ -8,6 +8,7 @@ import InteractionSensor from '../interaction-sensor.svelte'
 import { setFrame } from '../../stores/state'
 import { frame } from '../../stores/state'
 import Colliders from './colliders.svelte'
+import Chamber from './chamber.svelte'
 
 interface GLTFResult {
   nodes: {
@@ -51,6 +52,7 @@ $: visible = $frame.includes('level_3')
 
 {#if $gltf}
   <Console />
+  <Chamber />
 
   <T
     is={$gltf.nodes.floor_top}

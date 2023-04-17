@@ -5,7 +5,7 @@ import Stars from './stars.svelte'
 import Ship from './ship/index.svelte'
 import Player from './player/index.svelte'
 import Lights from './lights.svelte'
-import { cameraPosition, cameraRotation, frame } from '../stores/state'
+import { cameraPosition, cameraRotation } from '../stores/state'
 import { softShadows, resetSoftShadows } from 'trzy'
 
 const { renderer, scene, camera } = useThrelte()
@@ -23,14 +23,9 @@ resetSoftShadows(renderer!, scene, $camera)
   rotation={$cameraRotation}
   near={0.1}
   far={2500}
-  on:create={({ ref }) => ref.lookAt(0, 1, 0)}
 />
 
 <Stars />
-
-{#if $frame !== 'title'}
-  <Player />
-{/if}
-
+<Player />
 <Ship />
 <Lights />

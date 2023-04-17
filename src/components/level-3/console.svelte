@@ -60,9 +60,7 @@ const handleSelectConsole = () => {
       castShadow
       receiveShadow
       {visible}
-    >
-      
-    </T>
+    />
   </AutoColliders>
 {/if}
 

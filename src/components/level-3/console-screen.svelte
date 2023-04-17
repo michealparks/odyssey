@@ -73,7 +73,7 @@ $: $volume = $frame === 'level_3_console' ? 0.7 : 0
   >
     {#if $volume > 0}
     <PositionalAudio
-      src={`/mp3/computer_${$gameState === 'initial' ? 'broken' : 'working'}.mp3`}
+      src={`/mp3/computer_${$gameState === 'seeking' ? 'broken' : 'working'}.mp3`}
       refDistance={0.5}
       maxDistance={0.5}
       autoplay
