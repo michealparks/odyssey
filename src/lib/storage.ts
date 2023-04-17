@@ -2,7 +2,7 @@ const defaults: Record<string, string> = {
   graphics: 'quality',
   frame: 'title',
   level: '4',
-  gameState: 'initial',
+  gameState: 'intro',
 } as const
 
 export const storage = (key: string): string | null => {

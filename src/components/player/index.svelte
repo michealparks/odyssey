@@ -74,8 +74,8 @@ useFrame((_ctx, _delta) => {
     const startRotation = desiredRotation
     const dif = nextRotation - startRotation
 
-    if (dif > Math.PI) console.log('dif > +PI', startRotation, nextRotation)
-    if (dif < -Math.PI) console.log('dif <-PI', startRotation, nextRotation)
+    // if (dif > Math.PI) console.log('dif > +PI', startRotation, nextRotation)
+    // if (dif < -Math.PI) console.log('dif <-PI', startRotation, nextRotation)
 
     // // Going left
     // if (dif < -Math.PI) {

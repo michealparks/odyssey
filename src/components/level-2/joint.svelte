@@ -1,8 +1,8 @@
 <script lang='ts'>
 
 import { T } from '@threlte/core'
-import { usePrismaticJoint, RigidBody, Collider } from '@threlte/rapier'
-import { createEventDispatcher } from 'svelte';
+import { usePrismaticJoint, RigidBody, Collider, CollisionGroups } from '@threlte/rapier'
+import { createEventDispatcher } from 'svelte'
 
 export let rotation = 0
 
@@ -10,18 +10,23 @@ const dispatch = createEventDispatcher()
 
 const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint([0, 0, 0], [0, 0, 0], [1, 0, 0], [0, 3])
 
-const handleEnter = () => dispatch('enter')
-const handleExit = () => dispatch('exit')
+const handleEnter = (event: any) => {
+  if (event.targetRigidBody === $rigidBodyA) dispatch('enter')
+}
+
+const handleExit = (event: any) => {
+  if (event.targetRigidBody === $rigidBodyA) dispatch('exit')
+}
 
 </script>
 
 <T.Group position.y={0.6} rotation.y={rotation}>
-  <RigidBody
-    type='fixed'
-    bind:rigidBody={$rigidBodyB}
-  >
-    <Collider shape="cuboid" args={[0, 0, 0]} />
-  </RigidBody>
+    <RigidBody
+      type='fixed'
+      bind:rigidBody={$rigidBodyB}
+    >
+      <Collider shape="cuboid" args={[0, 0, 0]} />
+    </RigidBody>
 </T.Group>
 
 <T.Group position.y={0.7} rotation.y={rotation}>

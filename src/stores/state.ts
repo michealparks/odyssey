@@ -84,6 +84,6 @@ level.subscribe(async (update) => {
   animationPlayerControl.set(false)
 })
 
-type GameStates = 'initial' | 'fixedComputer' | 'ended'
+type GameStates = 'intro' | 'awoken' | 'fightingSentry' | 'defeatedSentry' | 'fixedComputer' | 'restoredSystems' | 'end'
 
 export const gameState = writable<GameStates>(storage('gameState') as GameStates)

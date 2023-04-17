@@ -7,6 +7,8 @@ import Console from './console.svelte'
 import InteractionSensor from '../interaction-sensor.svelte'
 import { setFrame } from '../../stores/state'
 import { frame } from '../../stores/state'
+import Colliders from './colliders.svelte'
+
 interface GLTFResult {
   nodes: {
     console: THREE.Mesh
@@ -45,9 +47,11 @@ $: visible = $frame.includes('level_3')
   />
 </T.Group>
 
+<Colliders />
+
 {#if $gltf}
   <Console />
-  
+
   <T
     is={$gltf.nodes.floor_top}
     receiveShadow

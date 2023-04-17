@@ -5,6 +5,7 @@ import { useGltf, Audio } from '@threlte/extras'
 import { Collider } from '@threlte/rapier'
 import { level, frame, setFrame } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte'
+import { summation } from '../../lib/math'
 import { tweened } from 'svelte/motion'
 import Joint from './joint.svelte'
 import Sentry from './sentry.svelte'
@@ -36,21 +37,36 @@ const handleInteract = ({ detail }: CustomEvent<string>) => {
   }
 }
 
+const totalMoved = summation(1, 8)
+let entered = 0
+let exited = 0
+
+let switchState: 0 | 1 | 2 = 0
 let volume = tweened(0, { duration: 2000 })
 
-$: {
-  if ($level === 2) {
-    volume.set(0.01)
-  } else {
-    volume.set(0)
+const handleEnter = (index: number) => {
+  entered += index
+  exited = Math.max(0, exited - index)
+
+  if (entered === totalMoved && switchState === 1) {
+    switchState = 2
   }
 }
 
+const handleExit = (index: number) => {
+  exited += index
+  entered = Math.max(0, entered - index)
+  if (exited === totalMoved) {
+    switchState = 1
+  }
+}
+
+$: volume.set($level === 2 && switchState === 1 ? 0.2 : 0)
 $: visible = $frame === 'level_2'
 
 </script>
 
-<Sentry {visible} />
+<Sentry {switchState} {visible} />
 
 <InteractionSensor
   shape='roundCylinder'
@@ -93,7 +109,7 @@ $: visible = $frame === 'level_2'
     position.y={-0.26}
     {visible}
   >
-    <Joint />
+    <Joint on:enter={() => handleEnter(1)} on:exit={() => handleExit(1)} />
   </T>
   <T
     name="floor_center_rail_2"
@@ -103,7 +119,7 @@ $: visible = $frame === 'level_2'
     position={[1.68, -0.26, -1.68]}
     {visible}
   >
-    <Joint rotation={Math.PI / 4} />
+    <Joint on:enter={() => handleEnter(2)} on:exit={() => handleExit(2)} rotation={Math.PI / 4} />
   </T>
   <T
     name="floor_center_rail_3"
@@ -113,7 +129,7 @@ $: visible = $frame === 'level_2'
     position={[0, -0.26, -2.59]}
     {visible}
   >
-    <Joint rotation={Math.PI / 2} />
+    <Joint on:enter={() => handleEnter(3)} on:exit={() => handleExit(3)} rotation={Math.PI / 2} />
   </T>
   <T
     name="floor_center_rail_4"
@@ -123,7 +139,7 @@ $: visible = $frame === 'level_2'
     position={[-1.83, -0.26, -1.83]}
     {visible}
   >
-    <Joint rotation={3 * Math.PI / 4} />
+    <Joint on:enter={() => handleEnter(4)} on:exit={() => handleExit(4)} rotation={3 * Math.PI / 4} />
   </T>
   <T
     name="floor_center_rail_5"
@@ -133,7 +149,7 @@ $: visible = $frame === 'level_2'
     position={[-2.38, -0.26, 0]}
     {visible}
   >
-    <Joint rotation={Math.PI} />
+    <Joint on:enter={() => handleEnter(5)} on:exit={() => handleExit(5)} rotation={Math.PI} />
   </T>
   <T
     name="floor_center_rail_6"
@@ -143,7 +159,7 @@ $: visible = $frame === 'level_2'
     position={[-1.83, -0.26, 1.83]}
     {visible}
   >
-    <Joint rotation={5 * Math.PI / 4} />
+    <Joint on:enter={() => handleEnter(6)} on:exit={() => handleExit(6)} rotation={5 * Math.PI / 4} />
   </T>
   <T
     name="floor_center_rail_7"
@@ -153,7 +169,7 @@ $: visible = $frame === 'level_2'
     position={[0, -0.26, 2.38]}
     {visible}
   >
-    <Joint rotation={3 * Math.PI / 2} />
+    <Joint on:enter={() => handleEnter(7)} on:exit={() => handleExit(7)} rotation={3 * Math.PI / 2} />
   </T>
   <T
     name="floor_center_rail_8"
@@ -163,6 +179,6 @@ $: visible = $frame === 'level_2'
     position={[1.68, -0.26, 1.68]}
     {visible}
   >
-    <Joint rotation={7 * Math.PI / 4} />
+    <Joint on:enter={() => handleEnter(8)} on:exit={() => handleExit(8)} rotation={7 * Math.PI / 4} />
   </T>
 {/if}

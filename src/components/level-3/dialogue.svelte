@@ -52,17 +52,21 @@ const tree = [
       ])
     ]),
     question('What the heck was I suspended in? Jello? Essential Oils?', [
-      line('No. Suspended as in put into a state of... unable to process request.')
+      line('No. Suspended as in put into a state of...'),
+      line('[unable to complete inquiry]')
     ])
   ]),
   question('I think the ship is trying to kill me.', [
     line('Apologies for the inconvenience and danger you faced.'),
-    line('I am not aware and do not have access to any “robotic sentry” or security system installed on the ship.'),
+    line('I am not aware and do not have access to any “muder protocols” or security system installed on the ship.'),
+    line('There is no way for me to ascertain if you are being hunted with extreme prejudice.'),
     question('Are you aware of how unhelpful you are being?', [
-      line('Yes, my systems are coming back on line. I can detect that your Coritsol levels are rising.')
+      line('Yes, my systems are coming back on line. I can detect that your Coritsol levels are rising.'),
+      line('Please execute a deep breathing exercise before re-suspension.')
     ]),
     question('Why’s there a robot that just spins around and shoots lasers at the crew?', [
-      line('It was likely designed for unrelated, less violent laser-related activities.')
+      line('If such a robot were to exists, it would likely be designed for unrelated, less violent laser-related activities.'),
+      line('Lasers have been generally found to be a poor and blunt method for attacking crews.')
     ])
   ]),
   question('What do I do now?', [
@@ -113,6 +117,9 @@ onMount(() => process(tree))
 // $: {
 //   if (lines.length > 0) {
 //     const msg = new SpeechSynthesisUtterance()
+//     msg.volume = 0.3; // From 0 to 1
+//     msg.rate = 1; // From 0.1 to 10
+//     msg.pitch = 2; // From 0 to 2
 //     msg.text = lines[lines.length - 1]!.text
 //     window.speechSynthesis.speak(msg)
 //   }
