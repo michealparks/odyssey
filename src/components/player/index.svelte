@@ -1,12 +1,13 @@
 <script lang='ts'>
 
+import * as THREE from 'three'
 import { tweened } from 'svelte/motion'
 import { useKeyboard, useGamepad } from 'trzy'
 import { Collider, RigidBody } from '@threlte/rapier'
 import { useFrame } from '@threlte/core'
-import { AudioListener } from '@threlte/extras'
+import { AudioListener, HTML } from '@threlte/extras'
 import type RAPIER from '@dimforge/rapier3d-compat'
-import { animationPlayerControl, elevatorPosition, gameState } from '../../stores/state'
+import { animationPlayerControl, elevatorPosition, gameState, explosionPosition } from '../../stores/state'
 import Male from './model.svelte'
 import type { ActionName } from './types'
 
@@ -17,11 +18,13 @@ let collider: RAPIER.Collider
 let rigidBody: RAPIER.RigidBody
 
 let action: ActionName = 'Man_Idle'
+let health = 1
 
 let rotation = tweened(0, { duration: 100 })
 
 let desiredRotation = 0
 let referenceAngle = 0
+let position = { x: 0, y: 0, z: 0 }
 
 gameState.subscribe((value) => {
   if (value === 'awoken') {
@@ -35,17 +38,39 @@ gameState.subscribe((value) => {
   }
 })
 
-$: cinematic = $gameState === 'intro' || $gameState === 'end'
+const vec3 = new THREE.Vector3()
+const vec3_2 = new THREE.Vector3()
+
+explosionPosition.subscribe(value => {
+  if (value === null) return
+
+  vec3.set(value[0], 0, value[1])
+  vec3_2.set(position.x, position.y, position.z)
+
+  const distanceSq = vec3.distanceToSquared(vec3_2)
+
+  if (distanceSq < 4) {
+    health -= 0.2
+  }
+
+  if (health <= 0) {
+    stop()
+    action = 'Man_Death'
+    $gameState = 'lose'
+  }
+})
+
+$: cinematic = $gameState === 'intro' || $gameState === 'end' || $gameState === 'lose'
 
 const t = 0.01667
 
 const { start, stop } = useFrame((_ctx, delta) => {
-  const desiredTranslation = rigidBody.translation()
+  position = rigidBody.translation()
 
   if ($animationPlayerControl) {
-    desiredTranslation.y = $elevatorPosition + 0.97
+    position.y = $elevatorPosition + 0.97
     
-    rigidBody.setTranslation(desiredTranslation, true)
+    rigidBody.setTranslation(position, true)
     return
   }
 
@@ -104,10 +129,10 @@ const { start, stop } = useFrame((_ctx, delta) => {
     // $rotation = Math.atan2(x, z)
   }
 
-  desiredTranslation.x += x
-  desiredTranslation.z += z
+  position.x += x
+  position.z += z
 
-  rigidBody.setTranslation(desiredTranslation, true)
+  rigidBody.setTranslation(position, true)
 }, { autostart: false })
 
 </script>
@@ -127,6 +152,14 @@ const { start, stop } = useFrame((_ctx, delta) => {
     shape='capsule'
     args={[0.5, 0.3]}
   />
+
+  {#if health < 1}
+    <HTML center>
+      <div class='w-10 h-2 border border-red-500 -translate-y-14'>
+        <div class='w-full h-full bg-red-500 origin-left' style='transform: scale({Math.max(health, 0)}, 1)' />
+      </div>
+    </HTML>
+  {/if}
 
   <Male
     visible={$gameState !== 'intro'}

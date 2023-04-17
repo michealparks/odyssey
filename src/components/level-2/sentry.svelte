@@ -1,12 +1,13 @@
 <script lang='ts'>
 
 import * as THREE from 'three'
-import { T, useFrame, useThrelte } from '@threlte/core'
+import { T, useFrame } from '@threlte/core'
 import { Collider } from '@threlte/rapier'
 import { useGltf } from '@threlte/extras'
 import { tweened } from 'svelte/motion'
 import * as Easing from 'svelte/easing'
 import { playSound } from '../../lib/sound'
+import { explosionPosition } from '../../stores/state'
 
 type States = 'sleeping' | 'waking-up' | 'seeking' | 'charging' | 'firing' | 'shutting-down' | 'dead'
 
@@ -33,13 +34,12 @@ interface GLTFResult {
   }
 }
 
-const INTENSITY = 100
+const INTENSITY = 70
 
 let charge = tweened(0, { duration: 1000 })
 let lightIntensity = tweened(0, { duration: 2000 })
 let moveSpeed = tweened(0, { duration: 2000 })
 let rotationY = 0
-let explosionPosition = [0, 0]
 
 let bulletPosition = tweened<[x: number, z: number]>([0, 0], { duration: 1000 })
 let bulletOpacity = tweened(0, { duration: 600 })
@@ -92,9 +92,10 @@ const firing = async () => {
   
   bulletOpacity.set(0)
   setTimeout(async () => {
-    explosionPosition = [...$bulletPosition]
+    $explosionPosition = [...$bulletPosition]
     await explosionScale.set(1)
     explosionScale.set(0, { duration: 0 })
+    $explosionPosition = null
   }, 500)
   await bulletPosition.set([0, 0])
   await moveSpeed.set(moveDirection * (0.01 + (Math.random() > 0.5 ? 0.5 : -0.5) * 0.03), { duration: 500 })
@@ -178,9 +179,9 @@ $: {
 
   <T.Mesh
     name='explosion'
-    position.x={explosionPosition[0]}
+    position.x={$explosionPosition?.[0] ?? 0}
     position.y={0.2}
-    position.z={explosionPosition[1]}
+    position.z={$explosionPosition?.[1] ?? 0}
     scale={$explosionScale}
   >
     <T.SphereGeometry args={[2]} />
