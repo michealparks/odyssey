@@ -28,13 +28,13 @@ const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint([0, 0, 0], [0, 0, 0]
 
 let entered = false
 
-const material = new THREE.MeshBasicMaterial({ color: 'green' })
+const material = new THREE.MeshBasicMaterial({ color: 'red' })
 
 const handleEnter = (event: any) => {
   if (event.targetRigidBody === $rigidBodyA) {
     entered = true
     dispatch('enter')
-    if (switchState === 1) material.color.set('red')
+    if (switchState === 1) material.color.set('green')
   }
 }
 

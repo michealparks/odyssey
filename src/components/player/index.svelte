@@ -153,7 +153,7 @@ const { start, stop } = useFrame((_ctx, delta) => {
     args={[0.5, 0.3]}
   />
 
-  {#if health < 1}
+  {#if health < 1 && $gameState === 'seeking'}
     <HTML center>
       <div class='w-10 h-2 border border-red-500 -translate-y-14'>
         <div class='w-full h-full bg-red-500 origin-left' style='transform: scale({Math.max(health, 0)}, 1)' />

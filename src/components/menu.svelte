@@ -3,6 +3,7 @@
 import { graphics, type GraphicsMode } from '../stores/settings'
 
 let open = false
+let changed = false
 let options = ['performance', 'balanced', 'quality']
 
 const handleKeyUp = (event: KeyboardEvent) => {
@@ -16,6 +17,7 @@ const handleKeyUp = (event: KeyboardEvent) => {
 
 const handleInput = (event: Event) => {
   $graphics = (event.currentTarget as HTMLInputElement).value as GraphicsMode
+  changed = true
 }
 
 </script>
@@ -43,5 +45,9 @@ const handleInput = (event: Event) => {
         </div>
       {/each}
     </fieldset>
+
+    {#if changed}
+      <p>Refresh required for best results.</p>
+    {/if}
   </section>
 {/if}

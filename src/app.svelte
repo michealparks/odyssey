@@ -7,10 +7,13 @@ import Scene from './components/scene.svelte'
 import Debug from './components/debug.svelte'
 import Title from './components/title.svelte'
 import Menu from './components/menu.svelte'
+import { graphics } from './stores/settings';
+
+$: dpr = $graphics === 'performance' ? Math.min(1.5, window.devicePixelRatio) : window.devicePixelRatio
 
 </script>
 
-<Canvas useLegacyLights={false}>
+<Canvas {dpr} useLegacyLights={false}>
   <World>
     <Debug />
     <Scene />
