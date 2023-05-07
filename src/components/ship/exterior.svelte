@@ -1,9 +1,10 @@
 <script lang='ts'>
 
+import * as THREE from 'three'
 import { useGltf } from '@threlte/extras'
-import { reflection } from './hull-reflection'
 import { T, useFrame, useThrelte } from '@threlte/core'
 import { level } from '../../stores/state'
+import { addToBloom } from '../../lib/bloom'
 
 interface GLTFResult {
   nodes: {
@@ -17,21 +18,48 @@ interface GLTFResult {
   }
 }
 
-const gltf = useGltf<GLTFResult>('./glb/ship.glb')
-const envMap = reflection.texture
-const metalness = 0.9
-const roughness = 0.05
-const envMapIntensity = 0.8
-
 const { renderer, scene } = useThrelte()
 
-reflection.texture.anisotropy = renderer?.capabilities.getMaxAnisotropy() ?? 1
-
+const near = 100
+const far = 2500
 const size = 512
-reflection.target.setSize(size, size)
+const target = new THREE.WebGLCubeRenderTarget(size, {
+  // generateMipmaps: true,
+  // minFilter: THREE.LinearMipmapLinearFilter,
+  anisotropy: renderer?.capabilities.getMaxAnisotropy() ?? 1,
+  stencilBuffer: false,
+  depthBuffer: false,
+})
+const camera = new THREE.CubeCamera(near, far, target)
+camera.name = 'Reflection Camera'
+scene.add(camera)
+
+const material = new THREE.MeshLambertMaterial({
+  color: 0xbcbcbc,
+  envMap: target.texture,
+  reflectivity: 0.95,
+})
+
+const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
 useFrame(() => {
-  if (renderer) reflection.update(renderer, scene)
+  // scene.traverse(obj => {
+  //   if (obj.name === 'stars') {
+  //     obj.visible = true
+  //     return
+  //   }
+  
+  //   obj.userData['visible'] = obj.visible
+  //   obj.visible = false
+  // })
+
+  target.clear(renderer!, true, false, false)
+  camera.update(renderer!, scene)
+
+  // scene.traverse(obj => {
+  //   if (obj.name === 'stars') return
+  //   obj.visible = obj.userData['visible']
+  // })
 })
 
 </script>
@@ -41,54 +69,30 @@ useFrame(() => {
     name="exterior_top"
     geometry={$gltf.nodes.exterior_top.geometry}
     visible={$level > 3}
-  >
-    <T
-      is={$gltf.materials.Exterior}
-      {metalness}
-      {roughness}
-      {envMap}
-      {envMapIntensity}
-    />
-  </T.Mesh>
+    {material}
+    on:create={({ ref }) => addToBloom(ref)}
+  />
 
   <T.Mesh
     name="exterior_middle_top"
     geometry={$gltf.nodes.exterior_middle_top.geometry}
     visible={$level > 2}
-  >
-    <T
-      is={$gltf.materials.Exterior}
-      {metalness}
-      {roughness}
-      {envMap}
-      {envMapIntensity}
-    />
-  </T.Mesh>
+    {material}
+    on:create={({ ref }) => addToBloom(ref)}
+  />
 
   <T.Mesh
     name="exterior_middle_bottom"
     geometry={$gltf.nodes.exterior_middle_bottom.geometry}
     visible={$level > 1}
-  >
-    <T
-      is={$gltf.materials.Exterior}
-      {metalness}
-      {roughness}
-      {envMap}
-      {envMapIntensity}
-    />
-  </T.Mesh>
+    {material}
+    on:create={({ ref }) => addToBloom(ref)}
+  />
 
   <T.Mesh
     name="exterior_bottom"
     geometry={$gltf.nodes.exterior_bottom.geometry}
-  >
-    <T
-      is={$gltf.materials.Exterior}
-      {metalness}
-      {roughness}
-      {envMap}
-      {envMapIntensity}
-    />
-  </T.Mesh>
+    {material}
+    on:create={({ ref }) => addToBloom(ref)}
+  />
 {/if}

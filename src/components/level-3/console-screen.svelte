@@ -5,6 +5,7 @@ import { T, useFrame, useThrelte } from '@threlte/core'
 import { useGltf, PositionalAudio } from '@threlte/extras'
 import { frame, gameState } from '../../stores/state'
 import { tweened } from 'svelte/motion'
+    import { setStatic } from '../../lib/static';
 
 export let visible = false
 
@@ -106,6 +107,7 @@ for (let i = 0; i < n; i += 1) {
     position={[4.94, 5.15, -0.09]}
     {material}
     {visible}
+    on:create={(event) => setStatic(event.ref)}
   >
     {#if $volume > 0}
       <PositionalAudio

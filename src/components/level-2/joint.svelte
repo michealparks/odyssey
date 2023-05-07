@@ -5,6 +5,7 @@ import { T } from '@threlte/core'
 import { usePrismaticJoint, RigidBody, Collider } from '@threlte/rapier'
 import { createEventDispatcher } from 'svelte'
 import { useGltf } from '@threlte/extras'
+import { addToBloom } from '../../lib/bloom'
 
 export let rotation = 0
 export let switchState: 0 | 1 | 2
@@ -28,13 +29,13 @@ const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint([0, 0, 0], [0, 0, 0]
 
 let entered = false
 
-const material = new THREE.MeshBasicMaterial({ color: 'red' })
+const material = new THREE.MeshStandardMaterial({ color: 0xFF5722, emissive: 10 })
 
 const handleEnter = (event: any) => {
   if (event.targetRigidBody === $rigidBodyA) {
     entered = true
     dispatch('enter')
-    if (switchState === 1) material.color.set('green')
+    if (switchState === 1) material.color.set(0x4CAF50)
   }
 }
 
@@ -42,7 +43,7 @@ const handleExit = (event: any) => {
   if (event.targetRigidBody === $rigidBodyA) {
     entered = false
     dispatch('exit')
-    if (switchState === 0) material.color.set('yellow')
+    if (switchState === 0) material.color.set(0xFFEE58)
   }
 }
 
@@ -86,6 +87,7 @@ const handleExit = (event: any) => {
         geometry={$gltf.nodes.sphere_band.geometry}
         position.y={-0.5}
         {material}
+        on:create={({ ref }) => addToBloom(ref)}
       />
     </RigidBody>
 

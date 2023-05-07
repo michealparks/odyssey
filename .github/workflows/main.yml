@@ -22,7 +22,7 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          npm ci --audit=false
+          npm ci --legacy-peer-deps --audit=false
           npm run build -- --base=/odyssey/
 
       - name: Deploy 🚀

@@ -8,6 +8,7 @@ import { tweened } from 'svelte/motion'
 import * as Easing from 'svelte/easing'
 import { playSound } from '../../lib/sound'
 import { explosionPosition } from '../../stores/state'
+    import { addToBloom } from '../../lib/bloom';
 
 type States = 'sleeping' | 'waking-up' | 'seeking' | 'charging' | 'firing' | 'shutting-down' | 'dead'
 
@@ -123,6 +124,8 @@ const dying = async () => {
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
+$:console.log(1 - ($explosionScale + 0.01))
+
 useFrame(() => {
   rotationY += $moveSpeed
 })
@@ -183,11 +186,10 @@ $: {
     position.y={0.2}
     position.z={$explosionPosition?.[1] ?? 0}
     scale={$explosionScale}
+    on:create={({ ref }) => addToBloom(ref)}
   >
     <T.SphereGeometry args={[2]} />
     <T.MeshBasicMaterial
-      transparent={true}
-      opacity={1 / ($explosionScale + 0.01)}
       color='#FFE0B2'
     />
   </T.Mesh>

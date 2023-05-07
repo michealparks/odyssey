@@ -75,6 +75,8 @@ frame.subscribe(async (update) => {
   await cameraPosition.set(position)
 
   cameraAnimating.set(false)
+
+  console.log(update)
 })
 
 export const elevatorPosition = tweened(3.83, { easing, duration })

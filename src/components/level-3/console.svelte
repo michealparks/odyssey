@@ -7,6 +7,7 @@ import { frame, setFrame, cameraAnimating, gameState } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte'
 import ConsoleScreen from './console-screen.svelte'
 import Dialogue from './dialogue.svelte'
+import { setStatic } from '../../lib/static'
 
 interface GLTFResult {
   nodes: {
@@ -60,6 +61,7 @@ const handleSelectConsole = () => {
       castShadow
       receiveShadow
       {visible}
+      on:create={(event) => setStatic(event.ref)}
     />
   </AutoColliders>
 {/if}

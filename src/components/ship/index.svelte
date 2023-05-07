@@ -8,6 +8,7 @@ import Level3 from '../level-3/index.svelte'
 import Level2 from '../level-2/index.svelte'
 import Level1 from './level-1.svelte'
 import { elevatorPosition, frame } from '../../stores/state';
+import Colliders from './colliders.svelte'
 
 interface GLTFResult {
   nodes: {
@@ -37,6 +38,8 @@ $: {
 <Level3 />
 <Level2 />
 <!-- <Level1 /> -->
+
+<Colliders />
 
 {#if $gltf}
   <T

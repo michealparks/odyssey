@@ -3,6 +3,7 @@
 import { T, useFrame } from '@threlte/core'
 import * as THREE from 'three'
 import { randomPointOnCircle } from '../lib/math'
+import { addToBloom } from '../lib/bloom'
 import { shaderMaterial } from 'trzy'
 
 const radius = 200
@@ -48,7 +49,7 @@ const StarMaterial = shaderMaterial(
       float z = (position.z + 1250.0) / 2500.0;
       vColor = color;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = 2.0;
+      gl_PointSize = 3.0;
     }
   `,
   `
@@ -80,6 +81,7 @@ useFrame(() => {
   {geometry}
   {material}
   position.z={-140}
+ 
 >
 
 </T.Points>

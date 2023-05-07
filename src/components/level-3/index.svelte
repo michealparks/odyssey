@@ -7,8 +7,8 @@ import Console from './console.svelte'
 import InteractionSensor from '../interaction-sensor.svelte'
 import { setFrame } from '../../stores/state'
 import { frame } from '../../stores/state'
-import Colliders from './colliders.svelte'
 import Chamber from './chamber.svelte'
+    import { setStatic } from '../../lib/static';
 
 interface GLTFResult {
   nodes: {
@@ -41,14 +41,15 @@ $: visible = $frame.includes('level_3')
 />
 
 <!-- floor_top -->
-<T.Group position.y={3.87}>
+<T.Group
+  position.y={3.87}
+  on:create={(event) => setStatic(event.ref)}
+>
   <Collider
     shape='roundCylinder'
     args={[0.1, 15, 0]}
   />
 </T.Group>
-
-<Colliders />
 
 {#if $gltf}
   <Console />
@@ -58,6 +59,7 @@ $: visible = $frame.includes('level_3')
     is={$gltf.nodes.floor_top}
     receiveShadow
     {visible}
+    on:create={(event) => setStatic(event.ref)}
   />
 
   <T
@@ -65,6 +67,7 @@ $: visible = $frame.includes('level_3')
     castShadow
     receiveShadow
     {visible}
+    on:create={(event) => setStatic(event.ref)}
   >
     <Collider
       shape='roundCylinder'
@@ -77,5 +80,6 @@ $: visible = $frame.includes('level_3')
     castShadow
     receiveShadow
     {visible}
+    on:create={(event) => setStatic(event.ref)}
   />
 {/if}

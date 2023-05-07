@@ -21,8 +21,8 @@ onMount(() => setTimeout(() => (ready = true), 1500))
 </script>
 
 <svelte:window
-  on:keyup|passive|once={init}
-  on:click|passive|once={init}
+  on:keyup|passive|once={$gameState === 'intro' ? init : undefined}
+  on:click|passive|once={$gameState === 'intro' ? init : undefined}
 />
 
 <header class='absolute top-0 left-0 w-full h-full grid place-content-center'>

@@ -4,12 +4,14 @@ import * as THREE from 'three'
 import { tweened } from 'svelte/motion'
 import { useKeyboard, useGamepad } from 'trzy'
 import { Collider, RigidBody } from '@threlte/rapier'
-import { useFrame } from '@threlte/core'
+import { useFrame, useThrelte } from '@threlte/core'
 import { AudioListener, HTML } from '@threlte/extras'
 import type RAPIER from '@dimforge/rapier3d-compat'
 import { animationPlayerControl, elevatorPosition, gameState, explosionPosition } from '../../stores/state'
 import Male from './model.svelte'
 import type { ActionName } from './types'
+
+const { scene } = useThrelte()
 
 const { gamepad1, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
@@ -135,10 +137,17 @@ const { start, stop } = useFrame((_ctx, delta) => {
   rigidBody.setTranslation(position, true)
 }, { autostart: false })
 
+const tw = tweened({ x: 0, y: 0, z: 0 }, { duration: 1000 })
+
+useFrame(() => {
+  tw.set({ ...position })
+  const cam = scene.getObjectByName('Camera')
+  cam?.lookAt($tw.x, $tw.y, $tw.z)
+})
+
 </script>
 
 <RigidBody
-  dominance={1}
   enabled={!cinematic && !$animationPlayerControl}
   enabledRotations={[false, false, false]}
   enabledTranslations={[true, false, true]}

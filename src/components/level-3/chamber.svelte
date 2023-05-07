@@ -6,6 +6,7 @@ import { Collider } from '@threlte/rapier'
 import { T } from '@threlte/core'
 import { frame, gameState } from '../../stores/state'
 import InteractionSensor from '../interaction-sensor.svelte';
+import { setStatic } from '../../lib/static'
 
 interface GLTFResult {
   nodes: {
@@ -20,9 +21,6 @@ let exited = false
 let erroring = false
 
 const handleInteract = () => {
-  $gameState = 'end'
-    $frame = 'end'
-    return
   if ($gameState === 'restoredSystems') {
     $gameState = 'end'
     $frame = 'end'
@@ -49,6 +47,7 @@ $: {
     castShadow
     receiveShadow
     {visible}
+    on:create={(event) => setStatic(event.ref)}
   >
     <Collider
       shape='roundCylinder'
@@ -62,7 +61,10 @@ $: {
       </div>
     </HTML>
     {:else}
-      <T.Group position.z={0.5}>
+      <T.Group
+        position.z={0.5}
+        on:create={(event) => setStatic(event.ref)}
+      >
         <InteractionSensor
           visible={exited}
           shape='roundCylinder'
