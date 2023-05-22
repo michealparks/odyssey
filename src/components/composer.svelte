@@ -3,14 +3,10 @@
 import { useThrelte, useRender } from '@threlte/core'
 import { initBloomEffect } from '../lib/bloom'
 import * as POST from 'postprocessing'
-import { addRendererResizer } from 'trzy'
-import { dpr } from '../stores/settings'
 
 const { scene, renderer, camera } = useThrelte()
 
 const composer = new POST.EffectComposer(renderer)
-
-let disposeResizer = addRendererResizer($camera, renderer!, composer, $dpr)
 
 const setupEffectComposer = (camera: THREE.Camera) => {
   composer.removeAllPasses()
@@ -26,11 +22,6 @@ const setupEffectComposer = (camera: THREE.Camera) => {
 }
 // We need to set up the passes according to the camera in use
 $: setupEffectComposer($camera)
-
-$: {
-  disposeResizer()
-  disposeResizer = addRendererResizer($camera, renderer!, composer, $dpr)
-}
 
 useRender((_, delta) => composer.render(delta))
 
