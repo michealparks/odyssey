@@ -18,7 +18,6 @@ $: {
   if (light !== undefined) {
     light.shadow.mapSize.set(mapSize, mapSize)
     light.shadow.dispose()
-    // @ts-expect-error 
     light.shadow.map = null
     light.shadow.needsUpdate = true
   }

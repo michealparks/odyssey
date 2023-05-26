@@ -25,7 +25,6 @@ onMount(() => {
 
   if (debug) {
     new Inspector({
-      THREE,
       scene,
       camera: camera.current as THREE.PerspectiveCamera,
       renderer: renderer!,

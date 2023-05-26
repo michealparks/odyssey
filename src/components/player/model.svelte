@@ -60,6 +60,7 @@ mixer.addEventListener('loop', playAnimationSound)
 
 $: {
   if ($actions[action]) {
+    
     fadeToAction($actions[action]!, 0.1, action !== 'Man_Death')
     playAnimationSound()
   }

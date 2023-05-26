@@ -124,8 +124,6 @@ const dying = async () => {
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
-$:console.log(1 - ($explosionScale + 0.01))
-
 useFrame(() => {
   rotationY += $moveSpeed
 })

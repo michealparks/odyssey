@@ -4,7 +4,6 @@ import { T, useFrame } from '@threlte/core'
 import * as THREE from 'three'
 import { randomPointOnCircle } from '../lib/math'
 import { addToBloom } from '../lib/bloom'
-import { shaderMaterial } from 'trzy'
 
 const radius = 200
 const length = 2500
@@ -39,27 +38,28 @@ for (let i = 0, j = 0; i < positionsArray.length; i += 3, j += 1) {
 const colorAttribute = new THREE.BufferAttribute(colorArray, 1)
 geometry.setAttribute('color', colorAttribute)
 
-const StarMaterial = shaderMaterial(
-  {},
-  `
+const material = new THREE.ShaderMaterial({
+  vertexShader: `
     attribute float color;
     varying float vColor;
+    varying float vDistance;
 
     void main() {
-      float z = (position.z + 1250.0) / 2500.0;
       vColor = color;
+      vDistance = 1.0 - (abs(position.z) / 1250.0);
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       gl_PointSize = 3.0;
     }
   `,
-  `
+  fragmentShader: `
     varying float vColor;
+    varying float vDistance;
     void main() {
-      gl_FragColor = vec4(vColor, vColor, vColor, 1.0);
+      gl_FragColor = vec4(vColor, vColor, vColor, vDistance);
     }
-  `)
-
-const material = new StarMaterial()
+  `,
+  transparent: true
+})
 
 useFrame(() => {
   for (let i = 0, j = 0, l = animatedCount * 3; i < l; i += 3, j += 1) {
@@ -81,7 +81,6 @@ useFrame(() => {
   {geometry}
   {material}
   position.z={-140}
- 
 >
 
 </T.Points>

@@ -7,7 +7,7 @@ export const configure = () => {
 
   renderer!.debug.checkShaderErrors = import.meta.env.DEV
 
-  softShadows()
+  // softShadows()
 
   scene.fog = new THREE.Fog( 0x000000, 1, 100 );
 }
