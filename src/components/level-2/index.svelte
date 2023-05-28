@@ -32,6 +32,7 @@ interface GLTFResult {
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
 const handleInteract = ({ detail }: CustomEvent<string>) => {
+  console.log(detail)
   switch (detail) {
     case 'e': return setFrame('level_3')
     // case 'f': return setFrame('level_1')

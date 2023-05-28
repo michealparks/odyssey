@@ -83,7 +83,7 @@ level.subscribe(async (update) => {
   allowPlayerControl = false
   animationPlayerControl.set(true)
 
-  if      (update === 3) await elevatorPosition.set(3.83)
+  if      (update === 3) await elevatorPosition.set(3.84)
   else if (update === 2) await elevatorPosition.set(-0.48)
 
   allowPlayerControl = true

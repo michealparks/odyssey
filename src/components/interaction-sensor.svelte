@@ -49,6 +49,10 @@ const handleExit = () => {
   />
 
   {#if entered && visible}
-    <Interaction {options} {labels} />
+    <Interaction
+      {options}
+      {labels}
+      on:click={(option) => dispatch('interact', option.detail)}
+    />
   {/if}
 </T.Group>

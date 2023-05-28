@@ -11,7 +11,7 @@ import { animationPlayerControl, elevatorPosition, gameState, explosionPosition 
 import Male from './model.svelte'
 import type { ActionName } from './types'
 
-const { scene } = useThrelte()
+const { camera } = useThrelte()
 
 const { gamepad1, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
@@ -31,7 +31,7 @@ let position = { x: 0, y: 0, z: 0 }
 gameState.subscribe((value) => {
   if (value === 'awoken') {
     rigidBody.setEnabled(true)
-    rigidBody.setTranslation({ x: 0, y: 5, z: -2.75 }, true)
+    rigidBody.setTranslation({ x: 0, y: 5, z: -2 }, true)
     start()
   }
 
@@ -97,6 +97,11 @@ const { start, stop } = useFrame((_ctx, delta) => {
     updateGamepad()
     x = gamepad1.leftStickX * scale
     z = gamepad1.leftStickY * scale
+  } else if (touch.x !== 0 || touch.y !== 0) {
+    const scale = 0.01
+    const max = 0.04
+    x = THREE.MathUtils.clamp(touch.x * scale, -max, max)
+    z = THREE.MathUtils.clamp(touch.y * scale, -max, max)
   }
 
   if (x === 0 && z === 0) {
@@ -137,15 +142,45 @@ const { start, stop } = useFrame((_ctx, delta) => {
   rigidBody.setTranslation(position, true)
 }, { autostart: false })
 
-const tw = tweened({ x: 0, y: 0, z: 0 }, { duration: 1000 })
+// const tw = tweened({ x: 0, y: 0, z: 0 }, { duration: 1000 })
+
+const tw = new THREE.Vector3()
+const tw2 = new THREE.Vector3()
 
 useFrame(() => {
-  tw.set({ ...position })
-  const cam = scene.getObjectByName('Camera')
-  cam?.lookAt($tw.x, $tw.y, $tw.z)
+  tw.set(position.x, position.y, position.z)
+  tw2.lerp(tw, 0.1)
+  camera.current.lookAt(tw2.x, tw2.y, tw2.z)
 })
 
+let touch = new THREE.Vector2()
+let touchDown = new THREE.Vector2()
+
+/**
+ * Extract to trzy
+ */
+const handleTouchStart = (event: TouchEvent) => {
+  touchDown.x = event.touches[0]?.clientX ?? 0
+  touchDown.y = event.touches[0]?.clientY ?? 0
+}
+
+const handleTouchMove = (event: TouchEvent) => {
+  touch.x = ((event.changedTouches[0]?.clientX ?? 0) - touchDown.x) / 10
+  touch.y = ((event.changedTouches[0]?.clientY ?? 0) - touchDown.y) / 10
+}
+
+const handleTouchEnd = () => {
+  touch.x = 0
+  touch.y = 0
+}
+
 </script>
+
+<svelte:window
+  on:touchstart={handleTouchStart}
+  on:touchmove={handleTouchMove}
+  on:touchend={handleTouchEnd}
+/>
 
 <RigidBody
   enabled={!cinematic && !$animationPlayerControl}

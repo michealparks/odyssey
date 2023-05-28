@@ -26,7 +26,7 @@ onMount(() => setTimeout(() => (ready = true), 1500))
 />
 
 <header class='absolute top-0 left-0 w-full h-full grid place-content-center'>
-  <h1 class='cursor-default text-white text-9xl font-extralight font-sans opacity-50 text-center'>odyssey</h1>
+  <h1 class='cursor-default text-white text-8xl sm:text-9xl font-extralight font-sans opacity-50 text-center'>odyssey</h1>
   {#if $gameState === 'end'}
     <article class='z-10 w-full grid text-center place-content-center h-[20vh] text-white opacity-50 text-lg'>
       A mini-game by Micheal Parks.
