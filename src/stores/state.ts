@@ -26,43 +26,43 @@ export const setFrame = (value: Frames) => frame.set(value)
 export const setLevel = (value: Levels) => level.set(value)
 
 const translations = {
-  level_3: [
-    [0, 18, 24],
-    [-0.6, 0, 0]
-  ],
-  level_3_console: [
-    [-1.3, 14.3, 11.3],
-    [-0.75, -0.53, -0.44]
-  ],
-  level_2: [
-    [0, 15, 16],
-    [-0.8, 0, 0]
-  ],
-  level_1: [
-    [0, 11, 11],
-    [-1, 0, 0]
-  ],
-  title: [
-    [0, 0, 57],
-    [0, 0, 0],
-  ],
-  end: [
-    [0, 0, 57],
-    [0, 0, 0],
-  ],
+  level_3: {
+    position: [0, 18, 24],
+    rotation: [-0.6, 0, 0],
+  },
+  level_3_console: {
+    position: [-1.3, 14.3, 11.3],
+    rotation: [-0.75, -0.53, -0.44]
+  },
+  level_2: {
+    position: [0, 15, 16],
+    rotation: [-0.8, 0, 0]
+  },
+  level_1: {
+    position: [0, 11, 11],
+    rotation: [-1, 0, 0]
+  },
+  title: {
+    position: [0, 0, 57],
+    rotation: [0, 0, 0],
+  },
+  end: {
+    position: [0, 0, 57],
+    rotation: [0, 0, 0],
+  },
 } as const
 
 const easing = Easing.cubicInOut
 const duration = 1500
 
-const [position, rotation] = translations[frameValue]
+const initialTranslation = translations[frameValue]
 
-export const cameraPosition = tweened(position, { easing, duration })
-export const cameraRotation = tweened(rotation, { easing, duration })
+export const cameraPosition = tweened(initialTranslation.position, { easing, duration })
+export const cameraRotation = tweened(initialTranslation.rotation, { easing, duration })
 export const cameraAnimating = writable<boolean>(false)
 
 frame.subscribe(async (update) => {
-  const [position, rotation] = translations[update]
+  const newTranslation = translations[update]
 
   if (update === 'end') level.set(4)
   if (update.includes('level_3')) level.set(3)
@@ -71,13 +71,13 @@ frame.subscribe(async (update) => {
 
   cameraAnimating.set(true)
 
-  cameraRotation.set(rotation)
-  await cameraPosition.set(position)
+  cameraRotation.set(newTranslation.rotation)
+  await cameraPosition.set(newTranslation.position)
 
   cameraAnimating.set(false)
 })
 
-export const elevatorPosition = tweened(3.83, { easing, duration })
+export const elevatorPosition = tweened(3.84, { easing, duration })
 
 level.subscribe(async (update) => {
   allowPlayerControl = false

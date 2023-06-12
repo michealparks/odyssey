@@ -3,10 +3,10 @@
 import * as THREE from 'three'
 import { tweened } from 'svelte/motion'
 import { useKeyboard, useGamepad } from 'trzy'
-import { Collider, RigidBody } from '@threlte/rapier'
+import { Collider, CollisionGroups, RigidBody } from '@threlte/rapier'
 import { useFrame, useThrelte } from '@threlte/core'
 import { AudioListener, HTML } from '@threlte/extras'
-import type RAPIER from '@dimforge/rapier3d-compat'
+import RAPIER from '@dimforge/rapier3d-compat'
 import { animationPlayerControl, elevatorPosition, gameState, explosionPosition } from '../../stores/state'
 import Male from './model.svelte'
 import type { ActionName } from './types'
@@ -21,6 +21,8 @@ let rigidBody: RAPIER.RigidBody
 
 let action: ActionName = 'Man_Idle'
 let health = 1
+
+const zeroVector = { x: 0, y: 0, z: 0 }
 
 let rotation = tweened(0, { duration: 100 })
 
@@ -70,7 +72,7 @@ const { start, stop } = useFrame((_ctx, delta) => {
   position = rigidBody.translation()
 
   if ($animationPlayerControl) {
-    position.y = $elevatorPosition + 0.97
+    position.y = $elevatorPosition + 0.99
     
     rigidBody.setTranslation(position, true)
     return
@@ -139,6 +141,7 @@ const { start, stop } = useFrame((_ctx, delta) => {
   position.x += x
   position.z += z
 
+  rigidBody.setLinvel(zeroVector, false)
   rigidBody.setTranslation(position, true)
 }, { autostart: false })
 
@@ -185,7 +188,6 @@ const handleTouchEnd = () => {
 <RigidBody
   enabled={!cinematic && !$animationPlayerControl}
   enabledRotations={[false, false, false]}
-  enabledTranslations={[true, false, true]}
   bind:rigidBody
   type='dynamic'
 >

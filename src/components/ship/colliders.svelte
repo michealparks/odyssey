@@ -1,46 +1,15 @@
 <script lang="ts">
 
-import type * as THREE from 'three'
+import * as THREE from 'three'
+import RAPIER from '@dimforge/rapier3d-compat'
+import { onMount } from 'svelte'
 import { AutoColliders } from '@threlte/rapier'
 import { T } from '@threlte/core'
 import { useGltf } from '@threlte/extras'
+import { useRapier } from '@threlte/rapier'
 
 interface GLTFResult {
   nodes: {
-    outer_collider_3_1: THREE.Mesh
-    outer_collider_3_2: THREE.Mesh
-    outer_collider_3_3: THREE.Mesh
-    outer_collider_3_4: THREE.Mesh
-    outer_collider_3_5: THREE.Mesh
-    outer_collider_3_6: THREE.Mesh
-    outer_collider_3_7: THREE.Mesh
-    outer_collider_3_8: THREE.Mesh
-    outer_collider_3_9: THREE.Mesh
-    outer_collider_3_10: THREE.Mesh
-    outer_collider_3_11: THREE.Mesh
-    outer_collider_3_12: THREE.Mesh
-    outer_collider_3_13: THREE.Mesh
-    outer_collider_3_14: THREE.Mesh
-    outer_collider_3_15: THREE.Mesh
-    outer_collider_3_16: THREE.Mesh
-
-    outer_collider_2_1: THREE.Mesh
-    outer_collider_2_2: THREE.Mesh
-    outer_collider_2_3: THREE.Mesh
-    outer_collider_2_4: THREE.Mesh
-    outer_collider_2_5: THREE.Mesh
-    outer_collider_2_6: THREE.Mesh
-    outer_collider_2_7: THREE.Mesh
-    outer_collider_2_8: THREE.Mesh
-    outer_collider_2_9: THREE.Mesh
-    outer_collider_2_10: THREE.Mesh
-    outer_collider_2_11: THREE.Mesh
-    outer_collider_2_12: THREE.Mesh
-    outer_collider_2_13: THREE.Mesh
-    outer_collider_2_14: THREE.Mesh
-    outer_collider_2_15: THREE.Mesh
-    outer_collider_2_16: THREE.Mesh
-
     collider_rail_1: THREE.Mesh
     collider_rail_2: THREE.Mesh
     collider_rail_3: THREE.Mesh
@@ -64,29 +33,42 @@ const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 const colliders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as const
 const rails = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const
 
+const { world } = useRapier()
+
+onMount(() => {
+  const vec3 = new THREE.Vector3()
+  const quat = new THREE.Quaternion()
+  const worldObj = new THREE.Object3D()
+  const localObj = new THREE.Object3D()
+
+  worldObj.add(localObj)
+  localObj.position.set(0, 4, 6.5)
+
+  const cuboid = RAPIER.ColliderDesc.cuboid(2.5, 2.5, 0.1)
+
+  for (let _ of colliders) {
+    const handle = world.createCollider(cuboid)
+    handle.setTranslation(localObj.getWorldPosition(vec3))
+    handle.setRotation(localObj.getWorldQuaternion(quat))
+
+    worldObj.rotation.y += 0.4
+  }
+
+  worldObj.rotation.y = 0
+  localObj.position.set(0, 2, 8)
+
+  for (let _ of colliders) {
+    const handle = world.createCollider(cuboid)
+    handle.setTranslation(localObj.getWorldPosition(vec3))
+    handle.setRotation(localObj.getWorldQuaternion(quat))
+
+    worldObj.rotation.y += 0.4
+  }
+})
+
 </script>
 
 {#if $gltf}
-  {#each colliders as index (index)}
-    <AutoColliders>
-      <T.Mesh
-        name="outer_collider_3_{index}"
-        geometry={$gltf.nodes[`outer_collider_3_${index}`].geometry}
-        visible={false}
-      />
-    </AutoColliders>
-  {/each}
-
-  {#each colliders as index (index)}
-    <AutoColliders>
-      <T.Mesh
-        name="outer_collider_2_{index}"
-        geometry={$gltf.nodes[`outer_collider_2_${index}`].geometry}
-        visible={false}
-      />
-    </AutoColliders>
-  {/each}
-
   {#each rails as index (index)}
     <AutoColliders>
       <T.Mesh
