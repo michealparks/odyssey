@@ -1,13 +1,9 @@
 const defaults: Record<string, string> = {
-  graphics: 'quality',
+  graphics: 'performance',
   frame: 'title',
   level: '4',
   gameState: 'intro',
 } as const
-
-const iosDefaults: Record<string, string> = {
-  graphics: 'performance'
-}
 
 const iOS = () => {
   return [
@@ -23,7 +19,7 @@ const iOS = () => {
 }
 
 export const storage = (key: string): string | null => {
-  return localStorage.getItem(key) ?? (iOS() ? iosDefaults[key] : defaults[key]) ?? null
+  return localStorage.getItem(key) ?? defaults[key] ?? null
 }
 
 export const save = (key: string, value: string): void => {
