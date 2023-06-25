@@ -27,15 +27,15 @@ export const setLevel = (value: Levels) => level.set(value)
 
 const translations = {
   level_3: {
-    position: [0, 18, 24],
+    position: [0, 15, 13],
     rotation: [-0.6, 0, 0],
   },
   level_3_console: {
-    position: [-1.3, 14.3, 11.3],
+    position: [-1.3, 13, 8],
     rotation: [-0.75, -0.53, -0.44]
   },
   level_2: {
-    position: [0, 15, 16],
+    position: [0, 13, 11],
     rotation: [-0.8, 0, 0]
   },
   level_1: {
@@ -43,7 +43,7 @@ const translations = {
     rotation: [-1, 0, 0]
   },
   title: {
-    position: [0, 0, 57],
+    position: [0, 0, 40],
     rotation: [0, 0, 0],
   },
   end: {
