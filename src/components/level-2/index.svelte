@@ -93,7 +93,7 @@ $: visible = $frame === 'level_2'
   <Audio
     loop
     autoplay
-    src='/mp3/computer_battle.mp3'
+    src={`${import.meta.env.BASE_URL}mp3/computer_battle.mp3`}
     volume={$volume}
   />
 {/if}

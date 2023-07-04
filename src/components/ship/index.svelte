@@ -55,7 +55,7 @@ $: {
 {#if $volume !== 0}
   <Audio
     autoplay
-    src='/mp3/elevator.mp3'
+    src={`${import.meta.env.BASE_URL}mp3/elevator.mp3`}
     volume={$volume}
   />
 {/if}

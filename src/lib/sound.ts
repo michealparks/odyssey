@@ -5,7 +5,7 @@ export const playSound = (file: string, volume = 0.5) => {
 
   if (audio === undefined) {
     audio = document.createElement('audio')
-    audio.src = `mp3/${file}`
+    audio.src = `${import.meta.env.BASE_URL}mp3/${file}`
     
     audios[file] = audio
   }

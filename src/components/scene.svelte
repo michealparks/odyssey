@@ -23,7 +23,7 @@ configure()
   <Audio
     loop
     autoplay
-    src='/mp3/end.mp3'
+    src={`${import.meta.env.BASE_URL}mp3/end.mp3`}
     volume={0.3}
   />
 {/if}

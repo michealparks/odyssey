@@ -107,11 +107,11 @@ for (let i = 0; i < n; i += 1) {
     position={[4.94, 5.15, -0.09]}
     {material}
     {visible}
-    on:create={(event) => setStatic(event.ref)}
+    on:create={({ ref }) => setStatic(ref)}
   >
     {#if $volume > 0}
       <PositionalAudio
-        src={`/mp3/computer_${$gameState === 'seeking' ? 'broken' : 'working'}.mp3`}
+        src={`${import.meta.env.BASE_URL}mp3/computer_${$gameState === 'seeking' ? 'broken' : 'working'}.mp3`}
         refDistance={0.5}
         maxDistance={0.5}
         autoplay
