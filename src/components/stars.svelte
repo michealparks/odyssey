@@ -81,6 +81,4 @@ useFrame(() => {
   {geometry}
   {material}
   position.z={-140}
->
-
-</T.Points>
+/>

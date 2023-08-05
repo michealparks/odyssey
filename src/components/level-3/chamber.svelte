@@ -55,26 +55,27 @@ $: {
     />
 
     {#if erroring}
-    <HTML center>
-      <div class='bg-red-500 text-white uppercase p-1 w-28 text-center font-mono font-bold border border-white text-xs z-50'>
-        no response
-      </div>
-    </HTML>
-    {:else}
-      <T.Group
-        position.z={0.5}
-        on:create={(event) => setStatic(event.ref)}
-      >
-        <InteractionSensor
-          visible={exited}
-          shape='roundCylinder'
-          args={[1.3, 0.9, 0]}
-          options={['e']}
-          labels={['sleep']}
-          on:interact={handleInteract}
-          on:exit={() => (exited = true)}
-        />
-      </T.Group>
+      <HTML center>
+        <div class='bg-red-500 text-white uppercase p-1 w-28 text-center font-mono font-bold border border-white text-xs z-50'>
+          no response
+        </div>
+      </HTML>
     {/if}
+  
+    <T.Group
+      position.z={0.5}
+      position.y={2}
+      on:create={(event) => setStatic(event.ref)}
+    >
+      <InteractionSensor
+        visible={exited}
+        shape='roundCylinder'
+        args={[1.3, 0.9, 0]}
+        options={['e']}
+        labels={['sleep']}
+        on:interact={handleInteract}
+        on:exit={() => (exited = true)}
+      />
+    </T.Group>
   </T>
 {/if}

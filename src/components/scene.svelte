@@ -8,8 +8,10 @@ import Lights from './lights.svelte'
 import { gameState } from '../stores/state'
 import Composer from './composer.svelte'
 import { configure } from '../lib/config'
+import { injectPlugins } from '../plugins'
 
 configure()
+injectPlugins()
 
 </script>
 

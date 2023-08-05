@@ -28,7 +28,7 @@ $: {
 <T.DirectionalLight
   name='directional'
   castShadow
-  intensity={1.3}
+  intensity={1.1}
   position={[-3.4, 8, 4.3]}
   on:create={({ ref }) => {
     const { shadow } = ref
@@ -42,10 +42,9 @@ $: {
     camera.bottom = -size
     camera.far = 20
     camera.near = 0.2
-    camera.updateProjectionMatrix()
   }}
 />
 
 <T.AmbientLight
-  intensity={0.6}
+  intensity={0.5}
 />

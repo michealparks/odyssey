@@ -11,7 +11,7 @@ let queue: THREE.Object3D[] = []
 
 export const initBloomEffect = (scene: THREE.Scene, camera: THREE.Camera) => {
   bloomEffect = new SelectiveBloomEffect(scene, camera, {
-    intensity: 5,
+    intensity: 0.2,
     luminanceThreshold: 0,
     height: 512,
     width: 512,
@@ -24,9 +24,7 @@ export const initBloomEffect = (scene: THREE.Scene, camera: THREE.Camera) => {
 
   didInit = true
 
-  for (let object of queue) {
-    addToBloom(object)
-  }
+  queue.forEach((object) => addToBloom(object))
 
   return bloomEffect
 }

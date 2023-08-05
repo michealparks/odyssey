@@ -14,5 +14,5 @@ export const configure = () => {
 
   renderer!.debug.checkShaderErrors = import.meta.env.DEV
 
-  scene.fog = new THREE.Fog( 0x000000, 1, 100 )
+  scene.fog = new THREE.Fog(0x000000, 1, 100)
 }

@@ -3,7 +3,7 @@
 import * as THREE from 'three'
 import { tweened } from 'svelte/motion'
 import { useKeyboard, useGamepad } from 'trzy'
-import { Collider, CollisionGroups, RigidBody } from '@threlte/rapier'
+import { Collider, RigidBody } from '@threlte/rapier'
 import { useFrame, useThrelte } from '@threlte/core'
 import { AudioListener, HTML } from '@threlte/extras'
 import RAPIER from '@dimforge/rapier3d-compat'
@@ -13,7 +13,7 @@ import type { ActionName } from './types'
 
 const { camera } = useThrelte()
 
-const { gamepad1, updateGamepad } = useGamepad()
+const { gamepad, updateGamepad } = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
 
 let collider: RAPIER.Collider
@@ -93,12 +93,12 @@ const { start, stop } = useFrame((_ctx, delta) => {
       x /= 1.5
       z /= 1.5
     }
-  } else if (gamepad1.connected) {
+  } else if (gamepad.connected) {
     const scale = 1 / 10
 
     updateGamepad()
-    x = gamepad1.leftStickX * scale
-    z = gamepad1.leftStickY * scale
+    x = gamepad.leftStickX * scale
+    z = gamepad.leftStickY * scale
   } else if (touch.x !== 0 || touch.y !== 0) {
     const scale = 0.01
     const max = 0.04
