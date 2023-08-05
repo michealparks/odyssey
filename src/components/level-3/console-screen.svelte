@@ -31,7 +31,7 @@ material.side = THREE.FrontSide
 material.needsUpdate = true
 map.wrapS = THREE.RepeatWrapping
 map.wrapT = THREE.RepeatWrapping
-map.anisotropy = renderer?.capabilities.getMaxAnisotropy() ?? 1
+map.anisotropy = renderer.capabilities.getMaxAnisotropy()
 
 const n = 20
 const bubbles: { r: number, o: number, c: [r: number, g: number, b: number], x: number, y: number, dx: number, dy: number }[] = []

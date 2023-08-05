@@ -26,7 +26,7 @@ const size = 512
 const target = new THREE.WebGLCubeRenderTarget(size, {
   // generateMipmaps: true,
   // minFilter: THREE.LinearMipmapLinearFilter,
-  anisotropy: renderer?.capabilities.getMaxAnisotropy() ?? 1,
+  anisotropy: renderer.capabilities.getMaxAnisotropy(),
   stencilBuffer: false,
   depthBuffer: false,
 })
@@ -53,8 +53,8 @@ useFrame(() => {
   //   obj.visible = false
   // })
 
-  target.clear(renderer!, true, false, false)
-  camera.update(renderer!, scene)
+  target.clear(renderer, true, false, false)
+  camera.update(renderer, scene)
 
   // scene.traverse(obj => {
   //   if (obj.name === 'stars') return

@@ -12,7 +12,7 @@ export const configure = () => {
     cam.position.set(update[0], update[1], update[2])
   })
 
-  renderer!.debug.checkShaderErrors = import.meta.env.DEV
+  renderer.debug.checkShaderErrors = import.meta.env.DEV
 
   scene.fog = new THREE.Fog(0x000000, 1, 100)
 }

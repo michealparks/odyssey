@@ -27,7 +27,7 @@ onMount(() => {
     new Inspector({
       scene,
       camera: camera.current as THREE.PerspectiveCamera,
-      renderer: renderer!,
+      renderer,
       options: { location: 'overlay' }
     })
   }
