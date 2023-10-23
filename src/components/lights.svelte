@@ -6,11 +6,11 @@ import { useThrelte } from '@threlte/core'
 
 const { scene } = useThrelte()
 
-$: mapSize = $graphics === 'performance'
-  ? 2 ** 9
-  : $graphics === 'balanced'
-  ? 2 ** 10
-  : 2 ** 12
+$: mapSize = {
+  performance: 2 ** 9,
+  balanced: 2 ** 10,
+  quality: 2 ** 12,
+}[$graphics]
 
 $: {
   const light = scene.getObjectByName('directional') as THREE.DirectionalLight | undefined
@@ -28,7 +28,7 @@ $: {
 <T.DirectionalLight
   name='directional'
   castShadow
-  intensity={1.1}
+  intensity={1.5}
   position={[-3.4, 8, 4.3]}
   on:create={({ ref }) => {
     const { shadow } = ref

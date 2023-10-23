@@ -6,7 +6,7 @@ import type { ActionName } from './types'
 import { T, type Events, type Slots } from '@threlte/core'
 import { useGltf, useGltfAnimations } from '@threlte/extras'
 import { playSound } from '../../lib/sound'
-import { fadeToAction } from '../../lib/animation'
+import { fadeToAction } from 'trzy'
 
 type $$Events = Events<THREE.Group>
 type $$Slots = Slots<THREE.Group>
@@ -58,11 +58,13 @@ const playAnimationSound = () => {
 
 mixer.addEventListener('loop', playAnimationSound)
 
+let previous = $actions[action]!
+
 $: {
   if ($actions[action]) {
-    
-    fadeToAction($actions[action]!, 0.1, action !== 'Man_Death')
+    fadeToAction(previous ?? $actions[action]!, $actions[action]!, 0.1, action !== 'Man_Death')
     playAnimationSound()
+    previous = $actions[action]!
   }
 }
 
