@@ -3,14 +3,14 @@
 import * as THREE from 'three'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { onDestroy, onMount } from 'svelte'
-import { useThrelte, useFrame } from '@threlte/core'
+import { useThrelte, useTask } from '@threlte/core'
 import { Debug } from '@threlte/rapier'
 import Inspector from 'three-inspect'
 
 import { storage } from '../lib/storage'
 
 const stats = new Stats()
-const { start, stop } = useFrame(() => stats.update(), { autostart: false })
+const { start, stop } = useTask(() => stats.update(), { autoStart: false })
 
 const debug = storage('debug') === 'true'
 const physicsDebug = storage('debug_physics') === 'true'

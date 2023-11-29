@@ -1,6 +1,6 @@
 <script lang='ts'>
 
-import { T, useFrame } from '@threlte/core'
+import { T, useTask } from '@threlte/core'
 import * as THREE from 'three'
 import { randomPointOnCircle } from '../lib/math'
 import { addToBloom } from '../lib/bloom'
@@ -61,7 +61,7 @@ const material = new THREE.ShaderMaterial({
   transparent: true
 })
 
-useFrame(() => {
+useTask(() => {
   for (let i = 0, j = 0, l = animatedCount * 3; i < l; i += 3, j += 1) {
     const val = positionsArray[i + 2]!
     if (val > length / 2) {

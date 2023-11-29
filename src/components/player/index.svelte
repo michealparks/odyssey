@@ -2,10 +2,10 @@
 
 import * as THREE from 'three'
 import { tweened } from 'svelte/motion'
-import { useKeyboard, useGamepad } from 'trzy'
+import { useKeyboard } from 'trzy'
 import { Collider, RigidBody } from '@threlte/rapier'
-import { useFrame, useThrelte } from '@threlte/core'
-import { AudioListener, HTML } from '@threlte/extras'
+import { useTask, useThrelte } from '@threlte/core'
+import { AudioListener, HTML, useGamepad } from '@threlte/extras'
 import RAPIER from '@dimforge/rapier3d-compat'
 import { animationPlayerControl, elevatorPosition, gameState, explosionPosition } from '../../stores/state'
 import Male from './model.svelte'
@@ -13,7 +13,7 @@ import type { ActionName } from './types'
 
 const { camera } = useThrelte()
 
-const { gamepad, updateGamepad } = useGamepad()
+const gamepad = useGamepad()
 const { keyboard } = useKeyboard({ preventDefault: false })
 
 let collider: RAPIER.Collider
@@ -68,7 +68,7 @@ $: cinematic = $gameState === 'intro' || $gameState === 'end' || $gameState === 
 
 const t = 0.01667
 
-const { start, stop } = useFrame((_ctx, delta) => {
+const { start, stop } = useTask((delta) => {
   position = rigidBody.translation()
 
   if ($animationPlayerControl) {
@@ -96,9 +96,8 @@ const { start, stop } = useFrame((_ctx, delta) => {
   } else if (gamepad.connected) {
     const scale = 1 / 10
 
-    updateGamepad()
-    x = gamepad.leftStickX * scale
-    z = gamepad.leftStickY * scale
+    x = gamepad.leftStick.x * scale
+    z = gamepad.leftStick.y * scale
   } else if (touch.x !== 0 || touch.y !== 0) {
     const scale = 0.01
     const max = 0.04
@@ -143,14 +142,14 @@ const { start, stop } = useFrame((_ctx, delta) => {
 
   rigidBody.setLinvel(zeroVector, false)
   rigidBody.setTranslation(position, true)
-}, { autostart: false })
+}, { autoStart: false })
 
 // const tw = tweened({ x: 0, y: 0, z: 0 }, { duration: 1000 })
 
 const tw = new THREE.Vector3()
 const tw2 = new THREE.Vector3()
 
-useFrame(() => {
+useTask(() => {
   tw.set(position.x, position.y, position.z)
   tw2.lerp(tw, 0.1)
   camera.current.lookAt(tw2.x, tw2.y, tw2.z)

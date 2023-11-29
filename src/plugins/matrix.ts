@@ -1,5 +1,5 @@
 import { Object3D } from 'three'
-import { injectPlugin, useFrame } from '@threlte/core'
+import { injectPlugin, useTask } from '@threlte/core'
 
 export const injectMatrixPlugin = () => {
   const propKeysRequiringMatrixUpdate = [
@@ -29,15 +29,14 @@ export const injectMatrixPlugin = () => {
     matrixAutoUpdate?: boolean
   }
 
-  useFrame(({ invalidate }) => {
+  useTask(() => {
     if (objectsToUpdate.length === 0) return
 
     objectsToUpdate.forEach((obj) => obj.updateMatrix())
     objectsToUpdate.splice(0, objectsToUpdate.length)
-    invalidate()
+    // invalidate()
   }, {
-    order: -Infinity,
-    invalidate: false,
+    autoInvalidate: false,
   })
 
   injectPlugin<MatrixPluginProps>('matrix-update', ({ ref, props }) => {

@@ -2,7 +2,7 @@
 
 import * as THREE from 'three'
 import { useGltf } from '@threlte/extras'
-import { T, useFrame, useThrelte } from '@threlte/core'
+import { T, useTask, useThrelte } from '@threlte/core'
 import { level } from '../../stores/state'
 import { addToBloom } from '../../lib/bloom'
 
@@ -42,7 +42,7 @@ const material = new THREE.MeshLambertMaterial({
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
-useFrame(() => {
+useTask(() => {
   // scene.traverse(obj => {
   //   if (obj.name === 'stars') {
   //     obj.visible = true

@@ -1,7 +1,7 @@
 <script lang='ts'>
 
 import * as THREE from 'three'
-import { T, useFrame } from '@threlte/core'
+import { T, useTask } from '@threlte/core'
 import { Collider } from '@threlte/rapier'
 import { useGltf } from '@threlte/extras'
 import { tweened } from 'svelte/motion'
@@ -124,11 +124,11 @@ const dying = async () => {
 
 const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
-useFrame(() => {
+useTask(() => {
   rotationY += $moveSpeed
 })
 
-const { stop, start } = useFrame(() => {
+const { stop, start } = useTask(() => {
   if (switchState === 2) {
     state = 'dead' 
   }
@@ -142,7 +142,7 @@ const { stop, start } = useFrame(() => {
     case 'shutting-down': return shutttingDown()
     case 'dead': return dying()
   }
-}, { autostart: false })
+}, { autoStart: false })
 
 $: {
   if (visible) {

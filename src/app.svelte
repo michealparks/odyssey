@@ -10,7 +10,7 @@ import Menu from './components/menu.svelte'
 
 </script>
 
-<Canvas useLegacyLights={false}>
+<Canvas>
   <World>
     <Debug />
     <Scene />

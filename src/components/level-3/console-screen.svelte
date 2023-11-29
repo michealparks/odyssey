@@ -1,7 +1,7 @@
 <script lang='ts'>
 
 import * as THREE from 'three'
-import { T, useFrame, useThrelte } from '@threlte/core'
+import { T, useTask, useThrelte } from '@threlte/core'
 import { useGltf, PositionalAudio } from '@threlte/extras'
 import { frame, gameState } from '../../stores/state'
 import { tweened } from 'svelte/motion'
@@ -68,7 +68,7 @@ const drawRandomRect = (): void => {
   }
 }
 
-const { start, stop } = useFrame(() => {
+const { start, stop } = useTask(() => {
   ctx.fillStyle = '#111'
   ctx.fillRect(0, 0, width, height)
 
@@ -79,7 +79,7 @@ const { start, stop } = useFrame(() => {
   }
   
   map.needsUpdate = true
-}, { autostart: false })
+}, { autoStart: false })
 
 $: visible ? start() : stop()
 
