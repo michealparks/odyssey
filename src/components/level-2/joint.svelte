@@ -1,76 +1,74 @@
-<script lang='ts'>
+<script lang="ts">
+  import * as THREE from "three";
+  import { T } from "@threlte/core";
+  import { usePrismaticJoint, RigidBody, Collider } from "@threlte/rapier";
+  import { createEventDispatcher } from "svelte";
+  import { useGltf } from "@threlte/extras";
+  import { addToBloom } from "../../lib/bloom";
 
-import * as THREE from 'three'
-import { T } from '@threlte/core'
-import { usePrismaticJoint, RigidBody, Collider } from '@threlte/rapier'
-import { createEventDispatcher } from 'svelte'
-import { useGltf } from '@threlte/extras'
-import { addToBloom } from '../../lib/bloom'
+  export let rotation = 0;
+  export let switchState: 0 | 1 | 2;
 
-export let rotation = 0
-export let switchState: 0 | 1 | 2
-
-interface GLTFResult {
-  nodes: {
-    sphere: THREE.Mesh
-    sphere_band: THREE.Mesh
+  interface GLTFResult {
+    nodes: {
+      sphere: THREE.Mesh;
+      sphere_band: THREE.Mesh;
+    };
+    materials: {
+      Material: THREE.MeshStandardMaterial;
+    };
   }
-  materials: {
-    Material: THREE.MeshStandardMaterial
-  }
-}
 
-const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>("./glb/ship.glb");
 
+  const dispatch = createEventDispatcher();
 
-const dispatch = createEventDispatcher()
+  const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint(
+    [0, 0, 0],
+    [0, 0, 0],
+    [1, 0, 0],
+    [0, -4]
+  );
 
-const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint([0, 0, 0], [0, 0, 0], [1, 0, 0], [0, 3])
+  let entered = false;
 
-let entered = false
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xff5722,
+    emissive: 10,
+  });
 
-const material = new THREE.MeshStandardMaterial({ color: 0xFF5722, emissive: 10 })
+  const handleEnter = (event: any) => {
+    if (event.targetRigidBody === $rigidBodyA) {
+      entered = true;
+      dispatch("enter");
+      if (switchState === 1) material.color.set(0x4caf50);
+    }
+  };
 
-const handleEnter = (event: any) => {
-  if (event.targetRigidBody === $rigidBodyA) {
-    entered = true
-    dispatch('enter')
-    if (switchState === 1) material.color.set(0x4CAF50)
-  }
-}
-
-const handleExit = (event: any) => {
-  if (event.targetRigidBody === $rigidBodyA) {
-    entered = false
-    dispatch('exit')
-    if (switchState === 0) material.color.set(0xFFEE58)
-  }
-}
-
+  const handleExit = (event: any) => {
+    if (event.targetRigidBody === $rigidBodyA) {
+      entered = false;
+      dispatch("exit");
+      if (switchState === 0) material.color.set(0xffee58);
+    }
+  };
 </script>
 
 {#if $gltf}
   <T.Group position.y={0.6} rotation.y={rotation}>
-    <RigidBody
-      type='fixed'
-      bind:rigidBody={$rigidBodyB}
-    >
+    <RigidBody type="fixed" bind:rigidBody={$rigidBodyB}>
       <Collider shape="cuboid" args={[0, 0, 0]} />
     </RigidBody>
   </T.Group>
 
   <T.Group position.y={1.5} rotation.y={rotation}>
     <RigidBody
-      type='dynamic'
+      type="dynamic"
       enabledRotations={[false, false, false]}
       enabledTranslations={[true, false, true]}
       bind:rigidBody={$rigidBodyA}
     >
-      <Collider
-        mass={0.1}
-        shape="cuboid"
-        args={[0.5, 0.5, 0.5]}
-      />
+      <Collider mass={0.1} shape="cuboid" args={[0.5, 0.5, 0.5]} />
 
       <T.Mesh
         name="sphere"
@@ -92,7 +90,7 @@ const handleExit = (event: any) => {
     </RigidBody>
 
     <Collider
-      shape='ball'
+      shape="ball"
       args={[0.2]}
       sensor
       on:sensorenter={handleEnter}
