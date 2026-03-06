@@ -2,12 +2,13 @@
   import * as THREE from "three";
   import { T } from "@threlte/core";
   import { usePrismaticJoint, RigidBody, Collider } from "@threlte/rapier";
-  import { createEventDispatcher } from "svelte";
   import { useGltf } from "@threlte/extras";
   import { addToBloom } from "../../lib/bloom";
 
   export let rotation = 0;
   export let switchState: 0 | 1 | 2;
+  export let onEnter: () => void;
+  export let onExit: () => void;
 
   interface GLTFResult {
     nodes: {
@@ -20,8 +21,6 @@
   }
 
   const gltf = useGltf<GLTFResult>("./glb/ship.glb");
-
-  const dispatch = createEventDispatcher();
 
   const { joint, rigidBodyA, rigidBodyB } = usePrismaticJoint(
     [0, 0, 0],
@@ -40,7 +39,7 @@
   const handleEnter = (event: any) => {
     if (event.targetRigidBody === $rigidBodyA) {
       entered = true;
-      dispatch("enter");
+      onEnter();
       if (switchState === 1) material.color.set(0x4caf50);
     }
   };
@@ -48,7 +47,7 @@
   const handleExit = (event: any) => {
     if (event.targetRigidBody === $rigidBodyA) {
       entered = false;
-      dispatch("exit");
+      onExit();
       if (switchState === 0) material.color.set(0xffee58);
     }
   };
@@ -85,7 +84,7 @@
         geometry={$gltf.nodes.sphere_band.geometry}
         position.y={-0.5}
         {material}
-        on:create={({ ref }) => addToBloom(ref)}
+        oncreate={(ref) => addToBloom(ref)}
       />
     </RigidBody>
 
@@ -93,8 +92,8 @@
       shape="ball"
       args={[0.2]}
       sensor
-      on:sensorenter={handleEnter}
-      on:sensorexit={handleExit}
+      onsensorenter={handleEnter}
+      onsensorexit={handleExit}
     />
   </T.Group>
 {/if}

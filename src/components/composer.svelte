@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { useThrelte, useRender } from "@threlte/core";
+  import type { Camera } from "three";
+  import { useThrelte, useTask } from "@threlte/core";
   import { initBloomEffect } from "../lib/bloom";
   import * as POST from "postprocessing";
 
@@ -7,7 +8,7 @@
 
   const composer = new POST.EffectComposer(renderer);
 
-  const setupEffectComposer = (camera: THREE.Camera) => {
+  const setupEffectComposer = (camera: Camera) => {
     composer.removeAllPasses();
     composer.addPass(new POST.RenderPass(scene, camera));
 
@@ -22,5 +23,5 @@
   // We need to set up the passes according to the camera in use
   $: setupEffectComposer($camera);
 
-  useRender((_, delta) => composer.render(delta));
+  useTask((delta) => composer.render(delta));
 </script>

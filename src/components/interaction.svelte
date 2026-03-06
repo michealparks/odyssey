@@ -1,31 +1,24 @@
-<script lang='ts'>
+<script lang="ts">
+  import { HTML } from "@threlte/extras";
 
-import { createEventDispatcher } from 'svelte'
-import { HTML } from '@threlte/extras'
-
-export let options: string[] = []
-export let labels: string[] = []
-
-const dispatch = createEventDispatcher()
-
+  export let options: string[] = [];
+  export let labels: string[] = [];
+  export let onClick: (option: string) => void;
 </script>
 
-<HTML
-  sprite
-  {...$$restProps}
->
-  <ul class='grid gap-1 font-mono m-0'>
+<HTML sprite {...$$restProps}>
+  <ul class="grid gap-1 font-mono m-0">
     {#each options as option, i (option)}
-      <button on:click={() => dispatch('click', option)}>
+      <button onclick={() => onClick(option)}>
         <li
-          class='flex items-center gap-1 px-1.5 text-white backdrop-blur border border-[rgba(255,255,255,0.6)] rounded-[3px]'
+          class="flex items-center gap-1 px-1.5 text-white backdrop-blur border border-[rgba(255,255,255,0.6)] rounded-[3px]"
         >
           {#if labels[i] === undefined}
             {option}
           {:else}
-          <span class='min-w-[0.5rem] text-center'>{option}</span>
-          <span class='h-full border-l border-[rgba(255,255,255,0.6)]' />
-          <span>{labels[i]}</span>
+            <span class="min-w-[0.5rem] text-center">{option}</span>
+            <span class="h-full border-l border-[rgba(255,255,255,0.6)]"></span>
+            <span>{labels[i]}</span>
           {/if}
         </li>
       </button>

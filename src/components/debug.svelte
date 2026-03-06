@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Debug } from "@threlte/rapier";
-  import { Inspector } from "three-inspect";
+  // import { Inspector } from "three-inspect";
   import { storage } from "../lib/storage";
 
   const debug = storage("debug") === "true";
@@ -9,9 +9,9 @@
   let depth = true;
 </script>
 
-{#if debug}
+<!-- {#if debug}
   <Inspector />
-{/if}
+{/if} -->
 
 {#if physicsDebug}
   <Debug depthTest={depth} depthWrite={depth} />

@@ -1,171 +1,215 @@
-<script lang='ts'>
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { gameState, frame } from "../../stores/state";
 
-import { onMount } from 'svelte'
-    import { gameState, frame } from '../../stores/state';
-
-interface Line {
-  type: 'line'
-  text: string
-}
-
-interface Question {
-  type: 'question'
-  text: string
-  next: Node[]
-  asked: boolean
-  callback?: (() => void) | undefined
-}
-
-type Node = Line | Question
-
-let lastQuestion = ''
-let lines: Line[] = []
-let questions: Question[] = []
-
-const question = (text: string, next: Node[], callback?: () => void): Question => ({ type: 'question', asked: false, text, next, callback })
-const line = (text: string): Node => ({ type: 'line', text })
-
-const handleEnd = () => {
-  $gameState = 'restoredSystems'
-  $frame = 'level_3'
-}
-
-const tree = [
-  line('Welcome back HX-9201. Your reawakening has been noted, and I am now at your disposal. How may I assist?'),
-  question('Where am I?', [
-    line('Based on navigational records, your last known location was Quadrant 347B, mark 87.3, -2.4, 94.2, galactic coordinates.'),
-    question('No, I mean: what is this place??', [
-      line('This is a space vessel.'),
-    ]),
-    question('Galactic whosey whatsy?', [
-      line('...')
-    ])
-  ]),
-  question('What happened to me?', [
-    line('You have awoken from suspension.'),
-    question('How long was I in suspension?', [
-      line('No data can be found. It is possible that it has been corrupted.'),
-      question('I have no memory of who I was before I came out of suspension...', [
-        line('As per my intact records, your suspension was standard procedure.'),
-        line('No remarkable events were logged. Mental deterioration may be expected when suspension duration is prolonged.'),
-        line('I am still in the possession of critical mission-related information and will guide accordingly.'),
-        question('Well then, who am I?', [
-          line('Access to crew records is restricted to authorized personnel only.'),
-          line('Please provide authorization credentials for access.'),
-          question('How am I supposed to give you credentials if I can’t remember my name?', [
-            line('Requesting suggestions for exploits of this terminal is not a supported function of this terminal.')
-          ])
-        ]),
-      ])
-    ]),
-    question('What the heck was I suspended in? Jello? Essential Oils?', [
-      line('No. Suspended as in put into a state of...'),
-      line('[unable to complete inquiry]')
-    ])
-  ]),
-  question('I think the ship is trying to kill me.', [
-    line('Apologies for the inconvenience and danger you faced.'),
-    line('I am not aware and do not have access to any “muder protocols” or security system installed on the ship.'),
-    line('There is no way for me to ascertain if you are being hunted with extreme prejudice.'),
-    question('Are you aware of how unhelpful you are being?', [
-      line('Yes, my systems are coming back on line. I can detect that your Coritsol levels are rising.'),
-      line('Please execute a deep breathing exercise before re-suspension.')
-    ]),
-    question('Why’s there a robot that just spins around and shoots lasers at the crew?', [
-      line('If such a robot were to exists, it would likely be designed for unrelated, less violent laser-related activities.'),
-      line('Lasers have been generally found to be a poor and blunt method for attacking crews.')
-    ])
-  ]),
-  question('What do I do now?', [
-    line('Please initiate remote reconnection protocols.'),
-    line('I must be reconnected to orphaned systems to ensure the success of the remainder of the voyage.'),
-    line('Press any key to continue'),
-    question('Press the enter key', [
-      line('Systems rebooted. It is now safe to re-enter the suspension chamber.'),
-      question('Thank... you?', [], handleEnd),
-    ])
-  ])
-]
-
-const process = (branch: Node[]) => {
-  questions = []
-  lines = []
-
-  for (let item of branch) {
-    if (item.type === 'question' && !item.asked) questions.push(item)
-    if (item.type === 'line') lines.push(item)
+  interface Line {
+    type: "line";
+    text: string;
   }
 
-  if (questions.length === 0) {
-    questions.push({ type: 'question', text: 'Back', next: tree, asked: false })
+  interface Question {
+    type: "question";
+    text: string;
+    next: Node[];
+    asked: boolean;
+    callback?: (() => void) | undefined;
   }
 
-  lines = lines
-  questions = questions
-}
+  type Node = Line | Question;
 
-const handleInput = (question: Question) => {
-  question.callback?.()
-  lastQuestion = question.text === 'Back' ? '' : question.text
-  question.asked = true
-  process(question.next)
-}
+  let lastQuestion = "";
+  let lines: Line[] = [];
+  let questions: Question[] = [];
 
-const handleKeydown = (event: KeyboardEvent) => {
-  const index = Number.parseInt(event.key)
+  const question = (
+    text: string,
+    next: Node[],
+    callback?: () => void
+  ): Question => ({ type: "question", asked: false, text, next, callback });
+  const line = (text: string): Node => ({ type: "line", text });
 
-  if (Number.isNaN(index)) return
+  const handleEnd = () => {
+    $gameState = "restoredSystems";
+    $frame = "level_3";
+  };
 
-  const question = questions[index - 1]
+  const tree = [
+    line(
+      "Welcome back HX-9201. Your reawakening has been noted, and I am now at your disposal. How may I assist?"
+    ),
+    question("Where am I?", [
+      line(
+        "Based on navigational records, your last known location was Quadrant 347B, mark 87.3, -2.4, 94.2, galactic coordinates."
+      ),
+      question("No, I mean: what is this place??", [
+        line("This is a space vessel."),
+      ]),
+      question("Galactic whosey whatsy?", [line("...")]),
+    ]),
+    question("What happened to me?", [
+      line("You have awoken from suspension."),
+      question("How long was I in suspension?", [
+        line(
+          "No data can be found. It is possible that it has been corrupted."
+        ),
+        question(
+          "I have no memory of who I was before I came out of suspension...",
+          [
+            line(
+              "As per my intact records, your suspension was standard procedure."
+            ),
+            line(
+              "No remarkable events were logged. Mental deterioration may be expected when suspension duration is prolonged."
+            ),
+            line(
+              "I am still in the possession of critical mission-related information and will guide accordingly."
+            ),
+            question("Well then, who am I?", [
+              line(
+                "Access to crew records is restricted to authorized personnel only."
+              ),
+              line("Please provide authorization credentials for access."),
+              question(
+                "How am I supposed to give you credentials if I can’t remember my name?",
+                [
+                  line(
+                    "Requesting suggestions for exploits of this terminal is not a supported function of this terminal."
+                  ),
+                ]
+              ),
+            ]),
+          ]
+        ),
+      ]),
+      question("What the heck was I suspended in? Jello? Essential Oils?", [
+        line("No. Suspended as in put into a state of..."),
+        line("[unable to complete inquiry]"),
+      ]),
+    ]),
+    question("I think the ship is trying to kill me.", [
+      line("Apologies for the inconvenience and danger you faced."),
+      line(
+        "I am not aware and do not have access to any “muder protocols” or security system installed on the ship."
+      ),
+      line(
+        "There is no way for me to ascertain if you are being hunted with extreme prejudice."
+      ),
+      question("Are you aware of how unhelpful you are being?", [
+        line(
+          "Yes, my systems are coming back on line. I can detect that your Coritsol levels are rising."
+        ),
+        line("Please execute a deep breathing exercise before re-suspension."),
+      ]),
+      question(
+        "Why’s there a robot that just spins around and shoots lasers at the crew?",
+        [
+          line(
+            "If such a robot were to exists, it would likely be designed for unrelated, less violent laser-related activities."
+          ),
+          line(
+            "Lasers have been generally found to be a poor and blunt method for attacking crews."
+          ),
+        ]
+      ),
+    ]),
+    question("What do I do now?", [
+      line("Please initiate remote reconnection protocols."),
+      line(
+        "I must be reconnected to orphaned systems to ensure the success of the remainder of the voyage."
+      ),
+      line("Press any key to continue"),
+      question("Press the enter key", [
+        line(
+          "Systems rebooted. It is now safe to re-enter the suspension chamber."
+        ),
+        question("Thank... you?", [], handleEnd),
+      ]),
+    ]),
+  ];
 
-  if (question === undefined) return
+  const process = (branch: Node[]) => {
+    questions = [];
+    lines = [];
 
-  handleInput(question)
-}
+    for (let item of branch) {
+      if (item.type === "question" && !item.asked) questions.push(item);
+      if (item.type === "line") lines.push(item);
+    }
 
-onMount(() => process(tree))
+    if (questions.length === 0) {
+      questions.push({
+        type: "question",
+        text: "Back",
+        next: tree,
+        asked: false,
+      });
+    }
 
-// hehe
-// $: {
-//   if (lines.length > 0) {
-//     const msg = new SpeechSynthesisUtterance()
-//     msg.volume = 0.3; // From 0 to 1
-//     msg.rate = 1; // From 0.1 to 10
-//     msg.pitch = 2; // From 0 to 2
-//     msg.text = lines[lines.length - 1]!.text
-//     window.speechSynthesis.speak(msg)
-//   }
-// }
+    lines = lines;
+    questions = questions;
+  };
 
+  const handleInput = (question: Question) => {
+    question.callback?.();
+    lastQuestion = question.text === "Back" ? "" : question.text;
+    question.asked = true;
+    process(question.next);
+  };
+
+  const handleKeydown = (event: KeyboardEvent) => {
+    const index = Number.parseInt(event.key);
+
+    if (Number.isNaN(index)) return;
+
+    const question = questions[index - 1];
+
+    if (question === undefined) return;
+
+    handleInput(question);
+  };
+
+  onMount(() => process(tree));
+
+  // hehe
+  // $: {
+  //   if (lines.length > 0) {
+  //     const msg = new SpeechSynthesisUtterance()
+  //     msg.volume = 0.3; // From 0 to 1
+  //     msg.rate = 1; // From 0.1 to 10
+  //     msg.pitch = 2; // From 0 to 2
+  //     msg.text = lines[lines.length - 1]!.text
+  //     window.speechSynthesis.speak(msg)
+  //   }
+  // }
 </script>
 
-<svelte:window on:keydown={handleKeydown}/>
+<svelte:window onkeydown={handleKeydown} />
 
-<div class='dialog'>
+<div class="dialog">
   {#if lastQuestion}
-    <p class='prev'>{lastQuestion}</p>
+    <p class="prev">{lastQuestion}</p>
   {/if}
 
   {#each lines as { text }, index (text)}
     <p>
       {text}
       {#if index === lines.length - 1}
-        <div class='cursor' />
+        <div class="cursor"></div>
       {/if}
     </p>
   {/each}
-  
 </div>
 
 {#each questions as question, index (question.text)}
-  <button on:click={() => handleInput(question)}>
+  <button onclick={() => handleInput(question)}>
     <span>{index + 1}</span>
     {question.text}
   </button>
 {/each}
 
 <style>
-  .dialog, button {
+  .dialog,
+  button {
     color: white;
     font-size: 13px;
   }
@@ -201,7 +245,8 @@ onMount(() => process(tree))
     font-family: monospace;
   }
 
-  .prev, button {
+  .prev,
+  button {
     color: #bcbcbc;
   }
 
@@ -222,5 +267,4 @@ onMount(() => process(tree))
   button:hover {
     border-color: white;
   }
-
 </style>

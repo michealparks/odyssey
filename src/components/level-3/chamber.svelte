@@ -1,44 +1,42 @@
-<script lang='ts'>
+<script lang="ts">
+  import * as THREE from "three";
+  import { useGltf, HTML } from "@threlte/extras";
+  import { Collider } from "@threlte/rapier";
+  import { T } from "@threlte/core";
+  import { frame, gameState } from "../../stores/state";
+  import InteractionSensor from "../interaction-sensor.svelte";
+  import { setStatic } from "../../lib/static";
 
-import * as THREE from 'three'
-import { useGltf, HTML } from '@threlte/extras'
-import { Collider } from '@threlte/rapier'
-import { T } from '@threlte/core'
-import { frame, gameState } from '../../stores/state'
-import InteractionSensor from '../interaction-sensor.svelte';
-import { setStatic } from '../../lib/static'
-
-interface GLTFResult {
-  nodes: {
-    stasis_chamber: THREE.Mesh
+  interface GLTFResult {
+    nodes: {
+      stasis_chamber: THREE.Mesh;
+    };
+    materials: {};
   }
-  materials: {}
-}
 
-const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>("./glb/ship.glb");
 
-let exited = false
-let erroring = false
+  let exited = false;
+  let erroring = false;
 
-const handleInteract = () => {
-  if ($gameState === 'restoredSystems') {
-    $gameState = 'end'
-    $frame = 'end'
-  } else {
-    erroring = true
-    setTimeout(() => (erroring = false), 2000)
+  const handleInteract = () => {
+    if ($gameState === "restoredSystems") {
+      $gameState = "end";
+      $frame = "end";
+    } else {
+      erroring = true;
+      setTimeout(() => (erroring = false), 2000);
+    }
+  };
+
+  $: visible = $frame.includes("level_3");
+
+  $: {
+    if ($gameState === "awoken") {
+      // start()
+      $gameState = "seeking";
+    }
   }
-}
-
-$: visible = $frame.includes('level_3')
-
-$: {
-  if ($gameState === 'awoken') {
-    // start()
-    $gameState = 'seeking'
-  }
-}
-
 </script>
 
 {#if $gltf}
@@ -47,34 +45,29 @@ $: {
     castShadow
     receiveShadow
     {visible}
-    on:create={(event) => setStatic(event.ref)}
+    oncreate={(ref) => setStatic(ref)}
   >
-    <Collider
-      shape='roundCylinder'
-      args={[1.3, 0.9, 0]}
-    />
+    <Collider shape="roundCylinder" args={[1.3, 0.9, 0]} />
 
     {#if erroring}
       <HTML center>
-        <div class='bg-red-500 text-white uppercase p-1 w-28 text-center font-mono font-bold border border-white text-xs z-50'>
+        <div
+          class="bg-red-500 text-white uppercase p-1 w-28 text-center font-mono font-bold border border-white text-xs z-50"
+        >
           no response
         </div>
       </HTML>
     {/if}
-  
-    <T.Group
-      position.z={0.5}
-      position.y={2}
-      on:create={(event) => setStatic(event.ref)}
-    >
+
+    <T.Group position.z={0.5} position.y={2} oncreate={(ref) => setStatic(ref)}>
       <InteractionSensor
         visible={exited}
-        shape='roundCylinder'
+        shape="roundCylinder"
         args={[1.3, 0.9, 0]}
-        options={['e']}
-        labels={['sleep']}
-        on:interact={handleInteract}
-        on:exit={() => (exited = true)}
+        options={["e"]}
+        labels={["sleep"]}
+        onInteract={handleInteract}
+        onExit={() => (exited = true)}
       />
     </T.Group>
   </T>

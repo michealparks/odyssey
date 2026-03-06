@@ -1,6 +1,7 @@
-import './app.css'
-import App from './app.svelte'
+import "./app.css";
+import App from "./app.svelte";
+import { mount } from "svelte";
 
-const target = document.querySelector('#app')!
+const target = document.querySelector("#app")!;
 
-export default new App({ target })
+mount(App, { target });
