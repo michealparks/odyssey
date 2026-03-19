@@ -3,13 +3,14 @@ import {
   BlendFunction,
   SelectiveBloomEffect,
 } from 'postprocessing'
+import type { Camera, Object3D, Scene } from 'three'
 
 export let bloomEffect: SelectiveBloomEffect
 
 let didInit = false
-let queue: THREE.Object3D[] = []
+let queue: Object3D[] = []
 
-export const initBloomEffect = (scene: THREE.Scene, camera: THREE.Camera) => {
+export const initBloomEffect = (scene: Scene, camera: Camera) => {
   bloomEffect = new SelectiveBloomEffect(scene, camera, {
     intensity: 0.2,
     luminanceThreshold: 0,
@@ -29,7 +30,7 @@ export const initBloomEffect = (scene: THREE.Scene, camera: THREE.Camera) => {
   return bloomEffect
 }
 
-export const addToBloom = (object: THREE.Object3D) => {
+export const addToBloom = (object: Object3D) => {
   if (!didInit) {
     queue.push(object)
     return

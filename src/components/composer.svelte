@@ -1,26 +1,41 @@
 <script lang="ts">
-  import { useThrelte, useRender } from "@threlte/core";
-  import { initBloomEffect } from "../lib/bloom";
-  import * as POST from "postprocessing";
+  import { useThrelte, useTask } from '@threlte/core'
+  import { initBloomEffect } from '../lib/bloom'
+  import {
+    EffectComposer,
+    RenderPass,
+    EffectPass,
+    SMAAEffect,
+    SMAAPreset,
+  } from 'postprocessing'
+  import type { Camera } from 'three'
 
-  const { scene, renderer, camera } = useThrelte();
+  const { scene, renderer, camera, autoRender, renderStage } = useThrelte()
 
-  const composer = new POST.EffectComposer(renderer);
+  const composer = new EffectComposer(renderer)
 
-  const setupEffectComposer = (camera: THREE.Camera) => {
-    composer.removeAllPasses();
-    composer.addPass(new POST.RenderPass(scene, camera));
+  const setupEffectComposer = (camera: Camera) => {
+    composer.removeAllPasses()
+    composer.addPass(new RenderPass(scene, camera))
 
     composer.addPass(
-      new POST.EffectPass(
+      new EffectPass(
         camera,
         initBloomEffect(scene, camera),
-        new POST.SMAAEffect({ preset: POST.SMAAPreset.LOW })
+        new SMAAEffect({ preset: SMAAPreset.LOW })
       )
-    );
-  };
+    )
+  }
   // We need to set up the passes according to the camera in use
-  $: setupEffectComposer($camera);
+  $effect(() => {
+    autoRender.set(false)
+    setupEffectComposer($camera)
+  })
 
-  useRender((_, delta) => composer.render(delta));
+  useTask(
+    (delta) => {
+      composer.render(delta)
+    },
+    { stage: renderStage }
+  )
 </script>

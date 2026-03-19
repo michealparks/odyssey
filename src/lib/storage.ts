@@ -5,19 +5,6 @@ const defaults: Record<string, string> = {
   gameState: 'intro',
 } as const
 
-const iOS = () => {
-  return [
-    'iPad Simulator',
-    'iPhone Simulator',
-    'iPod Simulator',
-    'iPad',
-    'iPhone',
-    'iPod'
-  ].includes(navigator.platform)
-  // iPad on iOS 13 detection
-  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-}
-
 export const storage = (key: string): string | null => {
   return localStorage.getItem(key) ?? defaults[key] ?? null
 }

@@ -1,86 +1,97 @@
-<script lang='ts'>
+<script lang="ts">
+  import type { Snippet } from 'svelte'
+  import {
+    type SkinnedMesh,
+    type Bone,
+    type MeshStandardMaterial,
+    AnimationAction,
+  } from 'three'
+  import { Group } from 'three'
+  import type { ActionName } from './types'
+  import { T } from '@threlte/core'
+  import { useGltf, useGltfAnimations } from '@threlte/extras'
+  import { playSound } from '../../lib/sound'
+  import { fadeToAction } from '../../lib/animation'
 
-import * as THREE from 'three'
-import { Group } from 'three'
-import type { ActionName } from './types'
-import { T, type Events, type Slots } from '@threlte/core'
-import { useGltf, useGltfAnimations } from '@threlte/extras'
-import { playSound } from '../../lib/sound'
-import { fadeToAction } from 'trzy'
-
-type $$Events = Events<THREE.Group>
-type $$Slots = Slots<THREE.Group>
-
-type GLTFResult = {
-  nodes: {
-    Cylinder002: THREE.SkinnedMesh
-    Cylinder002_1: THREE.SkinnedMesh
-    Cylinder002_2: THREE.SkinnedMesh
-    Cylinder002_3: THREE.SkinnedMesh
-    Cylinder002_4: THREE.SkinnedMesh
-    Cylinder002_5: THREE.SkinnedMesh
-    Bone: THREE.Bone
+  type GLTFResult = {
+    nodes: {
+      Cylinder002: SkinnedMesh
+      Cylinder002_1: SkinnedMesh
+      Cylinder002_2: SkinnedMesh
+      Cylinder002_3: SkinnedMesh
+      Cylinder002_4: SkinnedMesh
+      Cylinder002_5: SkinnedMesh
+      Bone: Bone
+    }
+    materials: {
+      Skin: MeshStandardMaterial
+      Eyes: MeshStandardMaterial
+      Hair: MeshStandardMaterial
+      Shirt: MeshStandardMaterial
+      Pants: MeshStandardMaterial
+      Socks: MeshStandardMaterial
+    }
   }
-  materials: {
-    Skin: THREE.MeshStandardMaterial
-    Eyes: THREE.MeshStandardMaterial
-    Hair: THREE.MeshStandardMaterial
-    Shirt: THREE.MeshStandardMaterial
-    Pants: THREE.MeshStandardMaterial
-    Socks: THREE.MeshStandardMaterial
+
+  interface Props {
+    action?: ActionName
+    children?: Snippet
+    [key: string]: any
   }
-}
 
-export const ref = new Group()
+  let { action = 'Man_Idle', children, ...rest }: Props = $props()
 
-export let action: ActionName = 'Man_Idle'
+  const ref = new Group()
 
-const gltf = useGltf<GLTFResult>('./glb/male.glb')
+  const gltf = useGltf<GLTFResult>('./glb/male.glb')
 
-let soundId1 = 0
-let soundId2 = 0
+  let soundId1 = 0
+  let soundId2 = 0
 
-export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+  const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
 
-const playAnimationSound = () => {
-  const offset = 200
+  const playAnimationSound = () => {
+    const offset = 200
 
-  if (action === 'Man_Walk') {
-    const duration = 1_041
-    soundId1 = setTimeout(playSound, offset, 'step2.ogg', 0.15)
-    soundId2 = setTimeout(playSound, offset + (duration / 2), 'step2.ogg', 0.15)
-  } else if (action === 'Man_Run') {
-    const duration = 875
-    soundId1 = setTimeout(playSound, offset, 'step1.ogg', 0.15)
-    soundId2 = setTimeout(playSound, offset + (duration / 2), 'step1.ogg', 0.15)
+    if (action === 'Man_Walk') {
+      const duration = 1_041
+      clearTimeout(soundId1)
+      clearTimeout(soundId2)
+      soundId1 = setTimeout(playSound, offset, 'step2.ogg', 0.15)
+      soundId2 = setTimeout(playSound, offset + duration / 2, 'step2.ogg', 0.15)
+    } else if (action === 'Man_Run') {
+      const duration = 875
+      clearTimeout(soundId1)
+      clearTimeout(soundId2)
+      soundId1 = setTimeout(playSound, offset, 'step1.ogg', 0.15)
+      soundId2 = setTimeout(playSound, offset + duration / 2, 'step1.ogg', 0.15)
+    }
   }
-}
 
-mixer.addEventListener('loop', playAnimationSound)
+  mixer.addEventListener('loop', playAnimationSound)
 
-let previous = $actions[action]!
+  let previous: AnimationAction | undefined
 
-$: {
-  if ($actions[action]) {
-    fadeToAction(previous ?? $actions[action]!, $actions[action]!, 0.1, action !== 'Man_Death')
-    playAnimationSound()
-    previous = $actions[action]!
-  }
-}
-
+  $effect(() => {
+    if ($actions[action]) {
+      fadeToAction(previous, $actions[action]!, 0.1, action !== 'Man_Death')
+      playAnimationSound()
+      previous = $actions[action]
+    }
+  })
 </script>
 
-{#if $gltf}
-  <T
-    is={ref}
-    dispose={false}
-    {...$$restProps}
-    name='Player'
-    scale={0.4}
-  >
+<T
+  is={ref}
+  dispose={false}
+  name="Player"
+  scale={0.4}
+  {...rest}
+>
+  {#if $gltf}
     <T is={$gltf.nodes.Bone} />
     <T.SkinnedMesh
-      name='Skin'
+      name="Skin"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002.geometry}
@@ -88,7 +99,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002.skeleton}
     />
     <T.SkinnedMesh
-      name='Feet'
+      name="Feet"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_1.geometry}
@@ -96,7 +107,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_1.skeleton}
     />
     <T.SkinnedMesh
-      name='Hair'
+      name="Hair"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_2.geometry}
@@ -104,7 +115,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_2.skeleton}
     />
     <T.SkinnedMesh
-      name='Shirt'
+      name="Shirt"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_3.geometry}
@@ -112,7 +123,7 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_3.skeleton}
     />
     <T.SkinnedMesh
-      name='Pants'
+      name="Pants"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_4.geometry}
@@ -120,13 +131,13 @@ $: {
       skeleton={$gltf.nodes.Cylinder002_4.skeleton}
     />
     <T.SkinnedMesh
-      name='Socks'
+      name="Socks"
       castShadow
       receiveShadow
       geometry={$gltf.nodes.Cylinder002_5.geometry}
       material={$gltf.materials.Socks}
       skeleton={$gltf.nodes.Cylinder002_5.skeleton}
     />
-    <slot {ref} />
-  </T>
-{/if}
+    {@render children?.()}
+  {/if}
+</T>

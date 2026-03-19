@@ -1,26 +1,19 @@
-import * as THREE from 'three'
+import { type AnimationAction, LoopRepeat, LoopOnce } from 'three'
 
-let previousAction: THREE.AnimationAction | undefined
-let activeAction: THREE.AnimationAction
-
-export const fadeToAction = (newAction: THREE.AnimationAction, duration: number, loop = true) => {
-
-  previousAction = activeAction
-  activeAction = newAction;
-
-  if (previousAction !== activeAction) {
-    previousAction?.fadeOut( duration )
+export const fadeToAction = (previous: AnimationAction | undefined, action: AnimationAction, duration: number, loop = true) => {
+  if (previous !== action) {
+    previous?.fadeOut( duration )
   }
 
   if (loop) {
-    activeAction.loop = THREE.LoopRepeat
-    activeAction.clampWhenFinished = false
+    action.loop = LoopRepeat
+    action.clampWhenFinished = false
   } else {
-    activeAction.loop = THREE.LoopOnce
-    activeAction.clampWhenFinished = true
+    action.loop = LoopOnce
+    action.clampWhenFinished = true
   }
 
-  activeAction
+  action
     .reset()
     .setEffectiveTimeScale( 1 )
     .setEffectiveWeight( 1 )

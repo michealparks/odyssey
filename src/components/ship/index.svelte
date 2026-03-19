@@ -1,43 +1,42 @@
 <script lang="ts">
+  import { Tween } from 'svelte/motion'
+  import { T } from '@threlte/core'
+  import { useGltf, Audio } from '@threlte/extras'
+  import Exterior from './exterior.svelte'
+  import Level3 from '../level-3/index.svelte'
+  import Level2 from '../level-2/index.svelte'
+  import Level1 from './level-1.svelte'
+  import { elevatorPosition, frame } from '../../stores/state'
+  import Colliders from './colliders.svelte'
+  import type { Mesh, MeshStandardMaterial } from 'three'
 
-import { tweened } from 'svelte/motion'
-import { T } from '@threlte/core'
-import { useGltf, Audio } from '@threlte/extras'
-import Exterior from './exterior.svelte'
-import Level3 from '../level-3/index.svelte'
-import Level2 from '../level-2/index.svelte'
-import Level1 from './level-1.svelte'
-import { elevatorPosition, frame } from '../../stores/state';
-import Colliders from './colliders.svelte'
-
-interface GLTFResult {
-  nodes: {
-    elevator_platform: THREE.Mesh
+  interface GLTFResult {
+    nodes: {
+      elevator_platform: Mesh
+    }
+    materials: {
+      Exterior: MeshStandardMaterial
+      Material: MeshStandardMaterial
+    }
   }
-  materials: {
-    Exterior: THREE.MeshStandardMaterial
-    Material: THREE.MeshStandardMaterial
-  }
-}
 
-const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
 
-let volume = tweened(0, { duration: 700 })
+  const volume = new Tween(0, { duration: 700 })
 
-$: {
-  if ($elevatorPosition === 3.83 || $elevatorPosition === -0.48) {
-    $volume = 0
-  } else {
-    $volume = 0.08
-  }
-}
-
+  $effect(() => {
+    if (elevatorPosition.current === 3.83 || elevatorPosition.current === -0.48) {
+      volume.target = 0
+    } else {
+      volume.target = 0.08
+    }
+  })
 </script>
 
 <Exterior />
 <Level3 />
 <Level2 />
-<!-- <Level1 /> -->
+<Level1 />
 
 <Colliders />
 
@@ -47,15 +46,15 @@ $: {
     is={$gltf.nodes.elevator_platform}
     castShadow
     receiveShadow
-    position.y={$elevatorPosition}
+    position.y={elevatorPosition.current}
     visible={$frame !== 'title'}
   />
 {/if}
 
-{#if $volume !== 0}
+{#if volume.current !== 0}
   <Audio
     autoplay
     src={`${import.meta.env.BASE_URL}mp3/elevator.mp3`}
-    volume={$volume}
+    volume={volume.current}
   />
 {/if}

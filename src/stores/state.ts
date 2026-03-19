@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import * as Easing from 'svelte/easing'
-import { tweened } from 'svelte/motion'
+import { Tween } from 'svelte/motion'
 import { storage } from '../lib/storage'
 
 type Levels = 1 | 2 | 3 | 4
@@ -15,7 +15,6 @@ type Frames =
 let frameValue: Frames = storage('frame') as Frames
 let levelValue: Levels = Number.parseInt(storage('level')!) as Levels
 
-export let allowPlayerControl = true
 
 export const animationPlayerControl = writable(false)
 
@@ -57,8 +56,8 @@ const duration = 1500
 
 const initialTranslation = translations[frameValue]
 
-export const cameraPosition = tweened(initialTranslation.position, { easing, duration })
-export const cameraRotation = tweened(initialTranslation.rotation, { easing, duration })
+export const cameraPosition = new Tween(initialTranslation.position, { easing, duration })
+export const cameraRotation = new Tween(initialTranslation.rotation, { easing, duration })
 export const cameraAnimating = writable<boolean>(false)
 
 frame.subscribe(async (update) => {
@@ -77,16 +76,18 @@ frame.subscribe(async (update) => {
   cameraAnimating.set(false)
 })
 
-export const elevatorPosition = tweened(3.84, { easing, duration })
+export const elevatorPosition = new Tween(3.84, { easing, duration })
 
 level.subscribe(async (update) => {
-  allowPlayerControl = false
   animationPlayerControl.set(true)
 
-  if      (update === 3) await elevatorPosition.set(3.84)
-  else if (update === 2) await elevatorPosition.set(-0.48)
+  if      (update === 3) {
+    await elevatorPosition.set(3.84)
+  }
+  else if (update === 2) {
+    await elevatorPosition.set(-0.48)
+  }
 
-  allowPlayerControl = true
   animationPlayerControl.set(false)
 })
 
