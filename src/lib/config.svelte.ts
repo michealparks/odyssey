@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { useThrelte } from '@threlte/core'
+import { isInstanceOf, useThrelte } from '@threlte/core'
 import { cameraPosition } from '../stores/state'
 import { fromStore } from 'svelte/store'
 
@@ -7,8 +7,14 @@ export const configure = () => {
   const { renderer, scene, camera: cameraStore } = useThrelte()
   const camera = fromStore(cameraStore)
 
-  camera.current.near = 2
-  camera.current.far = 2500
+  if (
+    isInstanceOf(camera.current, 'PerspectiveCamera')  ||
+    isInstanceOf(camera.current, 'OrthographicCamera')
+  ) {
+    camera.current.near = 2
+    camera.current.far = 2500
+    camera.current.updateProjectionMatrix()
+  }
 
   $effect(() => {
     camera.current.position.fromArray(cameraPosition.current)

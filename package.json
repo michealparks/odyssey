@@ -10,23 +10,23 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
     "@tsconfig/svelte": "^5.0.8",
     "runed": "^0.37.1",
-    "svelte": "^5.55.1",
+    "svelte": "^5.55.5",
     "svelte-check": "^4.4.6",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "tslib": "^2.8.1",
-    "typescript": "^6.0.2",
-    "vite": "^8.0.3"
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.19.3",
-    "@threlte/core": "^8.5.5",
-    "@threlte/extras": "^9.14.0",
-    "@threlte/rapier": "^3.4.1",
-    "@types/three": "^0.183.1",
-    "postprocessing": "^6.39.0",
-    "three": "^0.183.2"
+    "@threlte/core": "^8.5.11",
+    "@threlte/extras": "^9.15.0",
+    "@threlte/rapier": "^3.4.2",
+    "@types/three": "^0.184.0",
+    "postprocessing": "^6.39.1",
+    "three": "^0.184.0"
   }
 }

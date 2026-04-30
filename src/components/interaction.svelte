@@ -24,7 +24,7 @@
           {#if labels[i] === undefined}
             {option}
           {:else}
-            <span class="min-w-[0.5rem] text-center">{option}</span>
+            <span class="min-w-2 text-center">{option}</span>
             <span class="h-full border-l border-[rgba(255,255,255,0.6)]"></span>
             <span>{labels[i]}</span>
           {/if}

@@ -24,13 +24,17 @@
     }
   }
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
+
+  const fixedAnchorY = 0.6
+  const sliderY = 1.5
+  const sliderTravel = 4
 
   const { rigidBodyA, rigidBodyB } = usePrismaticJoint(
     [0, 0, 0],
-    [0, 0, 0],
+    [0, sliderY - fixedAnchorY, 0],
     [1, 0, 0],
-    [0, -4]
+    [-sliderTravel, 0]
   )
 
   const material = new MeshStandardMaterial({
@@ -58,26 +62,23 @@
 </script>
 
 <T.Group
-  position.y={0.6}
+  position.y={fixedAnchorY}
   rotation.y={rotation}
 >
   <RigidBody
     type="fixed"
     bind:rigidBody={$rigidBodyB}
-  >
-    <Collider
-      shape="cuboid"
-      args={[0, 0, 0]}
-    />
-  </RigidBody>
+  />
 </T.Group>
 
 <T.Group
-  position.y={1.5}
+  position.y={sliderY}
   rotation.y={rotation}
 >
   <RigidBody
     type="dynamic"
+    canSleep={false}
+    gravityScale={0}
     enabledRotations={[false, false, false]}
     enabledTranslations={[true, false, true]}
     bind:rigidBody={$rigidBodyA}

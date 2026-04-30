@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import type { Mesh } from 'three'
   import { useGltf, HTML } from '@threlte/extras'
   import { Collider } from '@threlte/rapier'
   import { T } from '@threlte/core'
@@ -9,12 +9,12 @@
 
   interface GLTFResult {
     nodes: {
-      stasis_chamber: THREE.Mesh
+      stasis_chamber: Mesh
     }
     materials: {}
   }
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
 
   let exited = $state(false)
   let erroring = $state(false)

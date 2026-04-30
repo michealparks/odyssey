@@ -29,7 +29,7 @@
     }
   }
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
 
   const handleInteract = (key: string) => {
     switch (key) {
@@ -46,8 +46,10 @@
   let entered = 0
   let exited = 0
 
-  let switchState: 0 | 1 | 2 = $state(0)
-  let volume = new Tween(0, { duration: 2000 })
+  let switchState = $state<0 | 1 | 2>(0)
+  let volume = Tween.of(() => ($level === 2 && switchState === 1 ? 0.2 : 0), {
+    duration: 2000,
+  })
 
   const handleEnter = (_index: number) => {
     if (switchState === 1) {
@@ -71,10 +73,6 @@
   }
 
   const visible = $derived($frame === 'level_2')
-
-  $effect(() => {
-    volume.set($level === 2 && switchState === 1 ? 0.2 : 0)
-  })
 </script>
 
 <Sentry

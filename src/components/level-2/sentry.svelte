@@ -135,7 +135,7 @@
     await lightIntensity.set(0, { duration: 300, easing: Easing.bounceInOut })
   }
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
 
   useTask(() => {
     rotationY += moveSpeed.current

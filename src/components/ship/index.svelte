@@ -20,7 +20,7 @@
     }
   }
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
 
   const volume = new Tween(0, { duration: 700 })
 

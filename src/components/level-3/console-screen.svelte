@@ -24,7 +24,7 @@
 
   const width = 200
   const height = 200
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
   canvas.width = width

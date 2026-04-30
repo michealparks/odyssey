@@ -25,7 +25,7 @@
     }
   }
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
 
   let visible = $derived($frame.includes('level_3'))
 </script>

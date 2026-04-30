@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import { gameState, frame } from '../../stores/state'
 
   interface Line {
@@ -117,20 +116,20 @@
   ]
 
   const process = (branch: Node[]) => {
-    questions = []
-    lines = []
+    const nextQuestions: Question[] = []
+    const nextLines: Line[] = []
 
     for (let item of branch) {
-      if (item.type === 'question' && !item.asked) questions.push(item)
-      if (item.type === 'line') lines.push(item)
+      if (item.type === 'question' && !item.asked) nextQuestions.push(item)
+      if (item.type === 'line') nextLines.push(item)
     }
 
-    if (questions.length === 0) {
-      questions.push({ type: 'question', text: 'Back', next: tree, asked: false })
+    if (nextQuestions.length === 0) {
+      nextQuestions.push({ type: 'question', text: 'Back', next: tree, asked: false })
     }
 
-    lines = lines
-    questions = questions
+    lines = nextLines
+    questions = nextQuestions
   }
 
   const handleInput = (question: Question) => {
@@ -152,9 +151,7 @@
     handleInput(question)
   }
 
-  $effect(() => {
-    process(tree)
-  })
+  process(tree)
 </script>
 
 <svelte:window {onkeydown} />
@@ -168,7 +165,7 @@
     <p>
       {text}
       {#if index === lines.length - 1}
-        <div class="cursor"></div>
+        <span class="cursor"></span>
       {/if}
     </p>
   {/each}
@@ -234,7 +231,7 @@
     margin: 0.1rem 0;
   }
 
-  button:span {
+  button span {
     color: white !important;
   }
 

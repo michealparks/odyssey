@@ -1,10 +1,15 @@
 <script lang="ts">
   import { Vector3, Vector2, MathUtils } from 'three'
   import { Tween } from 'svelte/motion'
-  import { PressedKeys } from 'runed'
   import { Collider, RigidBody } from '@threlte/rapier'
   import { useTask, useThrelte } from '@threlte/core'
-  import { AudioListener, HTML, useGamepad } from '@threlte/extras'
+  import {
+    AudioListener,
+    HTML,
+    useGamepad,
+    useInputMap,
+    useKeyboard,
+  } from '@threlte/extras'
   import RAPIER from '@dimforge/rapier3d-compat'
   import {
     animationPlayerControl,
@@ -18,25 +23,18 @@
   const { camera } = useThrelte()
 
   const gamepad = useGamepad()
-  const keys = new PressedKeys()
+  const keyboard = useKeyboard()
 
-  const keyboardX = $derived.by(() => {
-    let result = 0
-    for (const key of keys.all) {
-      if (key === 'd') result = 1
-      if (key === 'a') result = -1
-    }
-    return result
-  })
-
-  const keyboardY = $derived.by(() => {
-    let result = 0
-    for (const key of keys.all) {
-      if (key === 'w') result = 1
-      if (key === 's') result = -1
-    }
-    return result
-  })
+  const input = useInputMap(
+    ({ key, gamepadButton, gamepadAxis }) => ({
+      moveLeft: [key('a'), gamepadAxis('leftStick', 'x', -1)],
+      moveRight: [key('d'), gamepadAxis('leftStick', 'x', 1)],
+      moveForward: [key('w'), gamepadAxis('leftStick', 'y', -1)],
+      moveBack: [key('s'), gamepadAxis('leftStick', 'y', 1)],
+      run: [key('shift'), gamepadButton('leftBumper')],
+    }),
+    { keyboard, gamepad }
+  )
 
   let rigidBody = $state.raw<RAPIER.RigidBody>()
   let action = $state<ActionName>('Man_Idle')
@@ -116,27 +114,24 @@
 
       const f = delta / t
 
-      const scale = (1 / (keys.has('shift') ? 13 : 30)) * f
+      const move = input.vector('moveLeft', 'moveRight', 'moveBack', 'moveForward')
+      const run = input.action('run').pressed
+      const scale = input.activeDevice.current === 'gamepad' ? 1 / 10 : (1 / (run ? 13 : 30)) * f
 
-      x = keyboardX * scale
-      z = -keyboardY * scale
+      x = move.x * scale
+      z = -move.y * scale
 
-      if (gamepad.connected.current) {
-        const scale = 1 / 10
-
-        x = gamepad.leftStick.x * scale
-        z = gamepad.leftStick.y * scale
-      } else if (touch.x !== 0 || touch.y !== 0) {
-        const scale = 0.01
+      if (move.x === 0 && move.y === 0 && (touch.x !== 0 || touch.y !== 0)) {
+        const touchScale = 0.01
         const max = 0.04
-        x = MathUtils.clamp(touch.x * scale, -max, max)
-        z = MathUtils.clamp(touch.y * scale, -max, max)
+        x = MathUtils.clamp(touch.x * touchScale, -max, max)
+        z = MathUtils.clamp(touch.y * touchScale, -max, max)
       }
 
       if (x === 0 && z === 0) {
         action = 'Man_Idle'
       } else {
-        action = keys.has('shift') ? 'Man_Run' : 'Man_Walk'
+        action = run ? 'Man_Run' : 'Man_Walk'
       }
 
       if (x !== 0 || z !== 0) {
@@ -154,7 +149,7 @@
       rigidBody?.setLinvel({ x: 0, y: 0, z: 0 }, false)
       rigidBody?.setTranslation(position, true)
     },
-    { running: () => running }
+    { running: () => running, after: input.task }
   )
 
   // const tw = tweened({ x: 0, y: 0, z: 0 }, { duration: 1000 })

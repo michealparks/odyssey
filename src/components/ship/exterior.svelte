@@ -43,7 +43,7 @@
     reflectivity: 0.95,
   })
 
-  const gltf = useGltf<GLTFResult>('./glb/ship.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/ship.glb`)
 
   useTask(() => {
     target.clear(renderer, true, false, false)

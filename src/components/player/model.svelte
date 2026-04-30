@@ -43,7 +43,7 @@
 
   const ref = new Group()
 
-  const gltf = useGltf<GLTFResult>('./glb/male.glb')
+  const gltf = useGltf<GLTFResult>(`${import.meta.env.BASE_URL}glb/male.glb`)
 
   let soundId1 = 0
   let soundId2 = 0

@@ -7,18 +7,13 @@
     {
       performance: 2 ** 9,
       balanced: 2 ** 10,
-      quality: 2 ** 12,
+      quality: 2 ** 16,
     }[$graphics]
   )
 
   const light = new DirectionalLight()
   const size = 10
-  light.shadow.camera.left = -size
-  light.shadow.camera.right = size
-  light.shadow.camera.top = size
-  light.shadow.camera.bottom = -size
-  light.shadow.camera.far = 20
-  light.shadow.camera.near = 0.2
+
   light.shadow.dispose()
   light.shadow.map = null
   light.shadow.needsUpdate = true
@@ -33,6 +28,12 @@
   castShadow
   intensity={1.5}
   position={[-3.4, 8, 4.3]}
+  shadow.camera.left={-size}
+  shadow.camera.right={size}
+  shadow.camera.top={size}
+  shadow.camera.bottom={-size}
+  shadow.camera.far={20}
+  shadow.camera.near={0.2}
 />
 
 <T.AmbientLight intensity={0.5} />
