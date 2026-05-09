@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Audio } from '@threlte/extras'
+  import { Audio, SoftShadows } from '@threlte/extras'
   import Stars from './stars.svelte'
   import Ship from './ship/index.svelte'
   import Player from './player/index.svelte'
@@ -16,6 +16,10 @@
 <Player />
 <Ship />
 <Lights />
+<SoftShadows
+  samples={20}
+  size={10}
+/>
 
 {#if $gameState === 'end'}
   <Audio
